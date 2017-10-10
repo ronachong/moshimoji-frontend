@@ -66,10 +66,10 @@ import logo from './reactql-logo.svg';
 export default () => (
   <div>
     <Helmet
-      title="ReactQL application"
+      title="Moshimoji"
       meta={[{
         name: 'description',
-        content: 'ReactQL starter kit app',
+        content: 'Community-driven platform to read, share, and publish manga and other comics.',
       }]} />
     <div className={css.hello}>
       <img src={logo} alt="ReactQL" className={css.logo} />
