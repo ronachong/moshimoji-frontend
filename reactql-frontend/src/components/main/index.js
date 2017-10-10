@@ -75,19 +75,23 @@ export default () => (
 
     // -- header
     <div className={css.hello}>
-      <img src={logo} alt="ReactQL" className={css.logo} />
+      <Link to="/"><h1>moshimoji</h1></Link>
     </div>
     <hr />
 
-    // -- message component
-    <GraphQLMessage />
+    // -- dashboard button
+    <div className={css.hello}>
+      <Link to="/dashboard/site"><button>dashboard</button></Link>
+    </div>
     <hr />
 
     // -- nav
     <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/page/about">About</Link></li>
-      <li><Link to="/page/contact">Contact</Link></li>
+      <li><Link to="/">reader</Link></li>
+      <li><Link to="/database">database</Link></li>
+      <li><Link to="/forum">forum</Link></li>
+      <li><Link to="/reviews">reviews</Link></li>
+      <li><Link to="/doujin">doujin</Link></li>
       <li><Link to="/old/path">Redirect from /old/path &#8594; /new/path</Link></li>
     </ul>
     <hr />
@@ -95,10 +99,19 @@ export default () => (
     // -- hm
     <Switch>
       <Route exact path="/" component={Home} />
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/database" component={Database} />
+      <Route path="/forum" component={Forum} />
+      <Route path="/reviews" component={Reviews} />
+      <Route path="/doujin" component={Doujin} />
       <Route path="/page/:name" component={Page} />
       <Redirect from="/old/path" to="/new/path" />
       <Route component={WhenNotFound} />
     </Switch>
+    <hr />
+
+    // -- message component
+    <GraphQLMessage />
     <hr />
 
     // -- counter component
