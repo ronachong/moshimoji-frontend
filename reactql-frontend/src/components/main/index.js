@@ -65,18 +65,25 @@ import logo from './reactql-logo.svg';
 
 export default () => (
   <div>
+    // -- meta
     <Helmet
-      title="Moshimoji"
+      title="moshimoji"
       meta={[{
         name: 'description',
         content: 'Community-driven platform to read, share, and publish manga and other comics.',
       }]} />
+
+    // -- header
     <div className={css.hello}>
       <img src={logo} alt="ReactQL" className={css.logo} />
     </div>
     <hr />
+
+    // -- message component
     <GraphQLMessage />
     <hr />
+
+    // -- nav
     <ul>
       <li><Link to="/">Home</Link></li>
       <li><Link to="/page/about">About</Link></li>
@@ -84,6 +91,8 @@ export default () => (
       <li><Link to="/old/path">Redirect from /old/path &#8594; /new/path</Link></li>
     </ul>
     <hr />
+
+    // -- hm
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/page/:name" component={Page} />
@@ -91,11 +100,17 @@ export default () => (
       <Route component={WhenNotFound} />
     </Switch>
     <hr />
+
+    // -- counter component
     <ReduxCounter />
     <hr />
+
+    // -- runtime info
     <p>Runtime info:</p>
     <Stats />
     <hr />
+
+    // -- styles info
     <p>Stylesheet examples:</p>
     <Styles />
   </div>
