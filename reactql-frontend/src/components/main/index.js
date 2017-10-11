@@ -50,6 +50,8 @@ import { Redirect } from 'kit/lib/routing';
 // multiple components per file where it makes sense to do so
 import GraphQLMessage from 'src/components/graphql';
 import { Home, Page, WhenNotFound } from 'src/components/routes';
+import modules from 'src/components/modules/all';
+
 import ReduxCounter from 'src/components/redux';
 import Stats from 'src/components/stats';
 import Styles from 'src/components/styles';
@@ -87,23 +89,25 @@ export default () => (
 
     // -- nav
     <ul>
-      <li><Link to="/">reader</Link></li>
+      <li><Link to="/reader">reader</Link></li>
       <li><Link to="/database">database</Link></li>
       <li><Link to="/forum">forum</Link></li>
       <li><Link to="/reviews">reviews</Link></li>
       <li><Link to="/doujin">doujin</Link></li>
+      <li><Link to="/page/example">Example page</Link></li>
       <li><Link to="/old/path">Redirect from /old/path &#8594; /new/path</Link></li>
     </ul>
     <hr />
 
     // -- hm
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/database" component={Database} />
-      <Route path="/forum" component={Forum} />
-      <Route path="/reviews" component={Reviews} />
-      <Route path="/doujin" component={Doujin} />
+      <Route exact path="/" component={modules.SiteNews} />
+      <Route path="/dashboard" component={modules.Dashboard} />
+      <Route path="/reader" component={modules.Reader} />
+      <Route path="/database" component={modules.Database} />
+      <Route path="/forum" component={modules.Forum} />
+      <Route path="/reviews" component={modules.Reviews} />
+      <Route path="/doujin" component={modules.Doujin} />
       <Route path="/page/:name" component={Page} />
       <Redirect from="/old/path" to="/new/path" />
       <Route component={WhenNotFound} />
