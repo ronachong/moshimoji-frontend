@@ -10,7 +10,9 @@ class Common {
     // Apollo (middle|after)ware
     this.apolloMiddleware = [];
     this.apolloAfterware = [];
-    this.apolloNetworkOptions = {};
+    this.apolloNetworkOptions = {
+      credentials: 'same-origin',
+    };
     this.apolloClientOptions = {};
 
     // GraphQL endpoint.  This needs setting via either `config.enableGraphQLServer()`
