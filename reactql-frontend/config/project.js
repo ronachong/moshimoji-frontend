@@ -1,7 +1,4 @@
-import os
 import config from 'kit/config';
 
-if (process.env.ENV == 'local_dev')
-  config.setGraphQLEndpoint('http://127.0.0.1:8000');
-
-# TODO: add logic to determine graphql endpoint in docker for aws swarm
+// starter kit recommends using this file to set graphql endpoint, but at the
+// moment, I've put the config logic in app.js instead.
