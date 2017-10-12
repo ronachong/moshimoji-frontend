@@ -42,15 +42,18 @@ config.addReducer('counter', counterReducer, { count: 0 });
 
 /* GRAPHQL */
 
-// Enable the internal GraphQL server.  This will do two things:
-//
-// 1.  On the server, it will set-up the necessary route handlers to 'listen'
-// to incoming GraphQL requests on `/graphql`, as well as (by default) set-up
-// the GraphiQL IDE
-//
-// 2.  On the client, it will append the correct server URL so that we can
-// call the ReactQL host properly, and let the server handle our requests
-config.enableGraphQLServer();
+//config.enableGraphQLServer();
+// ^ I commented out above and am using setGraphQLEndpoint instead.
+// TODO: figure out if I should invoke config/project.js instead.
+// TODO: figure out if I want to put logic for the endpoint value elsewhere
+console.log(process.env);
+if (process.env.NODE_ENV == 'development')
+{
+  config.setGraphQLEndpoint('http://127.0.0.1:8000/gql');
+  console.log(`set graphql endpoint to ${config.graphQLEndpoint}`);
+}
+
+// TODO: add logic to determine graphql endpoint in docker for aws swarm
 
 /* SERVER */
 
