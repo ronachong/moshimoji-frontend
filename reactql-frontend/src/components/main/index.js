@@ -27,6 +27,7 @@
 
 // React
 import React from 'react';
+import { gql, graphql } from 'react-apollo';
 
 // Routing via React Router
 import {
@@ -65,7 +66,15 @@ import logo from './reactql-logo.svg';
 
 // ----------------------
 
-export default () => (
+const query = gql`
+{
+  currentUser {
+    id
+  }
+}
+`;
+
+const IndexContainer = ({ data }) => (
   <div>
     // -- meta
     <Helmet
@@ -85,6 +94,10 @@ export default () => (
     <div className={css.hello}>
       <Link to="/dashboard/site"><button>dashboard</button></Link>
     </div>
+    {
+      (!data.loading && data.currentUser == null) &&
+      <p>Clicking on dashboard should lead to login view popup.</p>
+    }
     <hr />
 
     // -- nav
@@ -132,3 +145,7 @@ export default () => (
     <Styles />
   </div>
 );
+
+const ApolloIndexContainer = graphql(query)(IndexContainer);
+
+export default ApolloIndexContainer;
