@@ -8,7 +8,20 @@ class Common {
     this.reducers = new Map();
 
     // Apollo (middle|after)ware
-    this.apolloMiddleware = [];
+    this.apolloMiddleware = [
+      (req, next) => {
+        if (!req.options.headers) {
+          req.options.headers = {};
+        }
+
+        const token = localStorage.getItem('token')
+          ? localStorage.getItem('token')
+          : null;
+
+        req.options.headers.authorization = `JWT ${token}`;
+        next();
+      },
+    ];
     this.apolloAfterware = [];
     this.apolloNetworkOptions = {
       credentials: 'same-origin',
