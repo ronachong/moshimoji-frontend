@@ -4,7 +4,7 @@
 /* NPM */
 
 // Apollo client library
-import { createBatchingNetworkInterface, createNetworkInterface, ApolloClient } from 'react-apollo';
+import { createNetworkInterface, ApolloClient } from 'react-apollo';
 
 /* ReactQL */
 
@@ -29,9 +29,9 @@ export function createClient(opt = {}) {
 // match https://github.com/mbrochh/django-graphql-apollo-react-demo#=
 export function getNetworkInterface(uri) {
   const networkInterface = createNetworkInterface({
-    uri: uri,
+    uri,
     opts: config.apolloNetworkOptions,
-  })
+  });
 
   // Couldn't get network requests to not return 400 bad error when I used this
   // const networkInterface = createBatchingNetworkInterface({
