@@ -10,15 +10,20 @@ class Common {
     // Apollo (middle|after)ware
     this.apolloMiddleware = [
       (req, next) => {
-        if (!req.options.headers) {
-          req.options.headers = {};
+        // TODO: figure out if I should sync server or graphql store with localstorage
+        // for session-like purposes
+        if (!SERVER) {
+          if (!req.options.headers) {
+            req.options.headers = {};
+          }
+
+          const token = localStorage.getItem('token')
+            ? localStorage.getItem('token')
+            : null;
+
+          req.options.headers.authorization = `JWT ${token}`;
         }
 
-        const token = localStorage.getItem('token')
-          ? localStorage.getItem('token')
-          : null;
-
-        req.options.headers.authorization = `JWT ${token}`;
         next();
       },
     ];
