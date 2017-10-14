@@ -51,6 +51,7 @@ import { Redirect } from 'kit/lib/routing';
 // multiple components per file where it makes sense to do so
 import GraphQLMessage from 'src/components/graphql';
 import { Home, Page, WhenNotFound } from 'src/components/routes';
+import LinkOrButton from 'src/components/reused/LinkOrButton';
 import modules from 'src/components/modules/all';
 
 import ReduxCounter from 'src/components/redux';
@@ -92,12 +93,13 @@ const IndexContainer = ({ data }) => (
 
     // -- dashboard button
     <div className={css.hello}>
-      <Link to="/dashboard/site"><button>dashboard</button></Link>
+      <Link to="/dashboard/site"><button onClick={console.log('click 1')}>dashboard</button></Link>
+      {
+        (data.loading)
+        ? <p>Loading...</p> : // TODO: probably make this a grayed out button
+        <DashboardLinkOrButton currentUser={data.currentUser} />
+      }
     </div>
-    {
-      (!data.loading && data.currentUser == null) &&
-      <p>Clicking on dashboard should lead to login view popup.</p>
-    }
     <hr />
 
     // -- nav
@@ -145,6 +147,37 @@ const IndexContainer = ({ data }) => (
     <Styles />
   </div>
 );
+
+const DashboardLinkOrButton = ({ currentUser }) => {
+  // TODO: consider refactoring this and LinkOrButton; does propsToPass really make sense?
+  // or can I simply just pass uri, onclick separately? should the isLink logic be moved elswhere?
+  const properties = (currentUser) ?
+    {
+      isLink: true,
+      propsToPass: {
+        uri: '/dashboard/site',
+      },
+    } :
+    {
+      isLink: false,
+      propsToPass: {
+        onClick: () => {
+          console.log('click 2');
+        },
+      },
+    };
+
+  const DisplayComponent = ({ onClick }) => (
+    <button onClick={onClick}>dashboard</button>
+  );
+
+  return (
+    <LinkOrButton
+      DisplayComponent={DisplayComponent}
+      isLink={properties.isLink}
+      propsToPass={properties.propsToPass} />
+  );
+};
 
 const ApolloIndexContainer = graphql(query)(IndexContainer);
 
