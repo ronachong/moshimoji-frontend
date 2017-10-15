@@ -50,7 +50,7 @@ import { Redirect } from 'kit/lib/routing';
 // per file, or in the case of <Home>, <Page> and <WhenFound>, we can group
 // multiple components per file where it makes sense to do so
 import GraphQLMessage from 'src/components/graphql';
-import { Home, Page, WhenNotFound } from 'src/components/routes';
+import { Page, WhenNotFound } from 'src/components/routes';
 import LoginModal from 'src/components/main/index/LoginModal';
 import DashboardLinkOrButton from 'src/components/main/index/DashboardLinkOrButton';
 import modules from 'src/components/modules/all';
@@ -78,7 +78,7 @@ const query = gql`
 
 const IndexContainer = ({ data }) => (
   <div>
-    // -- meta
+    { /* -- meta */ }
     <Helmet
       title="moshimoji"
       meta={[{
@@ -86,30 +86,28 @@ const IndexContainer = ({ data }) => (
         content: 'Community-driven platform to read, share, and publish manga and other comics.',
       }]} />
 
-    // -- Modal
+    { /* -- Modal */ }
     <LoginModal
       toggleModal={null} />
-    );
-    // -- header
+
+    { /* -- header */ }
     <div className={css.hello}>
       <Link to="/"><h1>moshimoji</h1></Link>
     </div>
     <hr />
 
-    // -- dashboard button
+    { /* -- dashboard button */ }
     <div className={css.hello}>
-      <Link to="/dashboard/site"></Link>
       {
         (data.loading || SERVER)
         // TODO: use presentational component for first button
         // TODO: make sure first button is grayed out when loading or initial react
-        ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
-        <DashboardLinkOrButton currentUser={data.currentUser} />
+          ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
+          <DashboardLinkOrButton currentUser={data.currentUser} />
       }
     </div>
     <hr />
-
-    // -- nav
+    { /* -- nav */ }
     <ul>
       <li><Link to="/reader">reader</Link></li>
       <li><Link to="/database">database</Link></li>
@@ -121,7 +119,7 @@ const IndexContainer = ({ data }) => (
     </ul>
     <hr />
 
-    // -- hm
+    { /* -- hm */ }
     <Switch>
       <Route exact path="/" component={modules.SiteNews} />
       <Route path="/dashboard" component={modules.Dashboard} />
@@ -136,20 +134,20 @@ const IndexContainer = ({ data }) => (
     </Switch>
     <hr />
 
-    // -- message component
+    { /* -- message component */ }
     <GraphQLMessage />
     <hr />
 
-    // -- counter component
+    { /* -- counter component */ }
     <ReduxCounter />
     <hr />
 
-    // -- runtime info
+    { /* -- runtime info */ }
     <p>Runtime info:</p>
     <Stats />
     <hr />
 
-    // -- styles info
+    { /* -- styles info */ }
     <p>Stylesheet examples:</p>
     <Styles />
   </div>
