@@ -1,14 +1,30 @@
+// ----------------------
+// IMPORTS
+
+/* NPM */
 import React from 'react';
+
+// HOC/decorator to listen to Redux store state
+import { connect } from 'react-redux';
+
+// components
 import LinkOrButton from 'src/components/reused/LinkOrButton';
 
+// Redux actions
+import { toggleLoginModal } from '../../../store/actions';
+
+
+// ----------------------
+// COMPONENT
 // TODO: figure out if this can/should be rewritten as a stateless functional
 // component, even if it needs the the dispatch prop (don't think I can use an
 // es6 class decorator with a functional component, so can't use @connect)
 // TODO: consider refactoring this and LinkOrButton;
-// does it make sense to store things in this.state if they aren't changing vals?
+// does it make sense to store things as class attrs?
 // does propsToPass really make sense?
 // or can I simply just pass uri, onclick separately?
 // should the isLink logic be moved elswhere?
+@connect()
 class DashboardLinkOrButton extends React.PureComponent {
   static propTypes = {
     // counter: PropTypes.shape({
@@ -24,21 +40,21 @@ class DashboardLinkOrButton extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = (this.props.currentUser) ?
-      {
-        isLink: true,
-        propsToPass: {
-          uri: '/dashboard/site',
-        },
-      } :
-      {
-        isLink: false,
-        propsToPass: {
-          onClick: () => {
-            console.log('dashboard button was clicked');
-          },
-        },
+    // TODO: figure out if this should be setState instead
+    if (this.props.currentUser) {
+      this.isLink = true;
+      this.propsToPass = {
+        uri: '/dashboard/site',
       };
+    } else {
+      this.isLink = false;
+      this.propsToPass = {
+        onClick: () => {
+          console.log('dashboard button was clicked');
+          this.props.dispatch(toggleLoginModal(true));
+        }
+      };
+    }
   }
 
   render() {
@@ -49,8 +65,8 @@ class DashboardLinkOrButton extends React.PureComponent {
     return (
       <LinkOrButton
         DisplayComponent={DisplayComponent}
-        isLink={this.state.isLink}
-        propsToPass={this.state.propsToPass} />
+        isLink={this.isLink}
+        propsToPass={this.propsToPass} />
     );
   }
 }
