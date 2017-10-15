@@ -52,7 +52,7 @@ import { Redirect } from 'kit/lib/routing';
 import GraphQLMessage from 'src/components/graphql';
 import { Home, Page, WhenNotFound } from 'src/components/routes';
 import LoginModal from 'src/components/main/index/LoginModal';
-import LinkOrButton from 'src/components/reused/LinkOrButton';
+import DashboardLinkOrButton from 'src/components/main/index/DashboardLinkOrButton';
 import modules from 'src/components/modules/all';
 
 import ReduxCounter from 'src/components/redux';
@@ -152,37 +152,6 @@ const IndexContainer = ({ data }) => (
     <Styles />
   </div>
 );
-
-const DashboardLinkOrButton = ({ currentUser }) => {
-  // TODO: consider refactoring this and LinkOrButton; does propsToPass really make sense?
-  // or can I simply just pass uri, onclick separately? should the isLink logic be moved elswhere?
-  const properties = (currentUser) ?
-    {
-      isLink: true,
-      propsToPass: {
-        uri: '/dashboard/site',
-      },
-    } :
-    {
-      isLink: false,
-      propsToPass: {
-        onClick: () => {
-          console.log('click 2');
-        },
-      },
-    };
-
-  const DisplayComponent = ({ onClick }) => (
-    <button onClick={onClick}>dashboard</button>
-  );
-
-  return (
-    <LinkOrButton
-      DisplayComponent={DisplayComponent}
-      isLink={properties.isLink}
-      propsToPass={properties.propsToPass} />
-  );
-};
 
 const ApolloIndexContainer = graphql(query)(IndexContainer);
 
