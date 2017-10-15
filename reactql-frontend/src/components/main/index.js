@@ -51,6 +51,7 @@ import { Redirect } from 'kit/lib/routing';
 // multiple components per file where it makes sense to do so
 import GraphQLMessage from 'src/components/graphql';
 import { Home, Page, WhenNotFound } from 'src/components/routes';
+import LoginModal from 'src/components/main/index/LoginModal';
 import LinkOrButton from 'src/components/reused/LinkOrButton';
 import modules from 'src/components/modules/all';
 
@@ -85,6 +86,10 @@ const IndexContainer = ({ data }) => (
         content: 'Community-driven platform to read, share, and publish manga and other comics.',
       }]} />
 
+    // -- Modal
+    <LoginModal
+      toggleModal={null} />
+    );
     // -- header
     <div className={css.hello}>
       <Link to="/"><h1>moshimoji</h1></Link>
