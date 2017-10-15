@@ -98,10 +98,12 @@ const IndexContainer = ({ data }) => (
 
     // -- dashboard button
     <div className={css.hello}>
-      <Link to="/dashboard/site"><button onClick={console.log('click 1')}>dashboard</button></Link>
+      <Link to="/dashboard/site"></Link>
       {
-        (data.loading)
-        ? <p>Loading...</p> : // TODO: probably make this a grayed out button
+        (data.loading || SERVER)
+        // TODO: use presentational component for first button
+        // TODO: make sure first button is grayed out when loading or initial react
+        ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
         <DashboardLinkOrButton currentUser={data.currentUser} />
       }
     </div>
