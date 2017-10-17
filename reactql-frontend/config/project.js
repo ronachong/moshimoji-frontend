@@ -27,10 +27,10 @@ const uriOptions = {
 // TODO: add logic to determine graphql,jwt endpoint in docker for aws swarm
 if (process.env.NODE_ENV === 'development') {
   config.setGraphQLEndpoint(
-    `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}`
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}/`
   );
   config.setJwtEndpoint(
-    `http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}`
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}/`
   );
   // eslint-disable-next-line no-console
   console.log(`set graphql endpoint to ${config.graphQLEndpoint} in project config`);
