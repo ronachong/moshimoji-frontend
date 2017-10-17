@@ -8,29 +8,9 @@ class Common {
     this.reducers = new Map();
 
     // Apollo (middle|after)ware
-    this.apolloMiddleware = [
-      (req, next) => {
-        // TODO: figure out if I should sync server or graphql store with localstorage
-        // for session-like purposes
-        if (!SERVER) {
-          if (!req.options.headers) {
-            req.options.headers = {};
-          }
-
-          const token = localStorage.getItem('token')
-            ? localStorage.getItem('token')
-            : null;
-
-          req.options.headers.authorization = `JWT ${token}`;
-        }
-
-        next();
-      },
-    ];
+    this.apolloMiddleware = [];
     this.apolloAfterware = [];
-    this.apolloNetworkOptions = {
-      credentials: 'same-origin',
-    };
+    this.apolloNetworkOptions = {};
     this.apolloClientOptions = {};
 
     // GraphQL endpoint.  This needs setting via either `config.enableGraphQLServer()`
