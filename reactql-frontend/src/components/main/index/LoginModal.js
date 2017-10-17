@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 
 import { Modal, Transition } from 'react-bootstrap';
 
+import config from 'kit/config';
 import { toggleLoginModal } from '../../../store/actions';
 
 // ----------------------
@@ -31,8 +32,8 @@ const styles = {
   },
   modalTextContainer : {
     position: 'absolute',
-    width: '90%',
-    height: '80%',
+    width: '50%',
+    height: '50%',
     top: '50%', left: '50%',
     transform: `translate(-${50}%, -${50}%)`,
     border: '1px solid #fff555',
@@ -63,7 +64,32 @@ class LoginModal extends Component {
     // },
   }
 
+  handleSubmit(loginDest, e) {
+    e.preventDefault()
+    const data = new FormData(this.form);
+    fetch(config.jwtEndpoint, {
+      method: 'POST',
+      body: data,
+    })
+      .then(res => {
+        res.json().then(resJson => {
+          if (resJson.token) {
+            localStorage.setItem('token', resJson.token);
+            window.location.replace(loginDest);
+          }
+        });
+      })
+      .catch(err => {
+        console.log(`Network error: ${err}`);
+      });
+  }
+
   render() {
+    // TODO: add logic to compute destination dynamically.
+    // can be dashboard or home/site news, depending on origin
+    // of modal (dashboard button or link preceding)
+    const loginDest = '/dashboard'
+
     return (
       // <Transition
       //   in={true}
@@ -77,8 +103,20 @@ class LoginModal extends Component {
           style={styles.modal}
           backdropStyle={styles.modalBackdrop}>
           <Modal.Body style={styles.modalTextContainer}>
-            <a>Link 1</a><br />
-            <a>Link 2</a>
+            <form
+              ref={ref => (this.form = ref)}
+              onSubmit={e => this.handleSubmit(loginDest, e)}
+            >
+              <div>
+                <label>Username:</label>
+                <input type="text" name="username" />
+              </div>
+              <div>
+                <label>Password:</label>
+                <input type="password" name="password" />
+              </div>
+              <button type="submit">Login</button>
+            </form>
           </Modal.Body>
         </Modal>
       // </Transition>
