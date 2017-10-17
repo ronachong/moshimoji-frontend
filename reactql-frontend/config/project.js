@@ -1,4 +1,41 @@
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
 import config from 'kit/config';
 
-// starter kit recommends using this file to set graphql endpoint, but at the
-// moment, I've put the config logic in app.js instead.
+// ----------------------
+// PROJECT CONFIGURATION
+
+/* BACKEND */
+const uriOptions = {
+  servers: {
+    development: '127.0.0.1:8000',
+    production: '',
+  },
+  slugs: {
+    graphql: 'gql',
+    jwtRetrieve: 'api-token-auth',
+  },
+};
+
+// eslint-disable-next-line no-console
+console.log('project config being run');
+// eslint-disable-next-line no-console
+console.log(process.env);
+
+/* GRAPHQL */
+// TODO: add logic to determine graphql endpoint in docker for aws swarm
+if (process.env.NODE_ENV === 'development') {
+  config.setGraphQLEndpoint(
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}`
+  );
+  // eslint-disable-next-line no-console
+  console.log(`set graphql endpoint to ${config.graphQLEndpoint} in project config`);
+}
+
+/* APOLLO */
+// TODO: figure out if setting this here is OK if network int.
+// is created before, in browser and server_*.js.
+config.setApolloNetworkOptions({
+  credentials: 'same-origin',
+})
