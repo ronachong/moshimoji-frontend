@@ -27,6 +27,7 @@
 
 // React
 import React from 'react';
+import { gql, graphql } from 'react-apollo';
 
 // Routing via React Router
 import {
@@ -49,7 +50,11 @@ import { Redirect } from 'kit/lib/routing';
 // per file, or in the case of <Home>, <Page> and <WhenFound>, we can group
 // multiple components per file where it makes sense to do so
 import GraphQLMessage from 'src/components/graphql';
-import { Home, Page, WhenNotFound } from 'src/components/routes';
+import { Page, WhenNotFound } from 'src/components/routes';
+import LoginModal from 'src/components/main/index/LoginModal';
+import DashboardLinkOrButton from 'src/components/main/index/DashboardLinkOrButton';
+import modules from 'src/components/modules/all';
+
 import ReduxCounter from 'src/components/redux';
 import Stats from 'src/components/stats';
 import Styles from 'src/components/styles';
@@ -63,40 +68,91 @@ import logo from './reactql-logo.svg';
 
 // ----------------------
 
-export default () => (
+const query = gql`
+{
+  currentUser {
+    id
+  }
+}
+`;
+
+const IndexContainer = ({ data }) => (
   <div>
+    { /* -- meta */ }
     <Helmet
-      title="ReactQL application"
+      title="moshimoji"
       meta={[{
         name: 'description',
-        content: 'ReactQL starter kit app',
+        content: 'Community-driven platform to read, share, and publish manga and other comics.',
       }]} />
+
+    { /* -- Modal */ }
+    <LoginModal
+      toggleModal={null} />
+
+    { /* -- header */ }
     <div className={css.hello}>
-      <img src={logo} alt="ReactQL" className={css.logo} />
+      <Link to="/"><h1>moshimoji</h1></Link>
     </div>
     <hr />
-    <GraphQLMessage />
+
+    { /* -- dashboard button */ }
+    <div className={css.hello}>
+      {
+        (data.loading || SERVER)
+        // TODO: use presentational component for first button
+        // TODO: make sure first button is grayed out when loading or initial react
+          ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
+          <DashboardLinkOrButton currentUser={data.currentUser} />
+      }
+    </div>
     <hr />
+    { /* -- nav */ }
     <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/page/about">About</Link></li>
-      <li><Link to="/page/contact">Contact</Link></li>
+      <li><Link to="/reader">reader</Link></li>
+      <li><Link to="/database">database</Link></li>
+      <li><Link to="/forum">forum</Link></li>
+      <li><Link to="/reviews">reviews</Link></li>
+      <li><Link to="/doujin">doujin</Link></li>
+      <li><Link to="/page/example">Example page</Link></li>
       <li><Link to="/old/path">Redirect from /old/path &#8594; /new/path</Link></li>
     </ul>
     <hr />
+
+    { /* -- hm */ }
     <Switch>
-      <Route exact path="/" component={Home} />
+      <Route exact path="/" component={modules.SiteNews} />
+      <Route path="/dashboard" component={modules.Dashboard} />
+      <Route path="/reader" component={modules.Reader} />
+      <Route path="/database" component={modules.Database} />
+      <Route path="/forum" component={modules.Forum} />
+      <Route path="/reviews" component={modules.Reviews} />
+      <Route path="/doujin" component={modules.Doujin} />
       <Route path="/page/:name" component={Page} />
       <Redirect from="/old/path" to="/new/path" />
       <Route component={WhenNotFound} />
     </Switch>
     <hr />
+
+    { /* -- message component */ }
+    <GraphQLMessage />
+    <hr />
+
+    { /* -- counter component */ }
     <ReduxCounter />
     <hr />
+
+    { /* -- runtime info */ }
     <p>Runtime info:</p>
     <Stats />
     <hr />
+
+    { /* -- styles info */ }
     <p>Stylesheet examples:</p>
     <Styles />
   </div>
 );
+
+const ApolloIndexContainer = graphql(query)(IndexContainer);
+
+export default ApolloIndexContainer;

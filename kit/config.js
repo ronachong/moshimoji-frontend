@@ -19,6 +19,9 @@ class Common {
 
     // Set to true if we're using an internal GraphQL server
     this.graphQLServer = false;
+
+    // Endpoint to retrieve jwt token. This needs setting via config.setJwtEndpoint()`
+    this.jwtEndpoint = null;
   }
 
   /* REDUX */
@@ -49,6 +52,11 @@ class Common {
   setGraphQLEndpoint(uri, graphiQL = true) {
     this.graphQLEndpoint = uri;
     this.graphiQL = graphiQL;
+  }
+
+  // Set a URI to retrieve jwt tokens for auth
+  setJwtEndpoint(uri) {
+    this.jwtEndpoint = uri;
   }
 
   // Register Apollo middleware function
