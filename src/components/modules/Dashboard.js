@@ -2,13 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
 
-const Dashboard = () => (
-  <div>
-    <h2>Dashboard</h2>
-    <ApolloUserStatusForm />
-    <ApolloUserStatusesContainer />
-  </div>
-);
+const dashboardQuery = gql`
+{
+  currentUser {
+    id
+  }
+}
+`;
+
+const Dashboard = ({ data }) => {
+  if (data.loading) {
+    return <div>Loading...</div> // TODO: maybe make this inactive cmps instead
+  }
+
+  // TODO: hook component to apollo to toggle login modal if user not logged in
+  // also, figure out what should happen if we're using server response
+  if (!data.currentUser) {
+    return <div>user not logged in</div>
+  }
+
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      <ApolloUserStatusForm />
+      <ApolloUserStatusesContainer />
+    </div>
+  )
+};
+
+const ApolloDashboard = graphql(dashboardQuery)(Dashboard);
 
 const userStatusFormMutation = gql`
 mutation UserStatusForm($text: String!) {
@@ -32,15 +54,6 @@ const userStatusFormQuery = gql`
 
 
 const UserStatusForm = ({ data, mutate }) => {
-  if (data.loading) {
-    return <div>Loading...</div>
-  }
-
-  console.assert(
-    data.currentUser,
-    'User status form accessed while user not logged in'
-  );
-
   let form = null;
   const handleSubmit = e => {
     e.preventDefault();
@@ -48,7 +61,9 @@ const UserStatusForm = ({ data, mutate }) => {
     const status = new FormData(form);
     mutate({ variables: { text: status.get('text') } })
       .then(res => {
-        if (res.status === 200) {
+        console.log('Res:', res);
+        console.log(res.data.createUserStatus.reqStatus);
+        if (res.data.createUserStatus.reqStatus === 200) {
           console.log('status submitted successfully');
         }
       })
@@ -172,4 +187,4 @@ UserStatusesPresentation.propTypes = {
   }).isRequired).isRequired,
 };
 
-export default Dashboard;
+export default ApolloDashboard;
