@@ -25,11 +25,22 @@ export function createClient(opt = {}) {
 }
 
 // Wrap `createNetworkInterface` to attach middleware
+// TODO: consider switching to createBatchingNetworkInterface, w/ settings to
+// match https://github.com/mbrochh/django-graphql-apollo-react-demo#=
 export function getNetworkInterface(uri) {
   const networkInterface = createNetworkInterface({
     uri,
     opts: config.apolloNetworkOptions,
   });
+
+  // Couldn't get network requests to not return 400 bad error when I used this
+  // const networkInterface = createBatchingNetworkInterface({
+  //   uri: 'http://localhost:8000/gql', // same as uri
+  //   batchInterval: 10,
+  //   opts: {  // same as config.apolloNetworkOptions
+  //     credentials: 'same-origin',
+  //   },
+  // })
 
   // Attach middleware
   networkInterface.use(config.apolloMiddleware.map(f => ({ applyMiddleware: f })));
