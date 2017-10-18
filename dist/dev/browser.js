@@ -10,7 +10,7 @@ webpackJsonp([0],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(59);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -154,6 +154,235 @@ Redirect.defaultProps = {
 
 /***/ }),
 
+/***/ 212:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony export (immutable) */ __webpack_exports__["a"] = toggleLoginModal;
+function toggleLoginModal(bool) {
+  console.log('toggleLoginModal being called');
+  return {
+    type: 'TOGGLE_MODAL',
+    payload: {
+      show: bool
+    }
+  };
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
+/***/ 213:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_apollo__);
+var _templateObject = _taggedTemplateLiteral(['\nmutation UserStatusForm($text: String!) {\n  createUserStatus(text: $text) {\n    reqStatus,\n    formErrors,\n    userStatus {\n      id\n    }\n  }\n}\n'], ['\nmutation UserStatusForm($text: String!) {\n  createUserStatus(text: $text) {\n    reqStatus,\n    formErrors,\n    userStatus {\n      id\n    }\n  }\n}\n']),
+    _templateObject2 = _taggedTemplateLiteral(['\n{\n  currentUser {\n    id\n  }\n}\n'], ['\n{\n  currentUser {\n    id\n  }\n}\n']),
+    _templateObject3 = _taggedTemplateLiteral(['\n{\n  allUserStatuses {\n    edges {\n      node {\n        id,\n        creationDate,\n        text\n      }\n    }\n  }\n}\n'], ['\n{\n  allUserStatuses {\n    edges {\n      node {\n        id,\n        creationDate,\n        text\n      }\n    }\n  }\n}\n']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+var Dashboard = function Dashboard() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h2',
+      null,
+      'Dashboard'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(ApolloUserStatusForm, null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(ApolloUserStatusesContainer, null)
+  );
+};
+
+var userStatusFormMutation = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["gql"])(_templateObject);
+
+var userStatusFormQuery = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["gql"])(_templateObject2);
+
+var UserStatusForm = function UserStatusForm(_ref) {
+  var data = _ref.data,
+      mutate = _ref.mutate;
+
+  if (data.loading) {
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'div',
+      null,
+      'Loading...'
+    );
+  }
+
+  console.assert(data.currentUser, 'User status form accessed while user not logged in');
+
+  var form = null;
+  var handleSubmit = function handleSubmit(e) {
+    e.preventDefault();
+    console.log(form);
+    var status = new FormData(form);
+    mutate({ variables: { text: status.get('text') } }).then(function (res) {
+      if (res.status === 200) {
+        console.log('status submitted successfully');
+      }
+    }).catch(function (err) {
+      console.log('Network error: ' + err);
+    });
+  };
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h3',
+      null,
+      'Update your status'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'form',
+      {
+        ref: function ref(_ref2) {
+          form = _ref2;
+        },
+        onSubmit: function onSubmit(e) {
+          return handleSubmit(e);
+        } },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('textarea', { name: 'text' })
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'button',
+        { type: 'submit' },
+        'Submit'
+      )
+    )
+  );
+};
+
+var ApolloUserStatusForm = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(userStatusFormQuery)(UserStatusForm);
+ApolloUserStatusForm = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(userStatusFormMutation)(ApolloUserStatusForm);
+
+var query = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["gql"])(_templateObject3);
+
+// I can create stateless functional components which receive data from apollo,
+// if I use the graphql(query)(component) pattern (instead of class decorator).
+var UserStatusesContainer = function UserStatusesContainer(_ref3) {
+  var data = _ref3.data;
+
+  console.log(data);
+
+  if (data.loading) {
+    console.log(data);
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'div',
+      null,
+      'Loading...'
+    );
+  }
+
+  var presentation = !data.allUserStatuses ? __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'p',
+    null,
+    'Error retrieving data'
+  ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(UserStatusesPresentation, { user_status_edges: data.allUserStatuses.edges });
+
+  if (!data.allUserStatuses) {
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'p',
+      null,
+      'Error retrieving data'
+    );
+  }
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h3',
+      null,
+      'User Statuses'
+    ),
+    presentation
+  );
+};
+
+// TODO: create a function to generate gql from proptypes or vice versa, or
+// from a common object (would I need to refer to schema for field types?),
+// if that will save me time
+UserStatusesContainer.propTypes = {
+  data: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+    allUserStatuses: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+      edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        node: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+          id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+          creationDate: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+          text: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+        }).isRequired
+      }).isRequired).isRequired
+    }).isRequired
+  }).isRequired
+};
+
+UserStatusesContainer.defaultProps = {
+  data: {
+    allUserStatuses: {
+      edges: [{
+        node: {
+          id: 0,
+          creationDate: 'date str',
+          text: 'default text'
+        }
+      }]
+    }
+  }
+};
+
+var ApolloUserStatusesContainer = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(query)(UserStatusesContainer);
+
+var UserStatusesPresentation = function UserStatusesPresentation(_ref4) {
+  var user_status_edges = _ref4.user_status_edges;
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    user_status_edges.map(function (user_status) {
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'p',
+        { key: user_status.node.id },
+        '\'',
+        user_status.node.text,
+        '\' created ',
+        user_status.node.creationDate
+      );
+    })
+  );
+};
+
+UserStatusesPresentation.propTypes = {
+  user_status_edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+    node: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+      id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+      creationDate: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired,
+      text: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+    }).isRequired
+  }).isRequired).isRequired
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Dashboard);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
 /***/ 214:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -175,12 +404,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_dom__ = __webpack_require__(223);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_dom__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_router_dom__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_apollo__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react_router_dom__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_apollo__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_react_apollo__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_src_app__ = __webpack_require__(307);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_kit_lib_apollo__ = __webpack_require__(512);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_kit_lib_redux__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_kit_lib_apollo__ = __webpack_require__(516);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_kit_lib_redux__ = __webpack_require__(518);
 // Browser entry point, for Webpack.  We'll grab the browser-flavoured
 // versions of React mounting, routing etc to hook into the DOM
 
@@ -297,23 +526,19 @@ doRender();
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_kit_config__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_src_reducers_counter__ = __webpack_require__(308);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_components_main__ = __webpack_require__(311);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_global_css__ = __webpack_require__(511);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_global_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_global_css__);
-var _this = this;
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-// Your app's entry point.  Every ReactQL projects requires 'src/app.js',
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_src_components_main__ = __webpack_require__(308);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_src_reducers_add_calls__ = __webpack_require__(508);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_config_project__ = __webpack_require__(512);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_config_server__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_config_browser__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_global_css__ = __webpack_require__(515);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__styles_global_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__styles_global_css__);
+// Aapp's entry point.  Every ReactQL projects requires 'src/app.js',
 // which both the server and browser will import.
 //
-// In this file, you'll do two things:
+// In this file, two things happen:
 //
-// 1.  Import `kit/config`, and configure your app.  In this example, I'm
-// adding a custom Redux reducer that acts as a simple counter, and enabling
-// a built-in GraphQL server that imports a schema for a simple message.
+// 1.  Import styles&configuration code in config/ & reducers/ to configure app.
 //
 // 2.  Export the root React component that goes between <div id="main"/>
 // in the server-side HTML.
@@ -323,15 +548,16 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 /* ReactQL */
 
-// Config API, for adding reducers and configuring our ReactQL app
-
-
 /* App */
 
-// Example counter reducer.  This simply increments the counter by +1
-
-
 // Main component -- i.e. the 'root' React component in our app
+
+
+
+// Init config
+
+
+
 
 
 // Init global styles.  These will be added to the resulting CSS automatically
@@ -339,211 +565,8 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 // ----------------------
-
-/* REDUCERS */
-
-// Add our custom `counter` reducer, with the initial state as a zero count.
-// Note:  The initial state (3rd param) will automatically be wrapped in
-// `seamless-immutable` by the kit's Redux init code, so plain objects are
-// automatically immutable by default
-__WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].addReducer('counter', __WEBPACK_IMPORTED_MODULE_1_src_reducers_counter__["a" /* default */], { count: 0 });
-
-/* GRAPHQL */
-
-// Enable the internal GraphQL server.  This will do two things:
-//
-// 1.  On the server, it will set-up the necessary route handlers to 'listen'
-// to incoming GraphQL requests on `/graphql`, as well as (by default) set-up
-// the GraphiQL IDE
-//
-// 2.  On the client, it will append the correct server URL so that we can
-// call the ReactQL host properly, and let the server handle our requests
-__WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].enableGraphQLServer();
-
-/* SERVER */
-
-// Set our server config, by checking `SERVER` -- this code path will be
-// eliminated by Webpack in the browser, so we can safely add this.
-
-if (false) {
-  /* SSL */
-
-  // By default, the Koa web server runs on a plain HTTP server. However,
-  // you can easily enable HTTPS.  In the following commands, I grab a sample
-  // self-signed key/cert combo and call `config.enableSSL()` with the options
-  // I want to pass to the `https.createServer()` that happens under the hood.
-  //
-  // Note: Running https:// in your browser using this self-signed cert will
-  // undoubtably raise a security error. But at least we can see it's working.
-  //
-  // Production note: I generally recommend using a dedicated upstream proxy
-  // such as Nginx to handle HTTPS traffic, since the TLS handshake will likely
-  // be faster, and you can add HTTP/2 and have much finer-grain control over
-  // HTTP. But, if you need a fast SSL service, ReactQL has you covered!
-
-  /*
-    Uncomment the next two lines to enable SSL!
-  */
-
-  var cert = require('src/cert/self_signed');
-  config.enableSSL({ key: cert.key, cert: cert.cert });
-
-  // If wanted, you could also run an *SSL-only* server by uncommenting:
-  // config.disableHTTP();
-
-  // Or, you could automatically redirect non-HTTP traffic to SSL by
-  // uncommenting the following: (Note: pass { port: 8081 }) for development
-  // or { port: 4000 } for the default production port
-  // config.forceSSL({ port: 8081 });
-
-  /* GRAPHQL SCHEMA */
-  // Pass in the schema to use for our internal GraphQL server.  Note we're
-  // doing this inside a `SERVER` block to avoid importing a potentially large
-  // file, which would then inflate our client bundle unnecessarily
-  config.setGraphQLSchema(require('src/graphql/schema').default);
-
-  /* CUSTOM ROUTES */
-
-  // We can add custom routes to the web server easily, by using
-  // `config.add<Get|Post|Put|Patch>Route()`.  Note:  These are server routes only.
-  config.addGetRoute('/test', function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(ctx) {
-      var stateDump;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              // For demo purposes, let's get a JSON dump of the current Redux state
-              // to see that we can expect its contents
-              stateDump = JSON.stringify(ctx.store.getState());
-
-              // Display a simple message, along with the Redux dump.  Note that this
-              // won't contain a full `apollo` response, because it hasn't passed through
-              // the React handler -- but it *does* mean we can still manipulate the state
-              // from within our root, or fire action handlers!
-
-              ctx.body = 'Hello from your ReactQL route. Redux dump: ' + stateDump;
-
-            case 2:
-            case 'end':
-              return _context.stop();
-          }
-        }
-      }, _callee, _this);
-    }));
-
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }());
-
-  /* CUSTOM 404 HANDLER */
-
-  // By default, if the server gets a route request that results in a 404,
-  // it will set `ctx.status = 404` but continue to render the <NotFound>
-  // block as normal.  If we want to add our own custom handler, we can use
-  // `config.set404Handler()` as below.
-  //
-  // Note:  This only applies to SERVER routes.  On the client, the
-  // <NotFound> block will *always* run.
-
-  config.set404Handler(function (ctx) {
-    // Like above, we'll grab a dump of the store state again -- this time,
-    // it *will* contain a full `apollo` dump because in order to figure out that
-    // a route has hit a 404, it will already have rendered the React chain
-    // and retrieved any relevant GraphQL
-    var stateDump = JSON.stringify(ctx.store.getState());
-
-    // Explicitly set the return status to 404.  This is done for us by
-    // default if we don't have a custom 404 handler, but left to the function
-    // otherwise (since we might not always want to return a 404)
-    ctx.status = 404;
-
-    // Set the body
-    ctx.body = 'This route does not exist on the server - Redux dump: ' + stateDump;
-  });
-
-  /* CUSTOM ERROR HANDLER */
-
-  // By default, any exceptions thrown anywhere in the middleware chain
-  // (including inside the `createReactHandler` func) will propogate up the
-  // call stack to a default error handler that simply logs the message and
-  // informs the user that there's an error.  We can override that default
-  // behaviour with a func with a (e, ctx, next) -> {} signature, where `e` is
-  // the error thrown, `ctx` is the Koa context object, and `next()` should
-  // be called if you want to recover from the error and continue processing
-  // subsequent middleware.  Great for logging to third-party tools, tc.
-  config.setErrorHandler(function (e, ctx /* `next` is unused in this example */) {
-    // Mimic the default behaviour with an overriden message, so we know it's
-    // working
-    // eslint-disable-next-line no-console
-    console.log('Error: ', e.message);
-    ctx.body = 'Some kind of error. Check your source code.';
-  });
-
-  /* CUSTOM KOA APP INSTANTIATION */
-
-  // If you need to do something with `app` outside of middleware/routing,
-  // you can pass a func to `config.getKoaApp()` that will be fed the `app`
-  // instance directly.
-  config.getKoaApp(function (app) {
-    // First, we'll add a new `engine` key to the app.context`
-    // prototype (that per-request `ctx` extends) that can be
-    // used in the middleware below, to set a `Powered-By` header.
-    // eslint-disable-next-line no-param-reassign
-    app.context.engine = 'ReactQL';
-
-    // We'll also add a generic error handler, that prints out to the console.
-    // Note: This is a 'lower-level' than `config.setErrorHandler()` because
-    // it's not middleware -- it's for errors that happen at the server level
-    app.on('error', function (e) {
-      // This function should never show up, because `config.setErrorHandler()`
-      // is already catching errors -- but just an FYI for what you might do.
-      // eslint-disable-next-line no-console
-      console.error('Server error:', e);
-    });
-  });
-
-  /* CUSTOM MIDDLEWARE */
-
-  // We can set custom middleware to be processed on the server.  This gives us
-  // fine-grain control over headers, requests, responses etc, and even decide
-  // if we want to avoid the React handler until certain conditions
-  config.addMiddleware(function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(ctx, next) {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              // Let's add a custom header so we can see middleware in action
-              ctx.set('Powered-By', ctx.engine); // <-- `ctx.engine` srt above!
-
-              // For the fun of it, let's demonstrate that we can fire Redux actions
-              // and it'll manipulate the state on the server side!  View the SSR version
-              // to see that the counter is now 1 and has been passed down the wire
-              ctx.store.dispatch({ type: 'INCREMENT_COUNTER' });
-
-              // Always return `next()`, otherwise the request won't 'pass' to the next
-              // middleware in the stack (likely, the React handler)
-              return _context2.abrupt('return', next());
-
-            case 3:
-            case 'end':
-              return _context2.stop();
-          }
-        }
-      }, _callee2, _this);
-    }));
-
-    return function (_x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }());
-}
-
-// In app.js, we need to export the root component we want to mount as the
-// starting point to our app.  We'll just export the `<Main>` component.
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_2_src_components_main__["a" /* default */]);
+// export the root component we want to mount as the starting point to our app.
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_src_components_main__["a" /* default */]);
 
 /***/ }),
 
@@ -551,49 +574,30 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = reducer;
-// Sample reducer, showing how you can 'listen' to the `INCREMENT_COUNTER`
-// action, and update the counter state
-
-// Note: There's no need to specify default state, because the kit's Redux
-// init code wraps `undefined` state values in a `defaultReducer()` function,
-// that captures Redux sentinel vals and responds back with a black object --
-// so in our reducer functions, we can safely assume we're working with 'real'
-// immutable state
-
-function reducer(state, action) {
-  if (action.type === 'INCREMENT_COUNTER') {
-    // Where did `state.merge()` come from?  Our plain state object is automatically
-    // wrapped in a call to `seamless-immutable` in our reducer init code,
-    // so we can use its functions to return a guaranteed immutable version
-    return state.merge({
-      count: state.count + 1
-    });
-  }
-  return state;
-}
-
-/***/ }),
-
-/***/ 311:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_helmet__ = __webpack_require__(312);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_helmet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_helmet__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_kit_lib_routing__ = __webpack_require__(157);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_src_components_graphql__ = __webpack_require__(320);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_components_routes__ = __webpack_require__(322);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_src_components_redux__ = __webpack_require__(502);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_src_components_stats__ = __webpack_require__(503);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_src_components_styles__ = __webpack_require__(505);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__main_scss__ = __webpack_require__(509);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__main_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__reactql_logo_svg__ = __webpack_require__(510);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__reactql_logo_svg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__reactql_logo_svg__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_apollo__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react_apollo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_router_dom__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_helmet__ = __webpack_require__(309);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_helmet___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_react_helmet__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_kit_lib_routing__ = __webpack_require__(157);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_components_graphql__ = __webpack_require__(317);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_src_components_routes__ = __webpack_require__(319);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_src_components_main_index_LoginModal__ = __webpack_require__(320);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_src_components_main_index_DashboardLinkOrButton__ = __webpack_require__(490);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__ = __webpack_require__(492);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_src_components_redux__ = __webpack_require__(499);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_src_components_stats__ = __webpack_require__(500);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_src_components_styles__ = __webpack_require__(502);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__main_scss__ = __webpack_require__(506);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__reactql_logo_svg__ = __webpack_require__(507);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__reactql_logo_svg___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14__reactql_logo_svg__);
+var _templateObject = _taggedTemplateLiteral(['\n{\n  currentUser {\n    id\n  }\n}\n'], ['\n{\n  currentUser {\n    id\n  }\n}\n']);
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 // Main React component, that we'll import in `src/app.js`
 //
 // Note a few points from this file:
@@ -624,6 +628,7 @@ function reducer(state, action) {
 // React
 
 
+
 // Routing via React Router
 
 
@@ -646,6 +651,10 @@ function reducer(state, action) {
 
 
 
+
+
+
+
 // Styles
 
 
@@ -655,23 +664,47 @@ function reducer(state, action) {
 
 // ----------------------
 
-/* harmony default export */ __webpack_exports__["a"] = (function () {
+var query = Object(__WEBPACK_IMPORTED_MODULE_1_react_apollo__["gql"])(_templateObject);
+
+var IndexContainer = function IndexContainer(_ref) {
+  var data = _ref.data;
   return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
     'div',
     null,
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_helmet___default.a, {
-      title: 'ReactQL application',
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_react_helmet___default.a, {
+      title: 'moshimoji',
       meta: [{
         name: 'description',
-        content: 'ReactQL starter kit app'
+        content: 'Community-driven platform to read, share, and publish manga and other comics.'
       }] }),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_src_components_main_index_LoginModal__["a" /* default */], {
+      toggleModal: null }),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'div',
-      { className: __WEBPACK_IMPORTED_MODULE_9__main_scss___default.a.hello },
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('img', { src: __WEBPACK_IMPORTED_MODULE_10__reactql_logo_svg___default.a, alt: 'ReactQL', className: __WEBPACK_IMPORTED_MODULE_9__main_scss___default.a.logo })
+      { className: __WEBPACK_IMPORTED_MODULE_13__main_scss___default.a.hello },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+        { to: '/' },
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h1',
+          null,
+          'moshimoji'
+        )
+      )
     ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_src_components_graphql__["a" /* default */], null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'div',
+      { className: __WEBPACK_IMPORTED_MODULE_13__main_scss___default.a.hello },
+      data.loading || false ?
+      // TODO: use presentational component for first button
+      // TODO: make sure first button is grayed out when loading or initial react
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'button',
+        { onClick: console.log('dashboard button clicked while inactive') },
+        'dashboard'
+      ) : __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_src_components_main_index_DashboardLinkOrButton__["a" /* default */], { currentUser: data.currentUser })
+    ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'ul',
@@ -680,34 +713,61 @@ function reducer(state, action) {
         'li',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-          { to: '/' },
-          'Home'
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/reader' },
+          'reader'
         )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-          { to: '/page/about' },
-          'About'
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/database' },
+          'database'
         )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
-          { to: '/page/contact' },
-          'Contact'
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/forum' },
+          'forum'
         )
       ),
       __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
         'li',
         null,
         __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/reviews' },
+          'reviews'
+        )
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'li',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/doujin' },
+          'doujin'
+        )
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'li',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
+          { to: '/page/example' },
+          'Example page'
+        )
+      ),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'li',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["b" /* Link */],
           { to: '/old/path' },
           'Redirect from /old/path \u2192 /new/path'
         )
@@ -715,769 +775,48 @@ function reducer(state, action) {
     ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["e" /* Switch */],
+      __WEBPACK_IMPORTED_MODULE_2_react_router_dom__["e" /* Switch */],
       null,
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["d" /* Route */], { exact: true, path: '/', component: __WEBPACK_IMPORTED_MODULE_5_src_components_routes__["a" /* Home */] }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["d" /* Route */], { path: '/page/:name', component: __WEBPACK_IMPORTED_MODULE_5_src_components_routes__["b" /* Page */] }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_kit_lib_routing__["b" /* Redirect */], { from: '/old/path', to: '/new/path' }),
-      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react_router_dom__["d" /* Route */], { component: __WEBPACK_IMPORTED_MODULE_5_src_components_routes__["c" /* WhenNotFound */] })
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { exact: true, path: '/', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].SiteNews }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/dashboard', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Dashboard }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/reader', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Reader }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/database', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Database }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/forum', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Forum }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/reviews', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Reviews }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/doujin', component: __WEBPACK_IMPORTED_MODULE_9_src_components_modules_all__["a" /* default */].Doujin }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { path: '/page/:name', component: __WEBPACK_IMPORTED_MODULE_6_src_components_routes__["a" /* Page */] }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_4_kit_lib_routing__["b" /* Redirect */], { from: '/old/path', to: '/new/path' }),
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_react_router_dom__["d" /* Route */], { component: __WEBPACK_IMPORTED_MODULE_6_src_components_routes__["b" /* WhenNotFound */] })
     ),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_src_components_redux__["a" /* default */], null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_5_src_components_graphql__["a" /* default */], null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_10_src_components_redux__["a" /* default */], null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'p',
       null,
       'Runtime info:'
     ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_src_components_stats__["a" /* default */], null),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11_src_components_stats__["a" /* default */], null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('hr', null),
     __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
       'p',
       null,
       'Stylesheet examples:'
     ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_8_src_components_styles__["a" /* default */], null)
-  );
-});
-
-/***/ }),
-
-/***/ 320:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GraphQLMessage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_apollo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_messages_gql__ = __webpack_require__(521);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_messages_gql___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_messages_gql__);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _class;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// Now, let's create a GraphQL-enabled component...
-
-// ... then, let's create the component and decorate it with the `graphql`
-// HOC that will automatically populate `this.props` with the query data
-// once the GraphQL API request has been completed
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-
-
-
-// GraphQL
-
-
-/* App */
-
-// GraphQL queries.  Looking at this file demonstrates how to import fragments.
-// Webpack will compile this into inline GraphQL for us, so we can pass the
-// query to components using the @graphql decorator
-
-
-// ----------------------
-
-// Since this component needs to 'listen' to GraphQL data, we wrap it in
-// `react-apollo`'s `graphql` HOC/decorator and pass in the query that this
-// component requires.   Note: This is not to be confused with the `graphql`
-// lib, which is used on the server-side to initially define the schema
-var GraphQLMessage = (_dec = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(__WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_messages_gql___default.a), _dec(_class = function (_React$PureComponent) {
-  _inherits(GraphQLMessage, _React$PureComponent);
-
-  function GraphQLMessage() {
-    _classCallCheck(this, GraphQLMessage);
-
-    return _possibleConstructorReturn(this, (GraphQLMessage.__proto__ || Object.getPrototypeOf(GraphQLMessage)).apply(this, arguments));
-  }
-
-  _createClass(GraphQLMessage, [{
-    key: 'render',
-    value: function render() {
-      var data = this.props.data;
-
-      // Since we're dealing with async GraphQL data, we defend against the
-      // data not yet being loaded by checking to see that we have the `message`
-      // key on our returned object
-
-      var message = data.message && data.message.text;
-
-      // Apollo will tell us whether we're still loading.  We can also use this
-      // check to ensure we have a fully returned response
-      var isLoading = data.loading ? 'yes' : 'nope';
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          null,
-          'Message from GraphQL server: ',
-          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-            'em',
-            null,
-            message
-          )
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          null,
-          'Currently loading?: ',
-          isLoading
-        )
-      );
-    }
-  }]);
-
-  return GraphQLMessage;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent)) || _class);
-GraphQLMessage.propTypes = {
-  data: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    message: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-      text: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string
-    })
-  })
-};
-GraphQLMessage.defaultProps = {
-  data: {
-    message: {
-      text: null
-    }
-  }
-};
-
-
-/***/ }),
-
-/***/ 322:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Home; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return Page; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return WhenNotFound; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_kit_lib_routing__ = __webpack_require__(157);
-// Demonstrates several components on one page, each with their own `export`.
-//
-// These are smaller components that <Main> imports, and changes depending
-// on the page route (via React Router).
-//
-// <WhenNotFound> demonstrates the use of <NotFound>, a ReactQL helper
-// component that signals to our web server that we have a 404 error, to handle
-// accordingly
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-// React
-
-
-
-/* ReactQL */
-
-// NotFound 404 handler for unknown routes
-
-
-// ----------------------
-
-// We'll display this <Home> component when we're on the / route
-var Home = function Home() {
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'h1',
-    null,
-    'You\'re on the home page - click another link above'
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_12_src_components_styles__["a" /* default */], null)
   );
 };
 
-// Helper component that will be conditionally shown when the route matches.
-// This gives you an idea how React Router v4 works -- we have a `match`
-// prop that gives us information on the route we can use within the component
-var Page = function Page(_ref) {
-  var match = _ref.match;
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'h1',
-    null,
-    'Changed route: ',
-    match.params.name
-  );
-};
+var ApolloIndexContainer = Object(__WEBPACK_IMPORTED_MODULE_1_react_apollo__["graphql"])(query)(IndexContainer);
 
-// Specify PropTypes if the `match` object, which is injected to props by
-// the <Route> component
-Page.propTypes = {
-  match: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    params: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.object
-  }).isRequired
-};
-
-// Create a route that will be displayed when the code isn't found
-var WhenNotFound = function WhenNotFound() {
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    __WEBPACK_IMPORTED_MODULE_2_kit_lib_routing__["a" /* NotFound */],
-    null,
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'h1',
-      null,
-      'Unknown route - the 404 handler was triggered!'
-    )
-  );
-};
+/* harmony default export */ __webpack_exports__["a"] = (ApolloIndexContainer);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
 
 /***/ }),
 
-/***/ 502:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReduxCounter; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(96);
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _class;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// Component that demonstrates using a part of the Redux store
-// outside of Apollo.  We can use config.addReducer(key, reducer) in `src/app.js`
-// to add custom Redux reducers
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-
-
-// HOC/decorator to listen to Redux store state
-
-
-// ----------------------
-
-// @connect accepts a function that takes the full Redux state, and then
-// returns the portion of state that our component cares about.  In this example,
-// we're listening to `state.counter`, which we can show inside the component
-var ReduxCounter = (_dec = Object(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* connect */])(function (state) {
-  return { counter: state.counter };
-}), _dec(_class = function (_React$PureComponent) {
-  _inherits(ReduxCounter, _React$PureComponent);
-
-  function ReduxCounter() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, ReduxCounter);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReduxCounter.__proto__ || Object.getPrototypeOf(ReduxCounter)).call.apply(_ref, [this].concat(args))), _this), _this.triggerIncrement = function () {
-      _this.props.dispatch({
-        type: 'INCREMENT_COUNTER'
-      });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  // Trigger the `INCREMENT_COUNTER` action in Redux, to add 1 to the total.
-  // Note: by using the `= () {}` format, we're implicitly binding the component
-  // to `this`, which is why we can use @connect's `.dispatch()` function that's
-  // passed in as a prop
-
-
-  _createClass(ReduxCounter, [{
-    key: 'render',
-    value: function render() {
-      var count = this.props.counter.count;
-
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'div',
-        null,
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'h2',
-          null,
-          'Listening to Redux counter: ',
-          count
-        ),
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'button',
-          { onClick: this.triggerIncrement },
-          'Increment'
-        )
-      );
-    }
-  }]);
-
-  return ReduxCounter;
-}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent)) || _class);
-ReduxCounter.propTypes = {
-  counter: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
-    count: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
-  })
-};
-ReduxCounter.defaultProps = {
-  counter: {
-    count: 0
-  } };
-
-
-/***/ }),
-
-/***/ 503:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stats_scss__ = __webpack_require__(504);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stats_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__stats_scss__);
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-// Simple <Stats> component that displays our current environment.
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-// React
-
-
-/* App */
-
-// Styles
-
-
-// ----------------------
-
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-  // We can pull the environment from `process.env.NODE_ENV`, which is set
-  // to either 'development' | 'production' on both the server and in the browser
-  var info = [['Environment', "development"]];
-
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'ul',
-    { className: __WEBPACK_IMPORTED_MODULE_1__stats_scss___default.a.data },
-    info.map(function (_ref) {
-      var _ref2 = _slicedToArray(_ref, 2),
-          key = _ref2[0],
-          val = _ref2[1];
-
-      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-        'li',
-        { key: key },
-        key,
-        ': ',
-        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-          'span',
-          null,
-          val
-        )
-      );
-    })
-  );
-});
-
-/***/ }),
-
-/***/ 504:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"data":"data-1TlbpCj5FlrOdqUTJqH60F"};
-
-/***/ }),
-
-/***/ 505:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_css__ = __webpack_require__(506);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__styles_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_scss__ = __webpack_require__(507);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_less__ = __webpack_require__(508);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_less__);
-// Example of CSS, SASS and LESS styles being used together
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-
-/* App */
-
-// Styles
-
-
-
-
-// ----------------------
-
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-    'ul',
-    { className: __WEBPACK_IMPORTED_MODULE_1__styles_css___default.a.styleExamples },
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      { className: __WEBPACK_IMPORTED_MODULE_1__styles_css___default.a.example },
-      'Styled by CSS'
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      { className: __WEBPACK_IMPORTED_MODULE_2__styles_scss___default.a.example },
-      'Styled by SASS'
-    ),
-    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
-      'li',
-      { className: __WEBPACK_IMPORTED_MODULE_3__styles_less___default.a.example },
-      'Styled by LESS'
-    )
-  );
-});
-
-/***/ }),
-
-/***/ 506:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"styleExamples":"styleExamples-1odAJW6hJJkT1H4az7KebJ","example":"example-HDBhpRi1XOtosKy5rqCSL"};
-
-/***/ }),
-
-/***/ 507:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"example":"example-3x1WZ3q5Zomb6qbpAqayqQ"};
-
-/***/ }),
-
-/***/ 508:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"example":"example-Qwu6EO0LZh1IVEfs-9zO_"};
-
-/***/ }),
-
-/***/ 509:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-module.exports = {"hello":"hello-3yYdKbSCZaFVyGKKMfKulk","logo":"logo-pd8BfVR8JEOTwAIiOe-h2"};
-
-/***/ }),
-
-/***/ 510:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "assets/img/reactql-logo.7b90d212d7c2537aeffb13ed959c5491.svg";
-
-/***/ }),
-
-/***/ 511:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 512:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export createClient */
-/* unused harmony export getNetworkInterface */
-/* harmony export (immutable) */ __webpack_exports__["a"] = browserClient;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_apollo__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react_apollo__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_kit_config__ = __webpack_require__(95);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_kit_lib_env__ = __webpack_require__(513);
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-// Apollo client library
-
-
-/* ReactQL */
-
-// Configuration
-
-
-// Get environment, to figure out where we're running the GraphQL server
-
-
-// ----------------------
-
-// Helper function to create a new Apollo client, by merging in
-// passed options alongside any set by `config.setApolloOptions` and defaults
-function createClient() {
-  var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  return new __WEBPACK_IMPORTED_MODULE_0_react_apollo__["ApolloClient"](Object.assign({
-    reduxRootSelector: function reduxRootSelector(state) {
-      return state.apollo;
-    }
-  }, __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloClientOptions, opt));
-}
-
-// Wrap `createNetworkInterface` to attach middleware
-function getNetworkInterface(uri) {
-  var networkInterface = Object(__WEBPACK_IMPORTED_MODULE_0_react_apollo__["createNetworkInterface"])({
-    uri: uri,
-    opts: __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloNetworkOptions
-  });
-
-  // Attach middleware
-  networkInterface.use(__WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloMiddleware.map(function (f) {
-    return { applyMiddleware: f };
-  }));
-  networkInterface.useAfter(__WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloAfterware.map(function (f) {
-    return { applyAfterware: f };
-  }));
-
-  return networkInterface;
-}
-
-// Creates a new browser client
-function browserClient() {
-  // If we have an internal GraphQL server, we need to append it with a
-  // call to `getServerURL()` to add the correct host (in dev + production)
-  var uri = __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLServer ? '' + Object(__WEBPACK_IMPORTED_MODULE_2_kit_lib_env__["a" /* getServerURL */])() + __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLEndpoint : __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLEndpoint;
-
-  return createClient({
-    networkInterface: getNetworkInterface(uri)
-  });
-}
-
-/***/ }),
-
-/***/ 513:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = getServerURL;
-/* eslint-disable import/prefer-default-export */
-
-// Environment-aware functions
-
-// Get the protocol://host:port of where the current server would bind
-function getServerURL() {
-  var host = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "localhost";
-  var port = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "8081";
-  var allowSSL = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-  // Check for SSL
-  if (allowSSL && null) {
-    var _stub = 'https://' + (host || "localhost");
-
-    // If we're on port 443, that's 'regular' SSL so no need to specify port
-    if (null === '443') return _stub;
-    return _stub + ':' + null;
-  }
-
-  // Plain HTTP
-  var stub = 'http://' + (host || "localhost");
-
-  // If we're on port 80, that's 'regular' HTTP so no need to specify port
-  if (port === '80') return stub;
-  return stub + ':' + port;
-}
-
-/***/ }),
-
-/***/ 514:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = createNewStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk__ = __webpack_require__(515);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_redux_thunk__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_seamless_immutable__ = __webpack_require__(516);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_seamless_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_seamless_immutable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_kit_config__ = __webpack_require__(95);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-/* eslint-disable no-underscore-dangle */
-
-/*
-Custom Redux store creation.  Along with the default Apollo store,
-we can define custom reducers using `kit/config.addReducer()` which will
-be available on the server and in the browser.
-
-Store state is wrapped by `seamless-immutable` to enforce a pattern of
-immutability, to prevent weird side effects.
-*/
-
-// ----------------------
-// IMPORTS
-
-/* NPM */
-
-
-
-
-/* Local */
-
-
-// ----------------------
-
-// Detect if we're both in the browser, AND we have dehydrated state
-var hasState = !!(!false && window.__STATE__);
-
-// Helper function that 'unwinds' the `config.reducers` Map, and provides
-// the `reducer` function or `initialState` (wrapped in `seamless-immutable`)
-// depending on what we asked for
-function unwind() {
-  var reducer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-  // Unwind `config.reducers`.  If we're looking for the `reducer`, we'll
-  // wrap this in a `defaultReducer` function that properly handles the Redux
-  // 'undefined' sentinel value, or calls 'real' reducer if it's not undefined.
-  //
-  // If we're not looking for reducers, it'll pull out the `initialState`
-  // variable instead, which we'll further process below
-  var r = Object.assign.apply(Object, [{}].concat(_toConsumableArray([].concat([].concat(_toConsumableArray(__WEBPACK_IMPORTED_MODULE_3_kit_config__["a" /* default */].reducers)).map(function (arr) {
-    return _defineProperty({}, arr[0], reducer ? function defaultReducer(state, action) {
-      // If `state` === undefined, this is Redux sending a sentinel value
-      // to check our set-up.  So we'll send back a plain object to prove
-      // that we're properly handling our reducer
-      if (typeof state === 'undefined') return {};
-
-      // Otherwise, call our real reducer with the {state, action}
-      return arr[1].reducer(state, action);
-    } : arr[1].initialState);
-  })))));
-
-  // If this is a reducer, return at this point
-  if (reducer) return r;
-
-  // If not, we're looking for the state -- so let's map it and wrap the
-  // object in `seamless-immutable`, to avoid side-effects with Redux
-  return Object.assign.apply(Object, [{}].concat(_toConsumableArray(Object.keys(r).map(function (key) {
-    return _defineProperty({}, key, __WEBPACK_IMPORTED_MODULE_2_seamless_immutable___default()(hasState && window.__STATE__[key] || r[key]));
-  }))));
-}
-
-function createNewStore(apolloClient) {
-  var store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(
-  // By default, we'll use just the apollo reducer.  We can easily add our
-  // own here, for global store management outside of Apollo
-  Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])(_extends({
-    apollo: apolloClient.reducer()
-  }, unwind())),
-  // Initial server state, provided by the server.
-  _extends({
-    apollo: hasState && window.__STATE__.apollo || {}
-  }, unwind(false)), Object(__WEBPACK_IMPORTED_MODULE_0_redux__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_0_redux__["applyMiddleware"])(apolloClient.middleware(), __WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a),
-  // Enable Redux Devtools on the browser, for easy state debugging
-  // eslint-disable-next-line no-underscore-dangle
-  !false && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : function (f) {
-    return f;
-  }));
-
-  return store;
-}
-
-/***/ }),
-
-/***/ 521:
-/***/ (function(module, exports, __webpack_require__) {
-
-
-    var doc = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"message"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"message"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Message"},"directives":[]}]}}]}}],"loc":{"start":0,"end":74}};
-    doc.loc.source = {"body":"#import \"./message.gql\"\n\nquery message {\n  message {\n    ...Message\n  }\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
-  
-
-    var names = {};
-    function unique(defs) {
-      return defs.filter(
-        function(def) {
-          if (def.kind !== 'FragmentDefinition') return true;
-          var name = def.name.value
-          if (names[name]) {
-            return false;
-          } else {
-            names[name] = true;
-            return true;
-          }
-        }
-      )
-    }
-  doc.definitions = doc.definitions.concat(unique(__webpack_require__(522).definitions));
-
-module.exports = doc;
-
-/***/ }),
-
-/***/ 522:
-/***/ (function(module, exports) {
-
-
-    var doc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Message"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"text"},"arguments":[],"directives":[],"selectionSet":null}]}}],"loc":{"start":0,"end":39}};
-    doc.loc.source = {"body":"fragment Message on Message {\n  text\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
-  
-
-    var names = {};
-    function unique(defs) {
-      return defs.filter(
-        function(def) {
-          if (def.kind !== 'FragmentDefinition') return true;
-          var name = def.name.value
-          if (names[name]) {
-            return false;
-          } else {
-            names[name] = true;
-            return true;
-          }
-        }
-      )
-    }
-  
-module.exports = doc;
-
-/***/ }),
-
-/***/ 95:
+/***/ 31:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1514,6 +853,9 @@ var Common = function () {
 
     // Set to true if we're using an internal GraphQL server
     this.graphQLServer = false;
+
+    // Endpoint to retrieve jwt token. This needs setting via config.setJwtEndpoint()`
+    this.jwtEndpoint = null;
   }
 
   /* REDUX */
@@ -1561,6 +903,14 @@ var Common = function () {
 
       this.graphQLEndpoint = uri;
       this.graphiQL = graphiQL;
+    }
+
+    // Set a URI to retrieve jwt tokens for auth
+
+  }, {
+    key: 'setJwtEndpoint',
+    value: function setJwtEndpoint(uri) {
+      this.jwtEndpoint = uri;
     }
 
     // Register Apollo middleware function
@@ -1871,6 +1221,1508 @@ if (false) {
 // instance here and export it.  This will then provide any subsequent imports
 // with the same object, so we can add settings to a common config
 /* harmony default export */ __webpack_exports__["a"] = (new Config());
+
+/***/ }),
+
+/***/ 317:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GraphQLMessage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react_apollo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_user_statuses_gql__ = __webpack_require__(318);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_user_statuses_gql___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_user_statuses_gql__);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Now, let's create a GraphQL-enabled component...
+
+// ... then, let's create the component and decorate it with the `graphql`
+// HOC that will automatically populate `this.props` with the query data
+// once the GraphQL API request has been completed
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+
+
+// GraphQL
+
+
+/* App */
+
+// GraphQL queries.  Looking at this file demonstrates how to import fragments.
+// Webpack will compile this into inline GraphQL for us, so we can pass the
+// query to components using the @graphql decorator
+//import allMessages from 'src/graphql/queries/all_messages.gql';
+
+
+// ----------------------
+
+// Since this component needs to 'listen' to GraphQL data, we wrap it in
+// `react-apollo`'s `graphql` HOC/decorator and pass in the query that this
+// component requires.   Note: This is not to be confused with the `graphql`
+// lib, which is used on the server-side to initially define the schema
+var GraphQLMessage = (_dec = Object(__WEBPACK_IMPORTED_MODULE_2_react_apollo__["graphql"])(__WEBPACK_IMPORTED_MODULE_3_src_graphql_queries_all_user_statuses_gql___default.a), _dec(_class = function (_React$PureComponent) {
+  _inherits(GraphQLMessage, _React$PureComponent);
+
+  function GraphQLMessage() {
+    _classCallCheck(this, GraphQLMessage);
+
+    return _possibleConstructorReturn(this, (GraphQLMessage.__proto__ || Object.getPrototypeOf(GraphQLMessage)).apply(this, arguments));
+  }
+
+  _createClass(GraphQLMessage, [{
+    key: 'render',
+
+    // TODO: create a function to generate gql from proptypes or vice versa, or
+    // from a common object (would I need to refer to schema for field types?),
+    // if that will save me time
+
+    value: function render() {
+      var data = this.props.data;
+      // Since we're dealing with async GraphQL data, we defend against the
+      // data not yet being loaded by checking to see that we have the `message`
+      // key on our returned object
+      //   const message = data.message && data.message.text;
+      // TODO: understand how this line^ works
+
+      // Apollo will tell us whether we're still loading.  We can also use this
+      // check to ensure we have a fully returned response
+
+      var isLoading = data.loading ? 'yes' : 'nope';
+      var message = isLoading == 'nope' ? data.allUserStatuses.edges[0].node.text : 'None';
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          null,
+          'Message from GraphQL server: ',
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            'em',
+            null,
+            message
+          )
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          null,
+          'Currently loading?: ',
+          isLoading
+        )
+      );
+    }
+  }]);
+
+  return GraphQLMessage;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent)) || _class);
+GraphQLMessage.propTypes = {
+  data: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+    allUserStatuses: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+      edges: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+        node: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+          id: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired,
+          text: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.string.isRequired
+        }).isRequired
+      }).isRequired).isRequired
+    }).isRequired
+  }).isRequired
+};
+GraphQLMessage.defaultProps = {
+  data: {
+    allUserStatuses: {
+      edges: [{
+        node: {
+          id: 0,
+          text: 'default text'
+        }
+      }]
+    }
+  }
+};
+
+
+/***/ }),
+
+/***/ 318:
+/***/ (function(module, exports) {
+
+
+    var doc = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"allUserStatuses"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"id"},"arguments":[],"directives":[],"selectionSet":null},{"kind":"Field","alias":null,"name":{"kind":"Name","value":"text"},"arguments":[],"directives":[],"selectionSet":null}]}}]}}]}}]}}],"loc":{"start":0,"end":98}};
+    doc.loc.source = {"body":"query {\n  allUserStatuses {\n    edges {\n      node {\n        id,\n        text\n      }\n    }\n  }\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
+  
+
+    var names = {};
+    function unique(defs) {
+      return defs.filter(
+        function(def) {
+          if (def.kind !== 'FragmentDefinition') return true;
+          var name = def.name.value
+          if (names[name]) {
+            return false;
+          } else {
+            names[name] = true;
+            return true;
+          }
+        }
+      )
+    }
+  
+module.exports = doc;
+
+/***/ }),
+
+/***/ 319:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Home */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Page; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return WhenNotFound; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_kit_lib_routing__ = __webpack_require__(157);
+// Demonstrates several components on one page, each with their own `export`.
+//
+// These are smaller components that <Main> imports, and changes depending
+// on the page route (via React Router).
+//
+// <WhenNotFound> demonstrates the use of <NotFound>, a ReactQL helper
+// component that signals to our web server that we have a 404 error, to handle
+// accordingly
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+// React
+
+
+
+/* ReactQL */
+
+// NotFound 404 handler for unknown routes
+
+
+// ----------------------
+
+// We'll display this <Home> component when we're on the / route
+var Home = function Home() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h1',
+    null,
+    'You\'re on the home page - click another link above'
+  );
+};
+
+// Helper component that will be conditionally shown when the route matches.
+// This gives you an idea how React Router v4 works -- we have a `match`
+// prop that gives us information on the route we can use within the component
+var Page = function Page(_ref) {
+  var match = _ref.match;
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h1',
+    null,
+    'Changed route: ',
+    match.params.name
+  );
+};
+
+// Specify PropTypes if the `match` object, which is injected to props by
+// the <Route> component
+Page.propTypes = {
+  match: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+    params: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.object
+  }).isRequired
+};
+
+// Create a route that will be displayed when the code isn't found
+var WhenNotFound = function WhenNotFound() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    __WEBPACK_IMPORTED_MODULE_2_kit_lib_routing__["a" /* NotFound */],
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h1',
+      null,
+      'Unknown route - the 404 handler was triggered!'
+    )
+  );
+};
+
+/***/ }),
+
+/***/ 320:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__ = __webpack_require__(330);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_kit_config__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__store_actions__ = __webpack_require__(212);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+
+// HOC/decorator to listen to Redux store state
+
+
+
+
+
+
+
+// ----------------------
+// STYLING
+var FADE_DURATION = 200;
+
+var styles = {
+  modal: {
+    position: 'fixed',
+    zIndex: 1040,
+    top: 0, bottom: 0, left: 0, right: 0
+  },
+  modalBackdrop: {
+    position: 'fixed',
+    top: 0, bottom: 0, left: 0, right: 0,
+    zIndex: 'auto',
+    backgroundColor: '#000',
+    opacity: 0.5
+  },
+  modalTextContainer: {
+    position: 'absolute',
+    width: '50%',
+    height: '50%',
+    top: '50%', left: '50%',
+    transform: 'translate(-' + 50 + '%, -' + 50 + '%)',
+    border: '1px solid #fff555',
+    backgroundColor: 'white',
+    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
+    padding: 20,
+    textAlign: 'center'
+  }
+};
+
+// -----------------------
+// REDUX
+
+// @connect accepts a function that takes the full Redux state, and then
+// returns the portion of state that our component cares about.  In this example,
+// we're listening to `state.counter`, which we can show inside the component
+var LoginModal = (_dec = Object(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* connect */])(function (state) {
+  return { loginModal: state.loginModal };
+}), _dec(_class = function (_Component) {
+  _inherits(LoginModal, _Component);
+
+  function LoginModal() {
+    _classCallCheck(this, LoginModal);
+
+    return _possibleConstructorReturn(this, (LoginModal.__proto__ || Object.getPrototypeOf(LoginModal)).apply(this, arguments));
+  }
+
+  _createClass(LoginModal, [{
+    key: 'handleSubmit',
+    value: function handleSubmit(loginDest, e) {
+      e.preventDefault();
+      var data = new FormData(this.form);
+      fetch(__WEBPACK_IMPORTED_MODULE_4_kit_config__["a" /* default */].jwtEndpoint, {
+        method: 'POST',
+        body: data
+      }).then(function (res) {
+        res.json().then(function (resJson) {
+          if (resJson.token) {
+            localStorage.setItem('token', resJson.token);
+            window.location.replace(loginDest);
+          }
+        });
+      }).catch(function (err) {
+        console.log('Network error: ' + err);
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      // TODO: add logic to compute destination dynamically.
+      // can be dashboard or home/site news, depending on origin
+      // of modal (dashboard button or link preceding)
+      var loginDest = '/dashboard';
+
+      return (
+        // <Transition
+        //   in={true}
+        //   timeout={FADE_DURATION}
+        //   className='fade'
+        //   enteredClassName='in'
+        //   enteringClassName='in'>
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Modal */],
+          {
+            show: this.props.loginModal.show,
+            onHide: function onHide() {
+              _this2.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_5__store_actions__["a" /* toggleLoginModal */])(false));
+            },
+            style: styles.modal,
+            backdropStyle: styles.modalBackdrop },
+          __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+            __WEBPACK_IMPORTED_MODULE_3_react_bootstrap__["a" /* Modal */].Body,
+            { style: styles.modalTextContainer },
+            __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+              'form',
+              {
+                ref: function ref(_ref) {
+                  return _this2.form = _ref;
+                },
+                onSubmit: function onSubmit(e) {
+                  return _this2.handleSubmit(loginDest, e);
+                }
+              },
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                null,
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  null,
+                  'Username:'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'text', name: 'username' })
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'div',
+                null,
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                  'label',
+                  null,
+                  'Password:'
+                ),
+                __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement('input', { type: 'password', name: 'password' })
+              ),
+              __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+                'button',
+                { type: 'submit' },
+                'Login'
+              )
+            )
+          )
+        )
+        // </Transition>
+
+      );
+    }
+  }]);
+
+  return LoginModal;
+}(__WEBPACK_IMPORTED_MODULE_0_react__["Component"])) || _class);
+LoginModal.propTypes = {
+  // counter: PropTypes.shape({
+  //   count: PropTypes.number.isRequired,
+  // }),
+};
+LoginModal.defaultProps = {
+  // counter: {
+  //   count: 0,
+  // },
+};
+
+
+/* harmony default export */ __webpack_exports__["a"] = (LoginModal);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
+/***/ 490:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_components_reused_LinkOrButton__ = __webpack_require__(491);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store_actions__ = __webpack_require__(212);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+// HOC/decorator to listen to Redux store state
+
+
+// components
+
+
+// Redux actions
+
+
+// ----------------------
+// COMPONENT
+// TODO: figure out if this can/should be rewritten as a stateless functional
+// component, even if it needs the the dispatch prop (don't think I can use an
+// es6 class decorator with a functional component, so can't use @connect)
+// TODO: consider refactoring this and LinkOrButton;
+// does it make sense to store things as class attrs?
+// does propsToPass really make sense?
+// or can I simply just pass uri, onclick separately?
+// should the isLink logic be moved elswhere?
+var DashboardLinkOrButton = (_dec = Object(__WEBPACK_IMPORTED_MODULE_1_react_redux__["a" /* connect */])(), _dec(_class = function (_React$PureComponent) {
+  _inherits(DashboardLinkOrButton, _React$PureComponent);
+
+  function DashboardLinkOrButton(props) {
+    _classCallCheck(this, DashboardLinkOrButton);
+
+    // TODO: figure out if this should be setState instead
+    var _this = _possibleConstructorReturn(this, (DashboardLinkOrButton.__proto__ || Object.getPrototypeOf(DashboardLinkOrButton)).call(this, props));
+
+    if (_this.props.currentUser) {
+      _this.isLink = true;
+      _this.propsToPass = {
+        uri: '/dashboard/site'
+      };
+    } else {
+      _this.isLink = false;
+      _this.propsToPass = {
+        onClick: function onClick() {
+          console.log('dashboard button was clicked');
+          _this.props.dispatch(Object(__WEBPACK_IMPORTED_MODULE_3__store_actions__["a" /* toggleLoginModal */])(true));
+        }
+      };
+    }
+    return _this;
+  }
+
+  _createClass(DashboardLinkOrButton, [{
+    key: 'render',
+    value: function render() {
+      var DisplayComponent = function DisplayComponent(_ref) {
+        var onClick = _ref.onClick;
+        return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'button',
+          { onClick: onClick },
+          'dashboard'
+        );
+      };
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2_src_components_reused_LinkOrButton__["a" /* default */], {
+        DisplayComponent: DisplayComponent,
+        isLink: this.isLink,
+        propsToPass: this.propsToPass });
+    }
+  }]);
+
+  return DashboardLinkOrButton;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent)) || _class);
+DashboardLinkOrButton.propTypes = {
+  // counter: PropTypes.shape({
+  //   count: PropTypes.number.isRequired,
+  // }),
+};
+DashboardLinkOrButton.defaultProps = {
+  // counter: {
+  //   count: 0,
+  // },
+};
+
+
+/* harmony default export */ __webpack_exports__["a"] = (DashboardLinkOrButton);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
+/***/ 491:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_router_dom__ = __webpack_require__(59);
+
+
+
+// <LinkOrButton displayComponent={const} onClick= />
+var LinkOrButton = function LinkOrButton(_ref) {
+  var DisplayComponent = _ref.DisplayComponent,
+      isLink = _ref.isLink,
+      propsToPass = _ref.propsToPass;
+
+  if (isLink) {
+    var uri = propsToPass.uri,
+        _otherProps = propsToPass.otherProps;
+
+    return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      __WEBPACK_IMPORTED_MODULE_1_react_router_dom__["b" /* Link */],
+      { to: uri },
+      __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(DisplayComponent, { props: _otherProps })
+    );
+  }
+
+  var onClick = propsToPass.onClick,
+      otherProps = propsToPass.otherProps;
+
+  console.log('LinkOrButton');
+  console.log(onClick);
+  console.log(propsToPass);
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(DisplayComponent, { onClick: onClick, props: otherProps });
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (LinkOrButton);
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
+/***/ 492:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_src_components_modules_Dashboard__ = __webpack_require__(213);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_src_components_modules_Database__ = __webpack_require__(493);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_components_modules_Doujin__ = __webpack_require__(494);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_src_components_modules_Forum__ = __webpack_require__(495);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_src_components_modules_Reader__ = __webpack_require__(496);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_src_components_modules_Reviews__ = __webpack_require__(497);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_src_components_modules_SiteNews__ = __webpack_require__(498);
+
+
+
+
+
+
+
+
+var modules = {
+  Dashboard: __WEBPACK_IMPORTED_MODULE_0_src_components_modules_Dashboard__["a" /* default */],
+  Database: __WEBPACK_IMPORTED_MODULE_1_src_components_modules_Database__["a" /* default */],
+  Doujin: __WEBPACK_IMPORTED_MODULE_2_src_components_modules_Doujin__["a" /* default */],
+  Forum: __WEBPACK_IMPORTED_MODULE_3_src_components_modules_Forum__["a" /* default */],
+  Reader: __WEBPACK_IMPORTED_MODULE_4_src_components_modules_Reader__["a" /* default */],
+  Reviews: __WEBPACK_IMPORTED_MODULE_5_src_components_modules_Reviews__["a" /* default */],
+  SiteNews: __WEBPACK_IMPORTED_MODULE_6_src_components_modules_SiteNews__["a" /* default */]
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (modules);
+
+/***/ }),
+
+/***/ 493:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Database = function Database() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h2',
+    null,
+    'Database module'
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Database);
+
+/***/ }),
+
+/***/ 494:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Doujin = function Doujin() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h2',
+    null,
+    'Doujin module'
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Doujin);
+
+/***/ }),
+
+/***/ 495:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Dashboard__ = __webpack_require__(213);
+
+
+
+var Forum = function Forum() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'div',
+    null,
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'h2',
+      null,
+      'Forum module'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1__Dashboard__["a" /* default */], null)
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Forum);
+
+/***/ }),
+
+/***/ 496:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Reader = function Reader() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h2',
+    null,
+    'Reader module'
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Reader);
+
+/***/ }),
+
+/***/ 497:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var Reviews = function Reviews() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h2',
+    null,
+    'Reviews module'
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Reviews);
+
+/***/ }),
+
+/***/ 498:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+
+
+var SiteNews = function SiteNews() {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'h2',
+    null,
+    'Site news module'
+  );
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (SiteNews);
+
+/***/ }),
+
+/***/ 499:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReduxCounter; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react_redux__ = __webpack_require__(96);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _class;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// Component that demonstrates using a part of the Redux store
+// outside of Apollo.  We can use config.addReducer(key, reducer) in `src/app.js`
+// to add custom Redux reducers
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+
+// HOC/decorator to listen to Redux store state
+
+
+// ----------------------
+
+// @connect accepts a function that takes the full Redux state, and then
+// returns the portion of state that our component cares about.  In this example,
+// we're listening to `state.counter`, which we can show inside the component
+var ReduxCounter = (_dec = Object(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* connect */])(function (state) {
+  return { counter: state.counter };
+}), _dec(_class = function (_React$PureComponent) {
+  _inherits(ReduxCounter, _React$PureComponent);
+
+  function ReduxCounter() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, ReduxCounter);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReduxCounter.__proto__ || Object.getPrototypeOf(ReduxCounter)).call.apply(_ref, [this].concat(args))), _this), _this.triggerIncrement = function () {
+      _this.props.dispatch({
+        type: 'INCREMENT_COUNTER'
+      });
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  // Trigger the `INCREMENT_COUNTER` action in Redux, to add 1 to the total.
+  // Note: by using the `= () {}` format, we're implicitly binding the component
+  // to `this`, which is why we can use @connect's `.dispatch()` function that's
+  // passed in as a prop
+
+
+  _createClass(ReduxCounter, [{
+    key: 'render',
+    value: function render() {
+      var count = this.props.counter.count;
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'h2',
+          null,
+          'Listening to Redux counter: ',
+          count
+        ),
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'button',
+          { onClick: this.triggerIncrement },
+          'Increment'
+        )
+      );
+    }
+  }]);
+
+  return ReduxCounter;
+}(__WEBPACK_IMPORTED_MODULE_0_react___default.a.PureComponent)) || _class);
+ReduxCounter.propTypes = {
+  counter: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.shape({
+    count: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.number.isRequired
+  })
+};
+ReduxCounter.defaultProps = {
+  counter: {
+    count: 0
+  } };
+
+
+/***/ }),
+
+/***/ 500:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stats_scss__ = __webpack_require__(501);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__stats_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__stats_scss__);
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+// Simple <Stats> component that displays our current environment.
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+// React
+
+
+/* App */
+
+// Styles
+
+
+// ----------------------
+
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+  // We can pull the environment from `process.env.NODE_ENV`, which is set
+  // to either 'development' | 'production' on both the server and in the browser
+  var info = [['Environment', "development"]];
+
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'ul',
+    { className: __WEBPACK_IMPORTED_MODULE_1__stats_scss___default.a.data },
+    info.map(function (_ref) {
+      var _ref2 = _slicedToArray(_ref, 2),
+          key = _ref2[0],
+          val = _ref2[1];
+
+      return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+        'li',
+        { key: key },
+        key,
+        ': ',
+        __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+          'span',
+          null,
+          val
+        )
+      );
+    })
+  );
+});
+
+/***/ }),
+
+/***/ 501:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"data":"data-1TlbpCj5FlrOdqUTJqH60F"};
+
+/***/ }),
+
+/***/ 502:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_css__ = __webpack_require__(503);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__styles_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__styles_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_scss__ = __webpack_require__(504);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__styles_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__styles_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_less__ = __webpack_require__(505);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__styles_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__styles_less__);
+// Example of CSS, SASS and LESS styles being used together
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+/* App */
+
+// Styles
+
+
+
+
+// ----------------------
+
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+  return __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+    'ul',
+    { className: __WEBPACK_IMPORTED_MODULE_1__styles_css___default.a.styleExamples },
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'li',
+      { className: __WEBPACK_IMPORTED_MODULE_1__styles_css___default.a.example },
+      'Styled by CSS'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'li',
+      { className: __WEBPACK_IMPORTED_MODULE_2__styles_scss___default.a.example },
+      'Styled by SASS'
+    ),
+    __WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(
+      'li',
+      { className: __WEBPACK_IMPORTED_MODULE_3__styles_less___default.a.example },
+      'Styled by LESS'
+    )
+  );
+});
+
+/***/ }),
+
+/***/ 503:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"styleExamples":"styleExamples-1odAJW6hJJkT1H4az7KebJ","example":"example-HDBhpRi1XOtosKy5rqCSL"};
+
+/***/ }),
+
+/***/ 504:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"example":"example-3x1WZ3q5Zomb6qbpAqayqQ"};
+
+/***/ }),
+
+/***/ 505:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"example":"example-Qwu6EO0LZh1IVEfs-9zO_"};
+
+/***/ }),
+
+/***/ 506:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+module.exports = {"hello":"hello-3yYdKbSCZaFVyGKKMfKulk","logo":"logo-pd8BfVR8JEOTwAIiOe-h2"};
+
+/***/ }),
+
+/***/ 507:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "assets/img/reactql-logo.7b90d212d7c2537aeffb13ed959c5491.svg";
+
+/***/ }),
+
+/***/ 508:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_kit_config__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_src_reducers_counter__ = __webpack_require__(509);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_src_reducers_login_modal__ = __webpack_require__(510);
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+
+/* REDUCERS */
+
+
+
+// ----------------------
+// ADDS
+// Add our custom `counter` reducer, with the initial state as a zero count.
+// Note:  The initial state (3rd param) will automatically be wrapped in
+// `seamless-immutable` by the kit's Redux init code, so plain objects are
+// automatically immutable by default
+__WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].addReducer('counter', __WEBPACK_IMPORTED_MODULE_1_src_reducers_counter__["a" /* default */], { count: 0 });
+__WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].addReducer('loginModal', __WEBPACK_IMPORTED_MODULE_2_src_reducers_login_modal__["a" /* default */], { show: false });
+
+/***/ }),
+
+/***/ 509:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = reducer;
+// Sample reducer, showing how you can 'listen' to the `INCREMENT_COUNTER`
+// action, and update the counter state
+
+// Note: There's no need to specify default state, because the kit's Redux
+// init code wraps `undefined` state values in a `defaultReducer()` function,
+// that captures Redux sentinel vals and responds back with a black object --
+// so in our reducer functions, we can safely assume we're working with 'real'
+// immutable state
+
+function reducer(state, action) {
+  if (action.type === 'INCREMENT_COUNTER') {
+    // Where did `state.merge()` come from?  Our plain state object is automatically
+    // wrapped in a call to `seamless-immutable` in our reducer init code,
+    // so we can use its functions to return a guaranteed immutable version
+    return state.merge({
+      count: state.count + 1
+    });
+  }
+  return state;
+}
+
+/***/ }),
+
+/***/ 510:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = reducer;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_immutable__ = __webpack_require__(511);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_immutable__);
+
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'TOGGLE_MODAL':
+      // replace loginModal state with payload in TOGGLE_MODAL action
+      return action.payload; // TODO: verify that not using a more immutable struct here is ok
+    default:
+      return state;
+  }
+}
+
+/***/ }),
+
+/***/ 512:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(console) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_kit_config__ = __webpack_require__(31);
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+
+// ----------------------
+// PROJECT CONFIGURATION
+
+// eslint-disable-next-line no-console
+console.log('project config being run');
+// eslint-disable-next-line no-console
+console.log(Object({"HOST":"localhost","PORT":"8081","SSL_PORT":null,"NODE_ENV":"development","DEBUG":true}));
+
+/* BACKEND */
+var uriOptions = {
+  servers: {
+    development: '127.0.0.1:8000',
+    production: ''
+  },
+  slugs: {
+    graphql: 'gql',
+    jwtRetrieve: 'api-token-auth'
+  }
+};
+
+/* GRAPHQL */
+// TODO: add logic to determine graphql,jwt endpoint in docker for aws swarm
+if (true) {
+  __WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].setGraphQLEndpoint('http://' + uriOptions.servers.development + '/' + uriOptions.slugs.graphql + '/');
+  __WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].setJwtEndpoint('http://' + uriOptions.servers.development + '/' + uriOptions.slugs.jwtRetrieve + '/');
+  // eslint-disable-next-line no-console
+  console.log('set graphql endpoint to ' + __WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].graphQLEndpoint + ' in project config');
+  // eslint-disable-next-line no-console
+  console.log('set endpoint to retrieve jwt to ' + __WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].jwtEndpoint + ' in project config');
+}
+
+/* APOLLO */
+// TODO: figure out if setting this here is OK if network int.
+// is created before, in browser and server_*.js.
+__WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].setApolloNetworkOptions({
+  credentials: 'same-origin'
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(9)))
+
+/***/ }),
+
+/***/ 513:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_kit_config__ = __webpack_require__(31);
+var _this = this;
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+
+// ----------------------
+// SERVER CONFIGURATION
+
+// Set server config, by checking `SERVER` -- this code path will be
+// eliminated by Webpack in the browser bundle.
+
+if (false) {
+  /* SSL */
+
+  // Leaving server as plain HTTP for now, since using Nginx upstream to handle
+  // HTTPS is recommmended. See config/example.js for explanation about options.
+
+  // const cert = require('src/cert/self_signed');
+  // config.enableSSL({ key: cert.key, cert: cert.cert });
+
+  /* CUSTOM ROUTES */
+
+  // Not enabling any custom routes at the moment. See config/example.js fmi.
+  // config.addGetRoute('/test', async ctx => {
+  //   ctx.body = `Body content here`;
+  // });
+
+  /* CUSTOM 404 HANDLER */
+
+  // custom 404 for server routes. see config/example.js fmi.
+
+  config.set404Handler(function (ctx) {
+    var stateDump = JSON.stringify(ctx.store.getState());
+    ctx.status = 404;
+    ctx.body = 'This route does not exist on the server - Redux dump: ' + stateDump;
+  });
+
+  /* CUSTOM ERROR HANDLER */
+
+  //  where `e` is the error thrown, `ctx` is the Koa context object.
+  // not incorporating third-party tools with next() yet.
+  // see config/example.js fmi.
+  config.setErrorHandler(function (e, ctx /* `next` is unused in this example */) {
+    // eslint-disable-next-line no-console
+    console.log('Error: ', e.message);
+    ctx.body = 'Some kind of error. Check your source code.\n' + e.message;
+  });
+
+  /* CUSTOM KOA APP INSTANTIATION */
+
+  // config of`app` outside of middleware/routing
+  // see config/example.js fmi & examples.
+  config.getKoaApp(function (app) {
+    // add new `engine` key to the app.context` prototype; used by middleware
+    // below to set a `Powered-By` header.
+    // eslint-disable-next-line no-param-reassign
+    app.context.engine = 'ReactQL';
+  });
+
+  /* CUSTOM MIDDLEWARE */
+
+  // Custom middleware to be processed on the server.
+  config.addMiddleware(function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(ctx, next) {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              // custom header
+              ctx.set('Powered-By', ctx.engine); // <-- `ctx.engine` srt above!
+
+              // Redux action to manipulate the state on the server side.
+              ctx.store.dispatch({ type: 'INCREMENT_COUNTER' });
+
+              // Always return `next()`, otherwise the request won't 'pass' to the next
+              // middleware in the stack (likely, the React handler)
+              return _context.abrupt('return', next());
+
+            case 3:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this);
+    }));
+
+    return function (_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }());
+}
+
+/***/ }),
+
+/***/ 514:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_kit_config__ = __webpack_require__(31);
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+
+// ----------------------
+// BROWSER CONFIGURATION
+
+// Set browsesr config, by checking `SERVER`
+
+if (true) {
+  /* APOLLO */
+  __WEBPACK_IMPORTED_MODULE_0_kit_config__["a" /* default */].addApolloMiddleware(function (req, next) {
+    // TODO: figure out if I should sync server or graphql store with localstorage
+    // for session-like purposes
+    if (!req.options.headers) {
+      req.options.headers = {};
+    }
+
+    var token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
+
+    req.options.headers.authorization = 'JWT ' + token;
+
+    next();
+  });
+}
+
+/***/ }),
+
+/***/ 515:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 516:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export createClient */
+/* unused harmony export getNetworkInterface */
+/* harmony export (immutable) */ __webpack_exports__["a"] = browserClient;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_apollo__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_apollo___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react_apollo__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_kit_config__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_kit_lib_env__ = __webpack_require__(517);
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+// Apollo client library
+
+
+/* ReactQL */
+
+// Configuration
+
+
+// Get environment, to figure out where we're running the GraphQL server
+
+
+// ----------------------
+
+// Helper function to create a new Apollo client, by merging in
+// passed options alongside any set by `config.setApolloOptions` and defaults
+function createClient() {
+  var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  return new __WEBPACK_IMPORTED_MODULE_0_react_apollo__["ApolloClient"](Object.assign({
+    reduxRootSelector: function reduxRootSelector(state) {
+      return state.apollo;
+    }
+  }, __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloClientOptions, opt));
+}
+
+// Wrap `createNetworkInterface` to attach middleware
+// TODO: consider switching to createBatchingNetworkInterface, w/ settings to
+// match https://github.com/mbrochh/django-graphql-apollo-react-demo#=
+function getNetworkInterface(uri) {
+  var networkInterface = Object(__WEBPACK_IMPORTED_MODULE_0_react_apollo__["createNetworkInterface"])({
+    uri: uri,
+    opts: __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloNetworkOptions
+  });
+
+  // Couldn't get network requests to not return 400 bad error when I used this
+  // const networkInterface = createBatchingNetworkInterface({
+  //   uri: 'http://localhost:8000/gql', // same as uri
+  //   batchInterval: 10,
+  //   opts: {  // same as config.apolloNetworkOptions
+  //     credentials: 'same-origin',
+  //   },
+  // })
+
+  // Attach middleware
+  networkInterface.use(__WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloMiddleware.map(function (f) {
+    return { applyMiddleware: f };
+  }));
+  networkInterface.useAfter(__WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].apolloAfterware.map(function (f) {
+    return { applyAfterware: f };
+  }));
+
+  return networkInterface;
+}
+
+// Creates a new browser client
+function browserClient() {
+  // If we have an internal GraphQL server, we need to append it with a
+  // call to `getServerURL()` to add the correct host (in dev + production)
+  var uri = __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLServer ? '' + Object(__WEBPACK_IMPORTED_MODULE_2_kit_lib_env__["a" /* getServerURL */])() + __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLEndpoint : __WEBPACK_IMPORTED_MODULE_1_kit_config__["a" /* default */].graphQLEndpoint;
+
+  return createClient({
+    networkInterface: getNetworkInterface(uri)
+  });
+}
+
+/***/ }),
+
+/***/ 517:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = getServerURL;
+/* eslint-disable import/prefer-default-export */
+
+// Environment-aware functions
+
+// Get the protocol://host:port of where the current server would bind
+function getServerURL() {
+  var host = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "localhost";
+  var port = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "8081";
+  var allowSSL = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+  // Check for SSL
+  if (allowSSL && null) {
+    var _stub = 'https://' + (host || "localhost");
+
+    // If we're on port 443, that's 'regular' SSL so no need to specify port
+    if (null === '443') return _stub;
+    return _stub + ':' + null;
+  }
+
+  // Plain HTTP
+  var stub = 'http://' + (host || "localhost");
+
+  // If we're on port 80, that's 'regular' HTTP so no need to specify port
+  if (port === '80') return stub;
+  return stub + ':' + port;
+}
+
+/***/ }),
+
+/***/ 518:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = createNewStore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk__ = __webpack_require__(519);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_redux_thunk___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_redux_thunk__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_seamless_immutable__ = __webpack_require__(520);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_seamless_immutable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_seamless_immutable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_kit_config__ = __webpack_require__(31);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/* eslint-disable no-underscore-dangle */
+
+/*
+Custom Redux store creation.  Along with the default Apollo store,
+we can define custom reducers using `kit/config.addReducer()` which will
+be available on the server and in the browser.
+
+Store state is wrapped by `seamless-immutable` to enforce a pattern of
+immutability, to prevent weird side effects.
+*/
+
+// ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+
+
+/* Local */
+
+
+// ----------------------
+
+// Detect if we're both in the browser, AND we have dehydrated state
+var hasState = !!(!false && window.__STATE__);
+
+// Helper function that 'unwinds' the `config.reducers` Map, and provides
+// the `reducer` function or `initialState` (wrapped in `seamless-immutable`)
+// depending on what we asked for
+function unwind() {
+  var reducer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+  // Unwind `config.reducers`.  If we're looking for the `reducer`, we'll
+  // wrap this in a `defaultReducer` function that properly handles the Redux
+  // 'undefined' sentinel value, or calls 'real' reducer if it's not undefined.
+  //
+  // If we're not looking for reducers, it'll pull out the `initialState`
+  // variable instead, which we'll further process below
+  var r = Object.assign.apply(Object, [{}].concat(_toConsumableArray([].concat([].concat(_toConsumableArray(__WEBPACK_IMPORTED_MODULE_3_kit_config__["a" /* default */].reducers)).map(function (arr) {
+    return _defineProperty({}, arr[0], reducer ? function defaultReducer(state, action) {
+      // If `state` === undefined, this is Redux sending a sentinel value
+      // to check our set-up.  So we'll send back a plain object to prove
+      // that we're properly handling our reducer
+      if (typeof state === 'undefined') return {};
+
+      // Otherwise, call our real reducer with the {state, action}
+      return arr[1].reducer(state, action);
+    } : arr[1].initialState);
+  })))));
+
+  // If this is a reducer, return at this point
+  if (reducer) return r;
+
+  // If not, we're looking for the state -- so let's map it and wrap the
+  // object in `seamless-immutable`, to avoid side-effects with Redux
+  return Object.assign.apply(Object, [{}].concat(_toConsumableArray(Object.keys(r).map(function (key) {
+    return _defineProperty({}, key, __WEBPACK_IMPORTED_MODULE_2_seamless_immutable___default()(hasState && window.__STATE__[key] || r[key]));
+  }))));
+}
+
+function createNewStore(apolloClient) {
+  var store = Object(__WEBPACK_IMPORTED_MODULE_0_redux__["createStore"])(
+  // By default, we'll use just the apollo reducer.  We can easily add our
+  // own here, for global store management outside of Apollo
+  Object(__WEBPACK_IMPORTED_MODULE_0_redux__["combineReducers"])(_extends({
+    apollo: apolloClient.reducer()
+  }, unwind())),
+  // Initial server state, provided by the server.
+  _extends({
+    apollo: hasState && window.__STATE__.apollo || {}
+  }, unwind(false)), Object(__WEBPACK_IMPORTED_MODULE_0_redux__["compose"])(Object(__WEBPACK_IMPORTED_MODULE_0_redux__["applyMiddleware"])(apolloClient.middleware(), __WEBPACK_IMPORTED_MODULE_1_redux_thunk___default.a),
+  // Enable Redux Devtools on the browser, for easy state debugging
+  // eslint-disable-next-line no-underscore-dangle
+  !false && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : function (f) {
+    return f;
+  }));
+
+  return store;
+}
 
 /***/ })
 

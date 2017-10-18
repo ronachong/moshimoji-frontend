@@ -71,18 +71,6 @@ module.exports = require("react");
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-module.exports = require("prop-types");
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = require("react-apollo");
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -112,6 +100,9 @@ let Common = class Common {
 
     // Set to true if we're using an internal GraphQL server
     this.graphQLServer = false;
+
+    // Endpoint to retrieve jwt token. This needs setting via config.setJwtEndpoint()`
+    this.jwtEndpoint = null;
   }
 
   /* REDUX */
@@ -142,6 +133,11 @@ let Common = class Common {
   setGraphQLEndpoint(uri, graphiQL = true) {
     this.graphQLEndpoint = uri;
     this.graphiQL = graphiQL;
+  }
+
+  // Set a URI to retrieve jwt tokens for auth
+  setJwtEndpoint(uri) {
+    this.jwtEndpoint = uri;
   }
 
   // Register Apollo middleware function
@@ -335,6 +331,18 @@ if (true) {
 exports.default = new Config();
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+module.exports = require("prop-types");
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-apollo");
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
@@ -394,12 +402,6 @@ module.exports = require("react-helmet");
 
 /***/ }),
 /* 9 */
-/***/ (function(module, exports) {
-
-module.exports = require("graphql");
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -414,7 +416,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -502,7 +504,253 @@ Redirect.defaultProps = {
 };
 
 /***/ }),
-/* 11 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toggleLoginModal = toggleLoginModal;
+function toggleLoginModal(bool) {
+  console.log('toggleLoginModal being called');
+  return {
+    type: 'TOGGLE_MODAL',
+    payload: {
+      show: bool
+    }
+  };
+}
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactApollo = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Dashboard = () => _react2.default.createElement(
+  'div',
+  null,
+  _react2.default.createElement(
+    'h2',
+    null,
+    'Dashboard'
+  ),
+  _react2.default.createElement(ApolloUserStatusForm, null),
+  _react2.default.createElement(ApolloUserStatusesContainer, null)
+);
+
+const userStatusFormMutation = _reactApollo.gql`
+mutation UserStatusForm($text: String!) {
+  createUserStatus(text: $text) {
+    reqStatus,
+    formErrors,
+    userStatus {
+      id
+    }
+  }
+}
+`;
+
+const userStatusFormQuery = _reactApollo.gql`
+{
+  currentUser {
+    id
+  }
+}
+`;
+
+const UserStatusForm = ({ data, mutate }) => {
+  if (data.loading) {
+    return _react2.default.createElement(
+      'div',
+      null,
+      'Loading...'
+    );
+  }
+
+  console.assert(data.currentUser, 'User status form accessed while user not logged in');
+
+  let form = null;
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log(form);
+    const status = new FormData(form);
+    mutate({ variables: { text: status.get('text') } }).then(res => {
+      if (res.status === 200) {
+        console.log('status submitted successfully');
+      }
+    }).catch(err => {
+      console.log(`Network error: ${err}`);
+    });
+  };
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'h3',
+      null,
+      'Update your status'
+    ),
+    _react2.default.createElement(
+      'form',
+      {
+        ref: ref => {
+          form = ref;
+        },
+        onSubmit: e => handleSubmit(e) },
+      _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement('textarea', { name: 'text' })
+      ),
+      _react2.default.createElement(
+        'button',
+        { type: 'submit' },
+        'Submit'
+      )
+    )
+  );
+};
+
+let ApolloUserStatusForm = (0, _reactApollo.graphql)(userStatusFormQuery)(UserStatusForm);
+ApolloUserStatusForm = (0, _reactApollo.graphql)(userStatusFormMutation)(ApolloUserStatusForm);
+
+const query = _reactApollo.gql`
+{
+  allUserStatuses {
+    edges {
+      node {
+        id,
+        creationDate,
+        text
+      }
+    }
+  }
+}
+`;
+
+// I can create stateless functional components which receive data from apollo,
+// if I use the graphql(query)(component) pattern (instead of class decorator).
+const UserStatusesContainer = ({ data }) => {
+  console.log(data);
+
+  if (data.loading) {
+    console.log(data);
+    return _react2.default.createElement(
+      'div',
+      null,
+      'Loading...'
+    );
+  }
+
+  const presentation = !data.allUserStatuses ? _react2.default.createElement(
+    'p',
+    null,
+    'Error retrieving data'
+  ) : _react2.default.createElement(UserStatusesPresentation, { user_status_edges: data.allUserStatuses.edges });
+
+  if (!data.allUserStatuses) {
+    return _react2.default.createElement(
+      'p',
+      null,
+      'Error retrieving data'
+    );
+  }
+
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'h3',
+      null,
+      'User Statuses'
+    ),
+    presentation
+  );
+};
+
+// TODO: create a function to generate gql from proptypes or vice versa, or
+// from a common object (would I need to refer to schema for field types?),
+// if that will save me time
+UserStatusesContainer.propTypes = {
+  data: _propTypes2.default.shape({
+    allUserStatuses: _propTypes2.default.shape({
+      edges: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        node: _propTypes2.default.shape({
+          id: _propTypes2.default.string.isRequired,
+          creationDate: _propTypes2.default.string.isRequired,
+          text: _propTypes2.default.string.isRequired
+        }).isRequired
+      }).isRequired).isRequired
+    }).isRequired
+  }).isRequired
+};
+
+UserStatusesContainer.defaultProps = {
+  data: {
+    allUserStatuses: {
+      edges: [{
+        node: {
+          id: 0,
+          creationDate: 'date str',
+          text: 'default text'
+        }
+      }]
+    }
+  }
+};
+
+const ApolloUserStatusesContainer = (0, _reactApollo.graphql)(query)(UserStatusesContainer);
+
+const UserStatusesPresentation = ({ user_status_edges }) => {
+  return _react2.default.createElement(
+    'div',
+    null,
+    user_status_edges.map(user_status => _react2.default.createElement(
+      'p',
+      { key: user_status.node.id },
+      '\'',
+      user_status.node.text,
+      '\' created ',
+      user_status.node.creationDate
+    ))
+  );
+};
+
+UserStatusesPresentation.propTypes = {
+  user_status_edges: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+    node: _propTypes2.default.shape({
+      id: _propTypes2.default.string.isRequired,
+      creationDate: _propTypes2.default.string.isRequired,
+      text: _propTypes2.default.string.isRequired
+    }).isRequired
+  }).isRequired).isRequired
+};
+
+exports.default = Dashboard;
+
+/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -682,7 +930,7 @@ var _koa = __webpack_require__(23);
 
 var _koa2 = _interopRequireDefault(_koa);
 
-var _reactApollo = __webpack_require__(2);
+var _reactApollo = __webpack_require__(3);
 
 var _koaSslify = __webpack_require__(24);
 
@@ -720,29 +968,29 @@ var _apolloLocalQuery = __webpack_require__(32);
 
 var _apolloLocalQuery2 = _interopRequireDefault(_apolloLocalQuery);
 
-var _graphql = __webpack_require__(9);
+var _graphql = __webpack_require__(33);
 
 var graphql = _interopRequireWildcard(_graphql);
 
-var _app = __webpack_require__(33);
+var _app = __webpack_require__(34);
 
 var _app2 = _interopRequireDefault(_app);
 
-var _redux = __webpack_require__(65);
+var _redux = __webpack_require__(67);
 
 var _redux2 = _interopRequireDefault(_redux);
 
-var _ssr = __webpack_require__(69);
+var _ssr = __webpack_require__(71);
 
 var _ssr2 = _interopRequireDefault(_ssr);
 
-var _apollo = __webpack_require__(70);
+var _apollo = __webpack_require__(72);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(1);
 
 var _config2 = _interopRequireDefault(_config);
 
-var _paths = __webpack_require__(71);
+var _paths = __webpack_require__(73);
 
 var _paths2 = _interopRequireDefault(_paths);
 
@@ -1106,7 +1354,7 @@ _config2.default.routes.forEach(route => {
 // `koa-bodyparser` is used to process POST requests.  Check that it's enabled
 // (default) and apply a custom config if we need one
 if (_config2.default.enableBodyParser) {
-  app.use(__webpack_require__(73)(
+  app.use(__webpack_require__(75)(
   // Pass in any options that may have been set in userland
   _config2.default.bodyParserOptions));
 }
@@ -1237,231 +1485,9 @@ module.exports = require("apollo-local-query");
 
 /***/ }),
 /* 33 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _config = __webpack_require__(3);
-
-var _config2 = _interopRequireDefault(_config);
-
-var _counter = __webpack_require__(34);
-
-var _counter2 = _interopRequireDefault(_counter);
-
-var _main = __webpack_require__(37);
-
-var _main2 = _interopRequireDefault(_main);
-
-__webpack_require__(62);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// ----------------------
-
-/* REDUCERS */
-
-// Add our custom `counter` reducer, with the initial state as a zero count.
-// Note:  The initial state (3rd param) will automatically be wrapped in
-// `seamless-immutable` by the kit's Redux init code, so plain objects are
-// automatically immutable by default
-
-
-// Main component -- i.e. the 'root' React component in our app
-// Your app's entry point.  Every ReactQL projects requires 'src/app.js',
-// which both the server and browser will import.
-//
-// In this file, you'll do two things:
-//
-// 1.  Import `kit/config`, and configure your app.  In this example, I'm
-// adding a custom Redux reducer that acts as a simple counter, and enabling
-// a built-in GraphQL server that imports a schema for a simple message.
-//
-// 2.  Export the root React component that goes between <div id="main"/>
-// in the server-side HTML.
-
-// ----------------------
-// IMPORTS
-
-/* ReactQL */
-
-// Config API, for adding reducers and configuring our ReactQL app
-_config2.default.addReducer('counter', _counter2.default, { count: 0 });
-
-/* GRAPHQL */
-
-// Enable the internal GraphQL server.  This will do two things:
-//
-// 1.  On the server, it will set-up the necessary route handlers to 'listen'
-// to incoming GraphQL requests on `/graphql`, as well as (by default) set-up
-// the GraphiQL IDE
-//
-// 2.  On the client, it will append the correct server URL so that we can
-// call the ReactQL host properly, and let the server handle our requests
-
-
-// Init global styles.  These will be added to the resulting CSS automatically
-// without any class hashing.  Use this to include default or framework CSS.
-
-
-/* App */
-
-// Example counter reducer.  This simply increments the counter by +1
-_config2.default.enableGraphQLServer();
-
-/* SERVER */
-
-// Set our server config, by checking `SERVER` -- this code path will be
-// eliminated by Webpack in the browser, so we can safely add this.
-
-if (true) {
-  /* SSL */
-
-  // By default, the Koa web server runs on a plain HTTP server. However,
-  // you can easily enable HTTPS.  In the following commands, I grab a sample
-  // self-signed key/cert combo and call `config.enableSSL()` with the options
-  // I want to pass to the `https.createServer()` that happens under the hood.
-  //
-  // Note: Running https:// in your browser using this self-signed cert will
-  // undoubtably raise a security error. But at least we can see it's working.
-  //
-  // Production note: I generally recommend using a dedicated upstream proxy
-  // such as Nginx to handle HTTPS traffic, since the TLS handshake will likely
-  // be faster, and you can add HTTP/2 and have much finer-grain control over
-  // HTTP. But, if you need a fast SSL service, ReactQL has you covered!
-
-  /*
-    Uncomment the next two lines to enable SSL!
-  */
-
-  const cert = __webpack_require__(63);
-  _config2.default.enableSSL({ key: cert.key, cert: cert.cert });
-
-  // If wanted, you could also run an *SSL-only* server by uncommenting:
-  // config.disableHTTP();
-
-  // Or, you could automatically redirect non-HTTP traffic to SSL by
-  // uncommenting the following: (Note: pass { port: 8081 }) for development
-  // or { port: 4000 } for the default production port
-  // config.forceSSL({ port: 8081 });
-
-  /* GRAPHQL SCHEMA */
-  // Pass in the schema to use for our internal GraphQL server.  Note we're
-  // doing this inside a `SERVER` block to avoid importing a potentially large
-  // file, which would then inflate our client bundle unnecessarily
-  _config2.default.setGraphQLSchema(__webpack_require__(64).default);
-
-  /* CUSTOM ROUTES */
-
-  // We can add custom routes to the web server easily, by using
-  // `config.add<Get|Post|Put|Patch>Route()`.  Note:  These are server routes only.
-  _config2.default.addGetRoute('/test', async ctx => {
-    // For demo purposes, let's get a JSON dump of the current Redux state
-    // to see that we can expect its contents
-    const stateDump = JSON.stringify(ctx.store.getState());
-
-    // Display a simple message, along with the Redux dump.  Note that this
-    // won't contain a full `apollo` response, because it hasn't passed through
-    // the React handler -- but it *does* mean we can still manipulate the state
-    // from within our root, or fire action handlers!
-    ctx.body = `Hello from your ReactQL route. Redux dump: ${stateDump}`;
-  });
-
-  /* CUSTOM 404 HANDLER */
-
-  // By default, if the server gets a route request that results in a 404,
-  // it will set `ctx.status = 404` but continue to render the <NotFound>
-  // block as normal.  If we want to add our own custom handler, we can use
-  // `config.set404Handler()` as below.
-  //
-  // Note:  This only applies to SERVER routes.  On the client, the
-  // <NotFound> block will *always* run.
-
-  _config2.default.set404Handler(ctx => {
-    // Like above, we'll grab a dump of the store state again -- this time,
-    // it *will* contain a full `apollo` dump because in order to figure out that
-    // a route has hit a 404, it will already have rendered the React chain
-    // and retrieved any relevant GraphQL
-    const stateDump = JSON.stringify(ctx.store.getState());
-
-    // Explicitly set the return status to 404.  This is done for us by
-    // default if we don't have a custom 404 handler, but left to the function
-    // otherwise (since we might not always want to return a 404)
-    ctx.status = 404;
-
-    // Set the body
-    ctx.body = `This route does not exist on the server - Redux dump: ${stateDump}`;
-  });
-
-  /* CUSTOM ERROR HANDLER */
-
-  // By default, any exceptions thrown anywhere in the middleware chain
-  // (including inside the `createReactHandler` func) will propogate up the
-  // call stack to a default error handler that simply logs the message and
-  // informs the user that there's an error.  We can override that default
-  // behaviour with a func with a (e, ctx, next) -> {} signature, where `e` is
-  // the error thrown, `ctx` is the Koa context object, and `next()` should
-  // be called if you want to recover from the error and continue processing
-  // subsequent middleware.  Great for logging to third-party tools, tc.
-  _config2.default.setErrorHandler((e, ctx /* `next` is unused in this example */) => {
-    // Mimic the default behaviour with an overriden message, so we know it's
-    // working
-    // eslint-disable-next-line no-console
-    console.log('Error: ', e.message);
-    ctx.body = 'Some kind of error. Check your source code.';
-  });
-
-  /* CUSTOM KOA APP INSTANTIATION */
-
-  // If you need to do something with `app` outside of middleware/routing,
-  // you can pass a func to `config.getKoaApp()` that will be fed the `app`
-  // instance directly.
-  _config2.default.getKoaApp(app => {
-    // First, we'll add a new `engine` key to the app.context`
-    // prototype (that per-request `ctx` extends) that can be
-    // used in the middleware below, to set a `Powered-By` header.
-    // eslint-disable-next-line no-param-reassign
-    app.context.engine = 'ReactQL';
-
-    // We'll also add a generic error handler, that prints out to the console.
-    // Note: This is a 'lower-level' than `config.setErrorHandler()` because
-    // it's not middleware -- it's for errors that happen at the server level
-    app.on('error', e => {
-      // This function should never show up, because `config.setErrorHandler()`
-      // is already catching errors -- but just an FYI for what you might do.
-      // eslint-disable-next-line no-console
-      console.error('Server error:', e);
-    });
-  });
-
-  /* CUSTOM MIDDLEWARE */
-
-  // We can set custom middleware to be processed on the server.  This gives us
-  // fine-grain control over headers, requests, responses etc, and even decide
-  // if we want to avoid the React handler until certain conditions
-  _config2.default.addMiddleware(async (ctx, next) => {
-    // Let's add a custom header so we can see middleware in action
-    ctx.set('Powered-By', ctx.engine); // <-- `ctx.engine` srt above!
-
-    // For the fun of it, let's demonstrate that we can fire Redux actions
-    // and it'll manipulate the state on the server side!  View the SSR version
-    // to see that the counter is now 1 and has been passed down the wire
-    ctx.store.dispatch({ type: 'INCREMENT_COUNTER' });
-
-    // Always return `next()`, otherwise the request won't 'pass' to the next
-    // middleware in the stack (likely, the React handler)
-    return next();
-  });
-}
-
-// In app.js, we need to export the root component we want to mount as the
-// starting point to our app.  We'll just export the `<Main>` component.
-exports.default = _main2.default;
+module.exports = require("graphql");
 
 /***/ }),
 /* 34 */
@@ -1473,32 +1499,54 @@ exports.default = _main2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = reducer;
-// Sample reducer, showing how you can 'listen' to the `INCREMENT_COUNTER`
-// action, and update the counter state
 
-// Note: There's no need to specify default state, because the kit's Redux
-// init code wraps `undefined` state values in a `defaultReducer()` function,
-// that captures Redux sentinel vals and responds back with a black object --
-// so in our reducer functions, we can safely assume we're working with 'real'
-// immutable state
+var _main = __webpack_require__(35);
 
-function reducer(state, action) {
-  if (action.type === 'INCREMENT_COUNTER') {
-    // Where did `state.merge()` come from?  Our plain state object is automatically
-    // wrapped in a call to `seamless-immutable` in our reducer init code,
-    // so we can use its functions to return a guaranteed immutable version
-    return state.merge({
-      count: state.count + 1
-    });
-  }
-  return state;
-}
+var _main2 = _interopRequireDefault(_main);
+
+__webpack_require__(59);
+
+__webpack_require__(63);
+
+__webpack_require__(64);
+
+__webpack_require__(65);
+
+__webpack_require__(66);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// export the root component we want to mount as the starting point to our app.
+// Aapp's entry point.  Every ReactQL projects requires 'src/app.js',
+// which both the server and browser will import.
+//
+// In this file, two things happen:
+//
+// 1.  Import styles&configuration code in config/ & reducers/ to configure app.
+//
+// 2.  Export the root React component that goes between <div id="main"/>
+// in the server-side HTML.
+
+// ----------------------
+// IMPORTS
+
+/* ReactQL */
+
+/* App */
+
+// Main component -- i.e. the 'root' React component in our app
+
+exports.default = _main2.default;
+
+// Init global styles.  These will be added to the resulting CSS automatically
+// without any class hashing.  Use this to include default or framework CSS.
+
+
+// Init config
 
 /***/ }),
-/* 35 */,
-/* 36 */,
-/* 37 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1512,37 +1560,51 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactApollo = __webpack_require__(3);
+
 var _reactRouterDom = __webpack_require__(4);
 
 var _reactHelmet = __webpack_require__(8);
 
 var _reactHelmet2 = _interopRequireDefault(_reactHelmet);
 
-var _routing = __webpack_require__(10);
+var _routing = __webpack_require__(9);
 
-var _graphql = __webpack_require__(38);
+var _graphql = __webpack_require__(36);
 
 var _graphql2 = _interopRequireDefault(_graphql);
 
-var _routes = __webpack_require__(40);
+var _routes = __webpack_require__(38);
 
-var _redux = __webpack_require__(53);
+var _LoginModal = __webpack_require__(39);
+
+var _LoginModal2 = _interopRequireDefault(_LoginModal);
+
+var _DashboardLinkOrButton = __webpack_require__(41);
+
+var _DashboardLinkOrButton2 = _interopRequireDefault(_DashboardLinkOrButton);
+
+var _all = __webpack_require__(43);
+
+var _all2 = _interopRequireDefault(_all);
+
+var _redux = __webpack_require__(50);
 
 var _redux2 = _interopRequireDefault(_redux);
 
-var _stats = __webpack_require__(54);
+var _stats = __webpack_require__(51);
 
 var _stats2 = _interopRequireDefault(_stats);
 
-var _styles = __webpack_require__(56);
+var _styles = __webpack_require__(53);
 
 var _styles2 = _interopRequireDefault(_styles);
 
-var _main = __webpack_require__(60);
+var _main = __webpack_require__(57);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _reactqlLogo = __webpack_require__(61);
+var _reactqlLogo = __webpack_require__(58);
 
 var _reactqlLogo2 = _interopRequireDefault(_reactqlLogo);
 
@@ -1553,100 +1615,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Styles
 
 
-/* ReactQL */
-
-// NotFound 404 handler for unknown routes
-
-
-// Routing via React Router
-exports.default = () => _react2.default.createElement(
-  'div',
-  null,
-  _react2.default.createElement(_reactHelmet2.default, {
-    title: 'ReactQL application',
-    meta: [{
-      name: 'description',
-      content: 'ReactQL starter kit app'
-    }] }),
-  _react2.default.createElement(
-    'div',
-    { className: _main2.default.hello },
-    _react2.default.createElement('img', { src: _reactqlLogo2.default, alt: 'ReactQL', className: _main2.default.logo })
-  ),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(_graphql2.default, null),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(
-    'ul',
-    null,
-    _react2.default.createElement(
-      'li',
-      null,
-      _react2.default.createElement(
-        _reactRouterDom.Link,
-        { to: '/' },
-        'Home'
-      )
-    ),
-    _react2.default.createElement(
-      'li',
-      null,
-      _react2.default.createElement(
-        _reactRouterDom.Link,
-        { to: '/page/about' },
-        'About'
-      )
-    ),
-    _react2.default.createElement(
-      'li',
-      null,
-      _react2.default.createElement(
-        _reactRouterDom.Link,
-        { to: '/page/contact' },
-        'Contact'
-      )
-    ),
-    _react2.default.createElement(
-      'li',
-      null,
-      _react2.default.createElement(
-        _reactRouterDom.Link,
-        { to: '/old/path' },
-        'Redirect from /old/path \u2192 /new/path'
-      )
-    )
-  ),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(
-    _reactRouterDom.Switch,
-    null,
-    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _routes.Home }),
-    _react2.default.createElement(_reactRouterDom.Route, { path: '/page/:name', component: _routes.Page }),
-    _react2.default.createElement(_routing.Redirect, { from: '/old/path', to: '/new/path' }),
-    _react2.default.createElement(_reactRouterDom.Route, { component: _routes.WhenNotFound })
-  ),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(_redux2.default, null),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(
-    'p',
-    null,
-    'Runtime info:'
-  ),
-  _react2.default.createElement(_stats2.default, null),
-  _react2.default.createElement('hr', null),
-  _react2.default.createElement(
-    'p',
-    null,
-    'Stylesheet examples:'
-  ),
-  _react2.default.createElement(_styles2.default, null)
-);
-
-// Get the ReactQL logo.  This is a local .svg file, which will be made
-// available as a string relative to [root]/dist/assets/img/
-
-
 /* App */
 
 // Child React components. Note:  We can either export one main React component
@@ -1655,6 +1623,24 @@ exports.default = () => _react2.default.createElement(
 
 
 // <Helmet> component for setting the page title/meta tags
+const query = _reactApollo.gql`
+{
+  currentUser {
+    id
+  }
+}
+`;
+
+// Get the ReactQL logo.  This is a local .svg file, which will be made
+// available as a string relative to [root]/dist/assets/img/
+
+
+/* ReactQL */
+
+// NotFound 404 handler for unknown routes
+
+
+// Routing via React Router
 // Main React component, that we'll import in `src/app.js`
 //
 // Note a few points from this file:
@@ -1684,8 +1670,153 @@ exports.default = () => _react2.default.createElement(
 
 // React
 
+
+const IndexContainer = ({ data }) => _react2.default.createElement(
+  'div',
+  null,
+  _react2.default.createElement(_reactHelmet2.default, {
+    title: 'moshimoji',
+    meta: [{
+      name: 'description',
+      content: 'Community-driven platform to read, share, and publish manga and other comics.'
+    }] }),
+  _react2.default.createElement(_LoginModal2.default, {
+    toggleModal: null }),
+  _react2.default.createElement(
+    'div',
+    { className: _main2.default.hello },
+    _react2.default.createElement(
+      _reactRouterDom.Link,
+      { to: '/' },
+      _react2.default.createElement(
+        'h1',
+        null,
+        'moshimoji'
+      )
+    )
+  ),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(
+    'div',
+    { className: _main2.default.hello },
+    data.loading || true ?
+    // TODO: use presentational component for first button
+    // TODO: make sure first button is grayed out when loading or initial react
+    _react2.default.createElement(
+      'button',
+      { onClick: console.log('dashboard button clicked while inactive') },
+      'dashboard'
+    ) : _react2.default.createElement(_DashboardLinkOrButton2.default, { currentUser: data.currentUser })
+  ),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(
+    'ul',
+    null,
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/reader' },
+        'reader'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/database' },
+        'database'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/forum' },
+        'forum'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/reviews' },
+        'reviews'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/doujin' },
+        'doujin'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/page/example' },
+        'Example page'
+      )
+    ),
+    _react2.default.createElement(
+      'li',
+      null,
+      _react2.default.createElement(
+        _reactRouterDom.Link,
+        { to: '/old/path' },
+        'Redirect from /old/path \u2192 /new/path'
+      )
+    )
+  ),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(
+    _reactRouterDom.Switch,
+    null,
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _all2.default.SiteNews }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/dashboard', component: _all2.default.Dashboard }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/reader', component: _all2.default.Reader }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/database', component: _all2.default.Database }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/forum', component: _all2.default.Forum }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/reviews', component: _all2.default.Reviews }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/doujin', component: _all2.default.Doujin }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: '/page/:name', component: _routes.Page }),
+    _react2.default.createElement(_routing.Redirect, { from: '/old/path', to: '/new/path' }),
+    _react2.default.createElement(_reactRouterDom.Route, { component: _routes.WhenNotFound })
+  ),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(_graphql2.default, null),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(_redux2.default, null),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(
+    'p',
+    null,
+    'Runtime info:'
+  ),
+  _react2.default.createElement(_stats2.default, null),
+  _react2.default.createElement('hr', null),
+  _react2.default.createElement(
+    'p',
+    null,
+    'Stylesheet examples:'
+  ),
+  _react2.default.createElement(_styles2.default, null)
+);
+
+const ApolloIndexContainer = (0, _reactApollo.graphql)(query)(IndexContainer);
+
+exports.default = ApolloIndexContainer;
+
 /***/ }),
-/* 38 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1715,21 +1846,22 @@ var _dec, _class; // Now, let's create a GraphQL-enabled component...
 // GraphQL queries.  Looking at this file demonstrates how to import fragments.
 // Webpack will compile this into inline GraphQL for us, so we can pass the
 // query to components using the @graphql decorator
+//import allMessages from 'src/graphql/queries/all_messages.gql';
 
 
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactApollo = __webpack_require__(2);
+var _reactApollo = __webpack_require__(3);
 
-var _all_messages = __webpack_require__(78);
+var _all_user_statuses = __webpack_require__(37);
 
-var _all_messages2 = _interopRequireDefault(_all_messages);
+var _all_user_statuses2 = _interopRequireDefault(_all_user_statuses);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1739,19 +1871,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // `react-apollo`'s `graphql` HOC/decorator and pass in the query that this
 // component requires.   Note: This is not to be confused with the `graphql`
 // lib, which is used on the server-side to initially define the schema
-let GraphQLMessage = (_dec = (0, _reactApollo.graphql)(_all_messages2.default), _dec(_class = class GraphQLMessage extends _react2.default.PureComponent {
+let GraphQLMessage = (_dec = (0, _reactApollo.graphql)(_all_user_statuses2.default), _dec(_class = class GraphQLMessage extends _react2.default.PureComponent {
+  // TODO: create a function to generate gql from proptypes or vice versa, or
+  // from a common object (would I need to refer to schema for field types?),
+  // if that will save me time
 
   render() {
     const { data } = this.props;
-
     // Since we're dealing with async GraphQL data, we defend against the
     // data not yet being loaded by checking to see that we have the `message`
     // key on our returned object
-    const message = data.message && data.message.text;
+    //   const message = data.message && data.message.text;
+    // TODO: understand how this line^ works
 
     // Apollo will tell us whether we're still loading.  We can also use this
     // check to ensure we have a fully returned response
     const isLoading = data.loading ? 'yes' : 'nope';
+    const message = isLoading == 'nope' ? data.allUserStatuses.edges[0].node.text : 'None';
     return _react2.default.createElement(
       'div',
       null,
@@ -1776,23 +1912,59 @@ let GraphQLMessage = (_dec = (0, _reactApollo.graphql)(_all_messages2.default), 
 }) || _class);
 GraphQLMessage.propTypes = {
   data: _propTypes2.default.shape({
-    message: _propTypes2.default.shape({
-      text: _propTypes2.default.string
-    })
-  })
+    allUserStatuses: _propTypes2.default.shape({
+      edges: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+        node: _propTypes2.default.shape({
+          id: _propTypes2.default.number.isRequired,
+          text: _propTypes2.default.string.isRequired
+        }).isRequired
+      }).isRequired).isRequired
+    }).isRequired
+  }).isRequired
 };
 GraphQLMessage.defaultProps = {
   data: {
-    message: {
-      text: null
+    allUserStatuses: {
+      edges: [{
+        node: {
+          id: 0,
+          text: 'default text'
+        }
+      }]
     }
   }
 };
 exports.default = GraphQLMessage;
 
 /***/ }),
-/* 39 */,
-/* 40 */
+/* 37 */
+/***/ (function(module, exports) {
+
+
+    var doc = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"allUserStatuses"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"id"},"arguments":[],"directives":[],"selectionSet":null},{"kind":"Field","alias":null,"name":{"kind":"Name","value":"text"},"arguments":[],"directives":[],"selectionSet":null}]}}]}}]}}]}}],"loc":{"start":0,"end":98}};
+    doc.loc.source = {"body":"query {\n  allUserStatuses {\n    edges {\n      node {\n        id,\n        text\n      }\n    }\n  }\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
+  
+
+    var names = {};
+    function unique(defs) {
+      return defs.filter(
+        function(def) {
+          if (def.kind !== 'FragmentDefinition') return true;
+          var name = def.name.value
+          if (names[name]) {
+            return false;
+          } else {
+            names[name] = true;
+            return true;
+          }
+        }
+      )
+    }
+  
+module.exports = doc;
+
+/***/ }),
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1807,11 +1979,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _routing = __webpack_require__(10);
+var _routing = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1874,19 +2046,533 @@ const WhenNotFound = exports.WhenNotFound = () => _react2.default.createElement(
 );
 
 /***/ }),
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _dec, _class; // ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+// HOC/decorator to listen to Redux store state
+
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(2);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(5);
+
+var _reactBootstrap = __webpack_require__(40);
+
+var _config = __webpack_require__(1);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _actions = __webpack_require__(10);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// STYLING
+const FADE_DURATION = 200;
+
+const styles = {
+  modal: {
+    position: 'fixed',
+    zIndex: 1040,
+    top: 0, bottom: 0, left: 0, right: 0
+  },
+  modalBackdrop: {
+    position: 'fixed',
+    top: 0, bottom: 0, left: 0, right: 0,
+    zIndex: 'auto',
+    backgroundColor: '#000',
+    opacity: 0.5
+  },
+  modalTextContainer: {
+    position: 'absolute',
+    width: '50%',
+    height: '50%',
+    top: '50%', left: '50%',
+    transform: `translate(-${50}%, -${50}%)`,
+    border: '1px solid #fff555',
+    backgroundColor: 'white',
+    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
+    padding: 20,
+    textAlign: 'center'
+  }
+};
+
+// -----------------------
+// REDUX
+
+// @connect accepts a function that takes the full Redux state, and then
+// returns the portion of state that our component cares about.  In this example,
+// we're listening to `state.counter`, which we can show inside the component
+let LoginModal = (_dec = (0, _reactRedux.connect)(state => ({ loginModal: state.loginModal })), _dec(_class = class LoginModal extends _react.Component {
+
+  handleSubmit(loginDest, e) {
+    e.preventDefault();
+    const data = new FormData(this.form);
+    fetch(_config2.default.jwtEndpoint, {
+      method: 'POST',
+      body: data
+    }).then(res => {
+      res.json().then(resJson => {
+        if (resJson.token) {
+          localStorage.setItem('token', resJson.token);
+          window.location.replace(loginDest);
+        }
+      });
+    }).catch(err => {
+      console.log(`Network error: ${err}`);
+    });
+  }
+
+  render() {
+    // TODO: add logic to compute destination dynamically.
+    // can be dashboard or home/site news, depending on origin
+    // of modal (dashboard button or link preceding)
+    const loginDest = '/dashboard';
+
+    return (
+      // <Transition
+      //   in={true}
+      //   timeout={FADE_DURATION}
+      //   className='fade'
+      //   enteredClassName='in'
+      //   enteringClassName='in'>
+      _react2.default.createElement(
+        _reactBootstrap.Modal,
+        {
+          show: this.props.loginModal.show,
+          onHide: () => {
+            this.props.dispatch((0, _actions.toggleLoginModal)(false));
+          },
+          style: styles.modal,
+          backdropStyle: styles.modalBackdrop },
+        _react2.default.createElement(
+          _reactBootstrap.Modal.Body,
+          { style: styles.modalTextContainer },
+          _react2.default.createElement(
+            'form',
+            {
+              ref: ref => this.form = ref,
+              onSubmit: e => this.handleSubmit(loginDest, e)
+            },
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'Username:'
+              ),
+              _react2.default.createElement('input', { type: 'text', name: 'username' })
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'label',
+                null,
+                'Password:'
+              ),
+              _react2.default.createElement('input', { type: 'password', name: 'password' })
+            ),
+            _react2.default.createElement(
+              'button',
+              { type: 'submit' },
+              'Login'
+            )
+          )
+        )
+      )
+      // </Transition>
+
+    );
+  }
+}) || _class);
+LoginModal.propTypes = {
+  // counter: PropTypes.shape({
+  //   count: PropTypes.number.isRequired,
+  // }),
+};
+LoginModal.defaultProps = {
+  // counter: {
+  //   count: 0,
+  // },
+};
+exports.default = LoginModal;
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-bootstrap");
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _dec, _class; // ----------------------
+// IMPORTS
+
+/* NPM */
+
+
+// HOC/decorator to listen to Redux store state
+
+
+// components
+
+
+// Redux actions
+
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(5);
+
+var _LinkOrButton = __webpack_require__(42);
+
+var _LinkOrButton2 = _interopRequireDefault(_LinkOrButton);
+
+var _actions = __webpack_require__(10);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// COMPONENT
+// TODO: figure out if this can/should be rewritten as a stateless functional
+// component, even if it needs the the dispatch prop (don't think I can use an
+// es6 class decorator with a functional component, so can't use @connect)
+// TODO: consider refactoring this and LinkOrButton;
+// does it make sense to store things as class attrs?
+// does propsToPass really make sense?
+// or can I simply just pass uri, onclick separately?
+// should the isLink logic be moved elswhere?
+let DashboardLinkOrButton = (_dec = (0, _reactRedux.connect)(), _dec(_class = class DashboardLinkOrButton extends _react2.default.PureComponent {
+
+  constructor(props) {
+    super(props);
+    // TODO: figure out if this should be setState instead
+    if (this.props.currentUser) {
+      this.isLink = true;
+      this.propsToPass = {
+        uri: '/dashboard/site'
+      };
+    } else {
+      this.isLink = false;
+      this.propsToPass = {
+        onClick: () => {
+          console.log('dashboard button was clicked');
+          this.props.dispatch((0, _actions.toggleLoginModal)(true));
+        }
+      };
+    }
+  }
+
+  render() {
+    const DisplayComponent = ({ onClick }) => _react2.default.createElement(
+      'button',
+      { onClick: onClick },
+      'dashboard'
+    );
+
+    return _react2.default.createElement(_LinkOrButton2.default, {
+      DisplayComponent: DisplayComponent,
+      isLink: this.isLink,
+      propsToPass: this.propsToPass });
+  }
+}) || _class);
+DashboardLinkOrButton.propTypes = {
+  // counter: PropTypes.shape({
+  //   count: PropTypes.number.isRequired,
+  // }),
+};
+DashboardLinkOrButton.defaultProps = {
+  // counter: {
+  //   count: 0,
+  // },
+};
+exports.default = DashboardLinkOrButton;
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// <LinkOrButton displayComponent={const} onClick= />
+const LinkOrButton = ({ DisplayComponent, isLink, propsToPass }) => {
+  if (isLink) {
+    const { uri, otherProps } = propsToPass;
+    return _react2.default.createElement(
+      _reactRouterDom.Link,
+      { to: uri },
+      _react2.default.createElement(DisplayComponent, { props: otherProps })
+    );
+  }
+
+  const { onClick, otherProps } = propsToPass;
+  console.log('LinkOrButton');
+  console.log(onClick);
+  console.log(propsToPass);
+  return _react2.default.createElement(DisplayComponent, { onClick: onClick, props: otherProps });
+};
+
+exports.default = LinkOrButton;
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Dashboard = __webpack_require__(11);
+
+var _Dashboard2 = _interopRequireDefault(_Dashboard);
+
+var _Database = __webpack_require__(44);
+
+var _Database2 = _interopRequireDefault(_Database);
+
+var _Doujin = __webpack_require__(45);
+
+var _Doujin2 = _interopRequireDefault(_Doujin);
+
+var _Forum = __webpack_require__(46);
+
+var _Forum2 = _interopRequireDefault(_Forum);
+
+var _Reader = __webpack_require__(47);
+
+var _Reader2 = _interopRequireDefault(_Reader);
+
+var _Reviews = __webpack_require__(48);
+
+var _Reviews2 = _interopRequireDefault(_Reviews);
+
+var _SiteNews = __webpack_require__(49);
+
+var _SiteNews2 = _interopRequireDefault(_SiteNews);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const modules = {
+  Dashboard: _Dashboard2.default,
+  Database: _Database2.default,
+  Doujin: _Doujin2.default,
+  Forum: _Forum2.default,
+  Reader: _Reader2.default,
+  Reviews: _Reviews2.default,
+  SiteNews: _SiteNews2.default
+};
+
+exports.default = modules;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Database = () => _react2.default.createElement(
+  'h2',
+  null,
+  'Database module'
+);
+
+exports.default = Database;
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Doujin = () => _react2.default.createElement(
+  'h2',
+  null,
+  'Doujin module'
+);
+
+exports.default = Doujin;
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Dashboard = __webpack_require__(11);
+
+var _Dashboard2 = _interopRequireDefault(_Dashboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Forum = () => _react2.default.createElement(
+  'div',
+  null,
+  _react2.default.createElement(
+    'h2',
+    null,
+    'Forum module'
+  ),
+  _react2.default.createElement(_Dashboard2.default, null)
+);
+
+exports.default = Forum;
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Reader = () => _react2.default.createElement(
+  'h2',
+  null,
+  'Reader module'
+);
+
+exports.default = Reader;
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Reviews = () => _react2.default.createElement(
+  'h2',
+  null,
+  'Reviews module'
+);
+
+exports.default = Reviews;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const SiteNews = () => _react2.default.createElement(
+  'h2',
+  null,
+  'Site news module'
+);
+
+exports.default = SiteNews;
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1914,7 +2600,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1975,7 +2661,7 @@ ReduxCounter.defaultProps = {
 exports.default = ReduxCounter;
 
 /***/ }),
-/* 54 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1989,7 +2675,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _stats = __webpack_require__(55);
+var _stats = __webpack_require__(52);
 
 var _stats2 = _interopRequireDefault(_stats);
 
@@ -2032,7 +2718,7 @@ exports.default = () => {
 // Styles
 
 /***/ }),
-/* 55 */
+/* 52 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2040,7 +2726,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 56 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2054,15 +2740,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _styles = __webpack_require__(57);
+var _styles = __webpack_require__(54);
 
 var _styles2 = _interopRequireDefault(_styles);
 
-var _styles3 = __webpack_require__(58);
+var _styles3 = __webpack_require__(55);
 
 var _styles4 = _interopRequireDefault(_styles3);
 
-var _styles5 = __webpack_require__(59);
+var _styles5 = __webpack_require__(56);
 
 var _styles6 = _interopRequireDefault(_styles5);
 
@@ -2101,7 +2787,7 @@ exports.default = () => _react2.default.createElement(
 // Styles
 
 /***/ }),
-/* 57 */
+/* 54 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2110,7 +2796,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 58 */
+/* 55 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2118,7 +2804,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 59 */
+/* 56 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2126,7 +2812,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 60 */
+/* 57 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -2135,16 +2821,108 @@ module.exports = {
 };
 
 /***/ }),
-/* 61 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "assets/img/reactql-logo.7b90d212d7c2537aeffb13ed959c5491.svg";
 
 /***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _config = __webpack_require__(1);
+
+var _config2 = _interopRequireDefault(_config);
+
+var _counter = __webpack_require__(60);
+
+var _counter2 = _interopRequireDefault(_counter);
+
+var _login_modal = __webpack_require__(61);
+
+var _login_modal2 = _interopRequireDefault(_login_modal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// ADDS
+// Add our custom `counter` reducer, with the initial state as a zero count.
+// Note:  The initial state (3rd param) will automatically be wrapped in
+// `seamless-immutable` by the kit's Redux init code, so plain objects are
+// automatically immutable by default
+
+
+/* REDUCERS */
+_config2.default.addReducer('counter', _counter2.default, { count: 0 }); // ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+_config2.default.addReducer('loginModal', _login_modal2.default, { show: false });
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+// Sample reducer, showing how you can 'listen' to the `INCREMENT_COUNTER`
+// action, and update the counter state
+
+// Note: There's no need to specify default state, because the kit's Redux
+// init code wraps `undefined` state values in a `defaultReducer()` function,
+// that captures Redux sentinel vals and responds back with a black object --
+// so in our reducer functions, we can safely assume we're working with 'real'
+// immutable state
+
+function reducer(state, action) {
+  if (action.type === 'INCREMENT_COUNTER') {
+    // Where did `state.merge()` come from?  Our plain state object is automatically
+    // wrapped in a call to `seamless-immutable` in our reducer init code,
+    // so we can use its functions to return a guaranteed immutable version
+    return state.merge({
+      count: state.count + 1
+    });
+  }
+  return state;
+}
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = reducer;
+
+var _immutable = __webpack_require__(62);
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'TOGGLE_MODAL':
+      // replace loginModal state with payload in TOGGLE_MODAL action
+      return action.payload; // TODO: verify that not using a more immutable struct here is ok
+    default:
+      return state;
+  }
+}
+
+/***/ }),
 /* 62 */
 /***/ (function(module, exports) {
 
-
+module.exports = require("immutable");
 
 /***/ }),
 /* 63 */
@@ -2153,63 +2931,52 @@ module.exports = __webpack_require__.p + "assets/img/reactql-logo.7b90d212d7c253
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+var _config = __webpack_require__(1);
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// PROJECT CONFIGURATION
+
+// eslint-disable-next-line no-console
+console.log('project config being run');
+// eslint-disable-next-line no-console
+// ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+console.log(Object({"HOST":"localhost","PORT":"8081","SSL_PORT":null,"NODE_ENV":"development","DEBUG":true}));
+
+/* BACKEND */
+const uriOptions = {
+  servers: {
+    development: '127.0.0.1:8000',
+    production: ''
+  },
+  slugs: {
+    graphql: 'gql',
+    jwtRetrieve: 'api-token-auth'
+  }
+};
+
+/* GRAPHQL */
+// TODO: add logic to determine graphql,jwt endpoint in docker for aws swarm
+if (true) {
+  _config2.default.setGraphQLEndpoint(`http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}/`);
+  _config2.default.setJwtEndpoint(`http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}/`);
+  // eslint-disable-next-line no-console
+  console.log(`set graphql endpoint to ${_config2.default.graphQLEndpoint} in project config`);
+  // eslint-disable-next-line no-console
+  console.log(`set endpoint to retrieve jwt to ${_config2.default.jwtEndpoint} in project config`);
+}
+
+/* APOLLO */
+// TODO: figure out if setting this here is OK if network int.
+// is created before, in browser and server_*.js.
+_config2.default.setApolloNetworkOptions({
+  credentials: 'same-origin'
 });
-// Self-signed certificate. Used for the purposes of running a demo SSL server
-// in the sample kit. Don't use in production!
-
-// Private key file
-const key = exports.key = `
------BEGIN RSA PRIVATE KEY-----
-MIIEogIBAAKCAQEArImW6u4aqhFf2sXDWjYiSg6W9e7LxNz6YbTk0E/G3vybHZk9
-4DLe/LLF2x2740WV60DLBXSw1PXbRdNX90MDUJey++BMNDrNlYNTgKC5jBSO54mD
-u3WKqhQfawYIaraNdzFix8yCgDgNyDuOziWTcIHRIO4DGH3zERcUH9yxrepoSuE9
-HqROVF+dsgTvP+I6CYULMTIDncQi5QaK6DScykAFs8lobmBuZ6ncEZJWejIzzdAo
-ZGaW1SQY7BwCauckiqbdlvYdLoRqijvnl/1IyYDBYbDpg+LGnw1US5dmzSf68biT
-VpdsmoZi4TgH8Cmnx1VKzGErvaFjJmguhiqqSwIDAQABAoIBAECVsFx4jJqkrlDi
-PmICaYt3MqMUpEoovcDdSdmAQ10tCZNmzXajFD1bXhzLYI2OerP5KQX9zEOrVE0q
-836nIxKD9oe6Skwyxsn0wskfYNVCzMt2+kytjx5jMe+J7pSjiQjY/7TypNcCJIaT
-ZL1d63bt4S6Gabo9S0NWdD4JCqmiu7X8AhJY4TcMr9taRKYH3ileGSRrp2jQyYGV
-+E11f8jb6VLFNWJzYV0aRftOefbFm8IQv13vGkxPtJ054tqPfdrIiI6GY01yRxS2
-xCPVREnw/nvPu2a3I7EdXdZjgkGMDt9rMGJOkWpEuk9UlEIQqsGRBZ2LfjnS8Kw2
-X65JbMECgYEA2vbjJ+0Q7tyxHxp468r84NGiZT/W92p5B31S1yE6czSFtk2rw2vK
-6nM5vlYwKnYt0ESlYtmdiWyl4mdrA2eclUczwuVbISlMxLphMs3puQFVcCoBYQ9q
-B1Z60BkNfevWXbSN9SH+E/yqqGA9HMuCKcyDIgKsYXvBNyPMlhNloSMCgYEAybhs
-3SbxS67NWlF7kT/A8rBDy8alWWAUcX4qD6fxzRpilrT7ChHPydMsgS9rd436GBId
-hlFSy+wKfwNvFeyZ59tSWBruEo/9tIPy/aSJRWgxPXcmtoMN/URNvM0igm+ModYA
-gMMddekNz+qjpD0a5gSMiw/nV18Kbg3N785haLkCgYB7YEcoFQTIgiNu8hyWR57r
-ElPdlvYKHL0rQisuOnPTvBFnYiZZC2Cfb+NmYuvq0QIJatSBeTqx1z007661kWkC
-F8eLlm4dpkayRo5D8RAzhRPeCl0SknvcvJagsK0QeZUk4XpnWArwuhpymx90HRsv
-cCOnQzhcCT4aUpqRKUbHXwKBgCX2rZZZc+QYe9FZsHW/l+KUxc2eDxRo/q/1XJkh
-tGIzawaN/QkCHScQtTmC4SjY8Y6CKkhTGdADFl6dGNT5eGWoYzDtsIyRyN+mTZ7q
-zmLfnxTATerfc0yNBExaFvqRX9g9XE7fabX9LHpK4I1SarOLe5/YWGObIW1g77cI
-ElERAoGAI0R8KGB6qLmAUx2Kt1LcrH8anhJ32q/qimYdae+0rpfJ7PgqtEyohJ2W
-cPOb3RRB2Cte/tYfhZse91lhuFMksp5R+/7H1aAA6u8vw2RFRVfpQMIq8Jag9xoA
-wreduKK1jVs++uTaWsz8hJm+OivXz+TVEbv14FxCG+UL0+jHgak=
------END RSA PRIVATE KEY-----
-`;
-
-// Certificate
-const cert = exports.cert = `
------BEGIN CERTIFICATE-----
-MIICpDCCAYwCCQDJpSJg3QqP6zANBgkqhkiG9w0BAQsFADAUMRIwEAYDVQQDDAls
-b2NhbGhvc3QwHhcNMTcwODI4MTUzNDM3WhcNMjcwODI2MTUzNDM3WjAUMRIwEAYD
-VQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCs
-iZbq7hqqEV/axcNaNiJKDpb17svE3PphtOTQT8be/JsdmT3gMt78ssXbHbvjRZXr
-QMsFdLDU9dtF01f3QwNQl7L74Ew0Os2Vg1OAoLmMFI7niYO7dYqqFB9rBghqto13
-MWLHzIKAOA3IO47OJZNwgdEg7gMYffMRFxQf3LGt6mhK4T0epE5UX52yBO8/4joJ
-hQsxMgOdxCLlBoroNJzKQAWzyWhuYG5nqdwRklZ6MjPN0ChkZpbVJBjsHAJq5ySK
-pt2W9h0uhGqKO+eX/UjJgMFhsOmD4safDVRLl2bNJ/rxuJNWl2yahmLhOAfwKafH
-VUrMYSu9oWMmaC6GKqpLAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAGu3NXny0wNR
-ltJnRujm5hIDfvu/buG6KUcC/7VIfqWbu2sRjc6ItRWhLZhG46GpfBkU30drSlAe
-YAS8vxPPAXegX+X6spdWZu8YMAEncZQyOQsNnGGMUCH9D58Jb8XAGdYUp43M6bE8
-muhQs6HDdtEqYpimiGhgBRgnMgbit0dN4jn2U7x0Z+TXbOOJHSN7WGDj5Cm12Dw8
-dG1lxJQxNCJuqV/E7Mw6L6Q7KDxiY3hqUeR1wcIE7lgtzhgoFBWv2P0KCyiH3VB/
-N9pdArD1KgMyvF7gUZ9jCsrsovOoCfxj8EQ2acgELHDnKA9pfwE8dX5N5iIb8AoE
-qoTa3AOG8Vk=
------END CERTIFICATE-----
-`;
 
 /***/ }),
 /* 64 */
@@ -2218,71 +2985,129 @@ qoTa3AOG8Vk=
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+var _config = __webpack_require__(1);
 
-var _graphql = __webpack_require__(9);
+var _config2 = _interopRequireDefault(_config);
 
-// ----------------------
-
-// GraphQL can handle Promises from its `resolve()` calls, so we'll create a
-// simple async function that returns a simple message.  In practice, `resolve()`
-// will generally pull from a 'real' data source such as a database
-async function getMessage() {
-  return {
-    text: `Hello from the GraphQL server @ ${new Date()}`
-  };
-}
-
-// Message type.  Imagine this like static type hinting on the 'message'
-// object we're going to throw back to the user
-// Schema for sample GraphQL server.
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // ----------------------
+// SERVER CONFIGURATION
+
+// Set server config, by checking `SERVER` -- this code path will be
+// eliminated by Webpack in the browser bundle.
+
+if (true) {
+  /* SSL */
+
+  // Leaving server as plain HTTP for now, since using Nginx upstream to handle
+  // HTTPS is recommmended. See config/example.js for explanation about options.
+
+  // const cert = require('src/cert/self_signed');
+  // config.enableSSL({ key: cert.key, cert: cert.cert });
+
+  /* CUSTOM ROUTES */
+
+  // Not enabling any custom routes at the moment. See config/example.js fmi.
+  // config.addGetRoute('/test', async ctx => {
+  //   ctx.body = `Body content here`;
+  // });
+
+  /* CUSTOM 404 HANDLER */
+
+  // custom 404 for server routes. see config/example.js fmi.
+
+  _config2.default.set404Handler(ctx => {
+    const stateDump = JSON.stringify(ctx.store.getState());
+    ctx.status = 404;
+    ctx.body = `This route does not exist on the server - Redux dump: ${stateDump}`;
+  });
+
+  /* CUSTOM ERROR HANDLER */
+
+  //  where `e` is the error thrown, `ctx` is the Koa context object.
+  // not incorporating third-party tools with next() yet.
+  // see config/example.js fmi.
+  _config2.default.setErrorHandler((e, ctx /* `next` is unused in this example */) => {
+    // eslint-disable-next-line no-console
+    console.log('Error: ', e.message);
+    ctx.body = `Some kind of error. Check your source code.\n${e.message}`;
+  });
+
+  /* CUSTOM KOA APP INSTANTIATION */
+
+  // config of`app` outside of middleware/routing
+  // see config/example.js fmi & examples.
+  _config2.default.getKoaApp(app => {
+    // add new `engine` key to the app.context` prototype; used by middleware
+    // below to set a `Powered-By` header.
+    // eslint-disable-next-line no-param-reassign
+    app.context.engine = 'ReactQL';
+  });
+
+  /* CUSTOM MIDDLEWARE */
+
+  // Custom middleware to be processed on the server.
+  _config2.default.addMiddleware(async (ctx, next) => {
+    // custom header
+    ctx.set('Powered-By', ctx.engine); // <-- `ctx.engine` srt above!
+
+    // Redux action to manipulate the state on the server side.
+    ctx.store.dispatch({ type: 'INCREMENT_COUNTER' });
+
+    // Always return `next()`, otherwise the request won't 'pass' to the next
+    // middleware in the stack (likely, the React handler)
+    return next();
+  });
+} // ----------------------
 // IMPORTS
-
-// GraphQL schema library, for building our GraphQL schema
-const Message = new _graphql.GraphQLObjectType({
-  name: 'Message',
-  description: 'GraphQL server message',
-  fields() {
-    return {
-      text: {
-        type: _graphql.GraphQLString,
-        resolve(msg) {
-          return msg.text;
-        }
-      }
-    };
-  }
-});
-
-// Root query.  This is our 'public API'.
-const Query = new _graphql.GraphQLObjectType({
-  name: 'Query',
-  description: 'Root query object',
-  fields() {
-    return {
-      message: {
-        type: Message,
-        resolve() {
-          return getMessage();
-        }
-      }
-    };
-  }
-});
-
-// The resulting schema.  We insert our 'root' `Query` object, to tell our
-// GraphQL server what to respond to.  We could also add a root `mutation`
-// if we want to pass mutation queries that have side-effects (e.g. like HTTP POST)
-exports.default = new _graphql.GraphQLSchema({
-  query: Query
-});
+// Config API for adding reducers and configuring ReactQL app
 
 /***/ }),
 /* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _config = __webpack_require__(1);
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// ----------------------
+// BROWSER CONFIGURATION
+
+// Set browsesr config, by checking `SERVER`
+
+if (false) {
+  /* APOLLO */
+  _config2.default.addApolloMiddleware((req, next) => {
+    // TODO: figure out if I should sync server or graphql store with localstorage
+    // for session-like purposes
+    if (!req.options.headers) {
+      req.options.headers = {};
+    }
+
+    const token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
+
+    req.options.headers.authorization = `JWT ${token}`;
+
+    next();
+  });
+} // ----------------------
+// IMPORTS
+// Config API for adding reducers and configuring ReactQL app
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2314,17 +3139,17 @@ immutability, to prevent weird side effects.
 
 exports.default = createNewStore;
 
-var _redux = __webpack_require__(66);
+var _redux = __webpack_require__(68);
 
-var _reduxThunk = __webpack_require__(67);
+var _reduxThunk = __webpack_require__(69);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-var _seamlessImmutable = __webpack_require__(68);
+var _seamlessImmutable = __webpack_require__(70);
 
 var _seamlessImmutable2 = _interopRequireDefault(_seamlessImmutable);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(1);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -2386,25 +3211,25 @@ function createNewStore(apolloClient) {
 }
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux");
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, exports) {
 
 module.exports = require("redux-thunk");
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, exports) {
 
 module.exports = require("seamless-immutable");
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2418,7 +3243,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(1);
+var _propTypes = __webpack_require__(2);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -2473,7 +3298,7 @@ Html.propTypes = {
 exports.default = Html;
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2486,9 +3311,9 @@ exports.createClient = createClient;
 exports.getNetworkInterface = getNetworkInterface;
 exports.browserClient = browserClient;
 
-var _reactApollo = __webpack_require__(2);
+var _reactApollo = __webpack_require__(3);
 
-var _config = __webpack_require__(3);
+var _config = __webpack_require__(1);
 
 var _config2 = _interopRequireDefault(_config);
 
@@ -2512,6 +3337,8 @@ function createClient(opt = {}) {
 }
 
 // Wrap `createNetworkInterface` to attach middleware
+// TODO: consider switching to createBatchingNetworkInterface, w/ settings to
+// match https://github.com/mbrochh/django-graphql-apollo-react-demo#=
 
 
 // Get environment, to figure out where we're running the GraphQL server
@@ -2526,6 +3353,15 @@ function getNetworkInterface(uri) {
     uri,
     opts: _config2.default.apolloNetworkOptions
   });
+
+  // Couldn't get network requests to not return 400 bad error when I used this
+  // const networkInterface = createBatchingNetworkInterface({
+  //   uri: 'http://localhost:8000/gql', // same as uri
+  //   batchInterval: 10,
+  //   opts: {  // same as config.apolloNetworkOptions
+  //     credentials: 'same-origin',
+  //   },
+  // })
 
   // Attach middleware
   networkInterface.use(_config2.default.apolloMiddleware.map(f => ({ applyMiddleware: f })));
@@ -2546,7 +3382,7 @@ function browserClient() {
 }
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2555,7 +3391,7 @@ function browserClient() {
 // ----------------------
 // IMPORTS
 
-const path = __webpack_require__(72);
+const path = __webpack_require__(74);
 
 // ----------------------
 
@@ -2599,75 +3435,16 @@ module.exports = {
 };
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports) {
 
 module.exports = require("koa-bodyparser");
-
-/***/ }),
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-    var doc = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"message"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"message"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Message"},"directives":[]}]}}]}}],"loc":{"start":0,"end":74}};
-    doc.loc.source = {"body":"#import \"./message.gql\"\n\nquery message {\n  message {\n    ...Message\n  }\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
-  
-
-    var names = {};
-    function unique(defs) {
-      return defs.filter(
-        function(def) {
-          if (def.kind !== 'FragmentDefinition') return true;
-          var name = def.name.value
-          if (names[name]) {
-            return false;
-          } else {
-            names[name] = true;
-            return true;
-          }
-        }
-      )
-    }
-  doc.definitions = doc.definitions.concat(unique(__webpack_require__(79).definitions));
-
-module.exports = doc;
-
-/***/ }),
-/* 79 */
-/***/ (function(module, exports) {
-
-
-    var doc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Message"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":null,"name":{"kind":"Name","value":"text"},"arguments":[],"directives":[],"selectionSet":null}]}}],"loc":{"start":0,"end":39}};
-    doc.loc.source = {"body":"fragment Message on Message {\n  text\n}\n","name":"GraphQL request","locationOffset":{"line":1,"column":1}};
-  
-
-    var names = {};
-    function unique(defs) {
-      return defs.filter(
-        function(def) {
-          if (def.kind !== 'FragmentDefinition') return true;
-          var name = def.name.value
-          if (names[name]) {
-            return false;
-          } else {
-            names[name] = true;
-            return true;
-          }
-        }
-      )
-    }
-  
-module.exports = doc;
 
 /***/ })
 /******/ ]);
