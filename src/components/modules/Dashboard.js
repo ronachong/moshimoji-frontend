@@ -1,6 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { gql, graphql } from 'react-apollo';
+import { connect } from 'react-redux'
+
+import PropTypes from 'prop-types';
+
+import { toggleLoginModal } from 'src/store/actions';
 
 const dashboardQuery = gql`
 {
@@ -10,7 +14,13 @@ const dashboardQuery = gql`
 }
 `;
 
-const Dashboard = ({ data }) => {
+const mapDispatchToProps = dispatch => (
+    {
+      toggleLoginModal: value => (dispatch(toggleLoginModal(value)))
+    }
+);
+
+let Dashboard = ({ data, toggleLoginModal }) => {
   if (data.loading) {
     return <div>Loading...</div> // TODO: maybe make this inactive cmps instead
   }
@@ -18,6 +28,7 @@ const Dashboard = ({ data }) => {
   // TODO: hook component to apollo to toggle login modal if user not logged in
   // also, figure out what should happen if we're using server response
   if (!data.currentUser) {
+    toggleLoginModal(true);
     return <div>user not logged in</div>
   }
 
@@ -30,6 +41,7 @@ const Dashboard = ({ data }) => {
   )
 };
 
+Dashboard = connect(null, mapDispatchToProps)(Dashboard);
 const ApolloDashboard = graphql(dashboardQuery)(Dashboard);
 
 const userStatusFormMutation = gql`
