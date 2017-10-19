@@ -1,0 +1,13 @@
+src/reducers/login_modal.js:7:      return action.payload; // TODO: verify that not using a more immutable struct here is ok
+src/components/main/index.js:103:        // TODO: use presentational component for first button
+src/components/main/index.js:104:        // TODO: make sure first button is grayed out when loading or initial react
+src/components/main/index/DashboardLinkOrButton.js:19:// TODO: figure out if this I should rewrite this as a stateless functional cmp
+src/components/main/index/DashboardLinkOrButton.js:20:// TODO: consider refactoring this and LinkOrButton;
+src/components/main/index/DashboardLinkOrButton.js:41:    // TODO: figure out if this should be setState instead
+src/components/main/index/LoginModal.js:88:    // TODO: add logic to compute destination dynamically.
+src/components/graphql.js:34:  // TODO: create a function to generate gql from proptypes or vice versa, or
+src/components/graphql.js:72:    // TODO: understand how this line^ works
+src/components/modules/Dashboard.js:25:    return <div>Loading...</div> // TODO: maybe make this inactive cmps instead
+src/components/modules/Dashboard.js:28:  // TODO: hook component to apollo to toggle login modal if user not logged in
+src/components/modules/Dashboard.js:67:// TODO: consider using update instead of refetch to update cache
+src/components/modules/Dashboard.js:150:// TODO: create a function to generate gql from proptypes or vice versa, or
