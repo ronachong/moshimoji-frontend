@@ -15,18 +15,19 @@ const dashboardQuery = gql`
 `;
 
 const mapDispatchToProps = dispatch => (
-    {
-      toggleLoginModal: value => (dispatch(toggleLoginModal(value)))
-    }
+  {
+    toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
+  }
 );
 
+// TODO: add prop types
 let Dashboard = ({ data, toggleLoginModal }) => {
   if (data.loading) {
-    return <div>Loading...</div> // TODO: maybe make this inactive cmps instead
+    return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
   }
 
   // TODO: hook component to apollo to toggle login modal if user not logged in
-  // also, figure out what should happen if we're using server response
+  // TODO: also, figure out what should happen if we're using server response
   if (!data.currentUser) {
     toggleLoginModal(true);
     return <div>user not logged in</div>
@@ -38,7 +39,7 @@ let Dashboard = ({ data, toggleLoginModal }) => {
       <ApolloUserStatusForm />
       <ApolloUserStatusesContainer />
     </div>
-  )
+  );
 };
 
 Dashboard = connect(null, mapDispatchToProps)(Dashboard);
