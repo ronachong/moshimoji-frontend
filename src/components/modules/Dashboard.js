@@ -64,14 +64,19 @@ const userStatusFormQuery = gql`
 }
 `;
 
-
+// TODO: consider using update instead of refetch to update cache
 const UserStatusForm = ({ data, mutate }) => {
   let form = null;
   const handleSubmit = e => {
     e.preventDefault();
     console.log(form);
     const status = new FormData(form);
-    mutate({ variables: { text: status.get('text') } })
+    console.log('userStatusesContainerQuery:', userStatusesContainerQuery);
+    mutate({
+      mutation: userStatusFormMutation,
+      variables: { text: status.get('text') },
+      refetchQueries: [{query: userStatusesContainerQuery}],
+    })
       .then(res => {
         console.log('Res:', res);
         console.log(res.data.createUserStatus.reqStatus);
@@ -102,7 +107,7 @@ const UserStatusForm = ({ data, mutate }) => {
 let ApolloUserStatusForm = graphql(userStatusFormQuery)(UserStatusForm);
 ApolloUserStatusForm = graphql(userStatusFormMutation)(ApolloUserStatusForm);
 
-const query = gql`
+const userStatusesContainerQuery = gql`
 {
   allUserStatuses {
     edges {
@@ -175,7 +180,7 @@ UserStatusesContainer.defaultProps = {
   },
 };
 
-const ApolloUserStatusesContainer = graphql(query)(UserStatusesContainer);
+const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery)(UserStatusesContainer);
 
 const UserStatusesPresentation = ({ user_status_edges }) => {
   return (
