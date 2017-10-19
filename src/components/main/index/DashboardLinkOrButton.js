@@ -16,9 +16,7 @@ import { toggleLoginModal } from '../../../store/actions';
 
 // ----------------------
 // COMPONENT
-// TODO: figure out if this can/should be rewritten as a stateless functional
-// component, even if it needs the the dispatch prop (don't think I can use an
-// es6 class decorator with a functional component, so can't use @connect)
+// TODO: figure out if this I should rewrite this as a stateless functional cmp
 // TODO: consider refactoring this and LinkOrButton;
 // does it make sense to store things as class attrs?
 // does propsToPass really make sense?
