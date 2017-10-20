@@ -1,6 +1,6 @@
 import React from 'react';
 import { gql, graphql } from 'react-apollo';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
@@ -31,7 +31,7 @@ let Dashboard = ({ data, toggleLoginModal }) => {
   // TODO: also, figure out what should happen if we're using server response
   if (!data.currentUser) {
     toggleLoginModal(true);
-    return <div>user not logged in</div>
+    return <div>user not logged in</div>;
   }
 
   return (
@@ -135,7 +135,7 @@ const UserStatusesContainer = ({ data }) => {
   }
 
   const presentation = (!data.allUserStatuses) ? <p>Error retrieving data</p> :
-    <UserStatusesPresentation user_status_edges={data.allUserStatuses.edges} />
+    <UserStatusesPresentation userStatusEdges={data.allUserStatuses.edges} />
 
   if (!data.allUserStatuses) {
     return <p>Error retrieving data</p>;
@@ -185,20 +185,18 @@ UserStatusesContainer.defaultProps = {
 
 const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery)(UserStatusesContainer);
 
-const UserStatusesPresentation = ({ user_status_edges }) => {
-  return (
-    <div>
-      {user_status_edges.map(user_status => (
-        <p key={user_status.node.id}>
-          '{user_status.node.text}' created {user_status.node.creationDate}
-        </p>
-      ))}
-    </div>
-  );
-};
+const UserStatusesPresentation = ({ userStatusEdges }) => (
+  <div>
+    {userStatusEdges.map(userStatus => (
+      <p key={userStatus.node.id}>
+        '{userStatus.node.text}' created {userStatus.node.creationDate}
+      </p>
+    ))}
+  </div>
+);
 
 UserStatusesPresentation.propTypes = {
-  user_status_edges: PropTypes.arrayOf(PropTypes.shape({
+  userStatusEdges: PropTypes.arrayOf(PropTypes.shape({
     node: PropTypes.shape({
       id: PropTypes.string.isRequired,
       creationDate: PropTypes.string.isRequired,
