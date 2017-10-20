@@ -20,7 +20,8 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-// TODO: add prop types
+// TODO: (med) add prop types
+// TODO: (med) update component to show form errors
 let Dashboard = ({ data, toggleLoginModal }) => {
   if (data.loading) {
     return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
@@ -108,6 +109,7 @@ const UserStatusForm = ({ data, mutate }) => {
 let ApolloUserStatusForm = graphql(userStatusFormQuery)(UserStatusForm);
 ApolloUserStatusForm = graphql(userStatusFormMutation)(ApolloUserStatusForm);
 
+// TODO: (high) update to only query statuses by currentUser
 const userStatusesContainerQuery = gql`
 {
   allUserStatuses {

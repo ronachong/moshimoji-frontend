@@ -7,7 +7,11 @@ src/components/main/index/DashboardLinkOrButton.js:41:    // TODO: figure out if
 src/components/main/index/LoginModal.js:88:    // TODO: add logic to compute destination dynamically.
 src/components/graphql.js:34:  // TODO: create a function to generate gql from proptypes or vice versa, or
 src/components/graphql.js:72:    // TODO: understand how this line^ works
-src/components/modules/Dashboard.js:25:    return <div>Loading...</div> // TODO: maybe make this inactive cmps instead
-src/components/modules/Dashboard.js:28:  // TODO: hook component to apollo to toggle login modal if user not logged in
-src/components/modules/Dashboard.js:67:// TODO: consider using update instead of refetch to update cache
-src/components/modules/Dashboard.js:150:// TODO: create a function to generate gql from proptypes or vice versa, or
+src/components/modules/Dashboard.js:23:// TODO: (med) add prop types
+src/components/modules/Dashboard.js:24:// TODO: (med) update component to show form errors
+src/components/modules/Dashboard.js:27:    return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
+src/components/modules/Dashboard.js:30:  // TODO: hook component to apollo to toggle login modal if user not logged in
+src/components/modules/Dashboard.js:31:  // TODO: also, figure out what should happen if we're using server response
+src/components/modules/Dashboard.js:69:// TODO: consider using update instead of refetch to update cache
+src/components/modules/Dashboard.js:112:// TODO: (high) update to only query statuses by currentUser
+src/components/modules/Dashboard.js:153:// TODO: create a function to generate gql from proptypes or vice versa, or
