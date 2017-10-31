@@ -1,2 +1,0 @@
-django==1.10.5
-graphene_django>=2.0.dev
