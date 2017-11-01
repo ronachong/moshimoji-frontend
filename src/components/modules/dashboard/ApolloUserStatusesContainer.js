@@ -98,7 +98,7 @@ UserStatusesContainer.defaultProps = {
     ],
     pageInfo: {
       endCursor: null,
-      hasNextPage: null,
+      hasNextPage: false,
     },
   },
 };

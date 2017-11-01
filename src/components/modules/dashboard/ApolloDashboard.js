@@ -22,7 +22,6 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-// TODO: (med) add prop types
 // TODO: (med) update component to show form errors
 let Dashboard = ({ data, toggleLoginModal }) => {
   if (data.loading) {
@@ -43,6 +42,17 @@ let Dashboard = ({ data, toggleLoginModal }) => {
       <ApolloUserStatusesContainer />
     </div>
   );
+};
+
+// TODO: (med) figure out if currentUser should be a required prop
+Dashboard.propTypes = {
+  data: PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    currentUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+  toggleLoginModal: PropTypes.func.isRequired,
 };
 
 Dashboard = connect(null, mapDispatchToProps)(Dashboard);
