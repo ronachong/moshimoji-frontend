@@ -2,6 +2,48 @@ import React from 'react';
 import { gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+const UserStatusesPresentation = ({ userStatusEdges }) => (
+  <div>
+    {userStatusEdges.map(userStatus => (
+      <p key={userStatus.node.id}>
+        '{userStatus.node.text}' created {userStatus.node.creationDate}
+      </p>
+    ))}
+  </div>
+);
+
+UserStatusesPresentation.propTypes = {
+  userStatusEdges: PropTypes.arrayOf(PropTypes.shape({
+    node: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      creationDate: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired).isRequired,
+};
+
+// I can create stateless functional components which receive data from apollo,
+// if I use the graphql(query)(component) pattern (instead of class decorator).
+const UserStatusesContainer = ({ loading, allUserStatuses, loadMoreEntries }) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const presentation = (!allUserStatuses) ? <p>Error retrieving data</p>
+    : <UserStatusesPresentation userStatusEdges={allUserStatuses.edges} />;
+
+  if (!allUserStatuses) {
+    return <p>Error retrieving data</p>;
+  }
+
+  return (
+    <div>
+      <h3>User Statuses</h3>
+      {presentation}
+      <button onClick={loadMoreEntries}>load more</button>
+    </div>
+  );
+};
 
 // TODO: (high) update to only query statuses by currentUser
 const userStatusesContainerQuery = gql`
@@ -22,81 +64,44 @@ query UserStatuses($cursor: String) {
 }
 `;
 
-// I can create stateless functional components which receive data from apollo,
-// if I use the graphql(query)(component) pattern (instead of class decorator).
-const UserStatusesContainer = ({loading, allUserStatuses, loadMoreEntries}) => {
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  const presentation = (!allUserStatuses) ? <p>Error retrieving data</p> :
-    <UserStatusesPresentation userStatusEdges={allUserStatuses.edges} />
-
-  if (!allUserStatuses) {
-    return <p>Error retrieving data</p>;
-  }
-
-  return (
-    <div>
-      <h3>User Statuses</h3>
-      {presentation}
-      <button onClick={loadMoreEntries}>load more</button>
-    </div>
-  );
-};
-
-
 // TODO: create a function to generate gql from proptypes or vice versa, or
 // from a common object (would I need to refer to schema for field types?),
 // if that will save me time
-// UserStatusesContainer.propTypes = {
-//   data: PropTypes.shape({
-//     allUserStatuses: PropTypes.shape({
-//       edges: PropTypes.arrayOf(PropTypes.shape({
-//         node: PropTypes.shape({
-//           id: PropTypes.string.isRequired,
-//           creationDate: PropTypes.string.isRequired,
-//           text: PropTypes.string.isRequired,
-//         }).isRequired,
-//       }).isRequired).isRequired,
-//     }).isRequired,
-//   }).isRequired,
-// };
-//
+UserStatusesContainer.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  allUserStatuses: PropTypes.shape({
+    edges: PropTypes.arrayOf(PropTypes.shape({
+      node: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        creationDate: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired).isRequired,
+    pageInfo: PropTypes.shape({
+      endCursor: PropTypes.string,
+      hasNextPage: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
+  loadMoreEntries: PropTypes.func.isRequired,
+};
+
 UserStatusesContainer.defaultProps = {
-  data: {
-    allUserStatuses: {
-      edges: [
-        {
-          node: {
-            id: 0,
-            creationDate: 'date str',
-            text: 'default text',
-          },
+  allUserStatuses: {
+    edges: [
+      {
+        node: {
+          id: 'fakeid',
+          creationDate: 'date str',
+          text: 'default text',
         },
-      ],
-      pageInfo: {
-        startCursor: null,
-        hasPreviousPage: null,
       },
+    ],
+    pageInfo: {
+      endCursor: null,
+      hasNextPage: null,
     },
   },
 };
-//
-// allUserStatuses(last: 2, before: $cursor) {
-//   edges {
-//     node {
-//       id,
-//       creationDate,
-//       text
-//     }
-//   }
-//   pageInfo {
-//     endCursor
-//     hasPreviousPage
-//   }
-// }
-// }
 
 const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery, {
   props({ data: { loading, allUserStatuses, fetchMore } }) {
@@ -125,25 +130,5 @@ const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery, {
     };
   },
 })(UserStatusesContainer);
-
-const UserStatusesPresentation = ({ userStatusEdges }) => (
-  <div>
-    {userStatusEdges.map(userStatus => (
-      <p key={userStatus.node.id}>
-        '{userStatus.node.text}' created {userStatus.node.creationDate}
-      </p>
-    ))}
-  </div>
-);
-
-UserStatusesPresentation.propTypes = {
-  userStatusEdges: PropTypes.arrayOf(PropTypes.shape({
-    node: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      creationDate: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired).isRequired,
-};
 
 export default ApolloUserStatusesContainer;
