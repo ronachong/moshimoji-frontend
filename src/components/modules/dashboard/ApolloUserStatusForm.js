@@ -2,6 +2,7 @@ import React from 'react';
 import { gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import { userStatusesContainerQuery } from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
 
 const userStatusFormMutation = gql`
 mutation UserStatusForm($text: String!) {
@@ -32,7 +33,7 @@ const UserStatusForm = ({ data, mutate }) => {
     mutate({
       mutation: userStatusFormMutation,
       variables: { text: status.get('text') },
-      refetchQueries: [{query: userStatusesContainerQuery}],
+      refetchQueries: [{ query: userStatusesContainerQuery }],
     })
       .then(res => {
         console.log('Res:', res);
