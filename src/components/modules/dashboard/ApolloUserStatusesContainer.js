@@ -131,4 +131,5 @@ const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery, {
   },
 })(UserStatusesContainer);
 
+export { userStatusesContainerQuery };
 export default ApolloUserStatusesContainer;
