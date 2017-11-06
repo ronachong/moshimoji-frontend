@@ -2,6 +2,8 @@ import React from 'react';
 import { gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import fragments from 'src/graphql/fragments';
+
 const UserStatusesPresentation = ({ userStatusEdges }) => (
   <div>
     {userStatusEdges.map(userStatus => (
@@ -46,27 +48,29 @@ const UserStatusesContainer = ({ loading, allUserStatuses, loadMoreEntries }) =>
 };
 
 // TODO: (high) update to only query statuses by currentUser
+// TODO: (med) consider renaming Container to List for consistency
+// TODO: add orderByArg when implemented in Schema
 const userStatusesContainerQuery = gql`
-query UserStatuses($cursor: String) {
-  allUserStatuses(first: 5, after: $cursor, orderBy: "-creation_date") {
-    edges {
-      node {
-        id,
-        creationDate,
-        text
+  query UserStatuses($cursor: String) {
+    allUserStatuses(first: 5, after: $cursor) {
+      edges {
+        node {
+          ...UserStatusForList
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
-    pageInfo {
-      endCursor
-      hasNextPage
-    }
   }
-}
+  ${fragments.userStatusForList}
 `;
 
 // TODO: create a function to generate gql from proptypes or vice versa, or
 // from a common object (would I need to refer to schema for field types?),
 // if that will save me time
+// TODO: (high) update prop types
 UserStatusesContainer.propTypes = {
   loading: PropTypes.bool.isRequired,
   allUserStatuses: PropTypes.shape({

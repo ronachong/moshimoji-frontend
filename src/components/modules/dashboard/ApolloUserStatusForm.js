@@ -2,18 +2,19 @@ import React from 'react';
 import { gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+import fragments from 'src/graphql/fragments';
 import { userStatusesContainerQuery } from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
 
 const userStatusFormMutation = gql`
-mutation UserStatusForm($text: String!) {
-  createUserStatus(text: $text) {
-    reqStatus,
-    formErrors,
-    userStatus {
-      id
+  mutation UserStatusForm($text: String!) {
+    createUserStatus(text: $text) {
+      reqStatus,
+      formErrors,
+      userStatus {
+        ...UserStatusForList
+      }
     }
   }
-}
 `;
 
 const userStatusFormQuery = gql`
@@ -63,6 +64,16 @@ const UserStatusForm = ({ data, mutate }) => {
 };
 
 let ApolloUserStatusForm = graphql(userStatusFormQuery)(UserStatusForm);
-ApolloUserStatusForm = graphql(userStatusFormMutation)(ApolloUserStatusForm);
+ApolloUserStatusForm = graphql(userStatusFormMutation, {
+  options: {
+    update: (proxy, { data: { createUserStatus } }) => {
+      const data = proxy.readQuery({ query: userStatusesContainerQuery });
+      console.log('data is', data);
+      console.log('createUserStatus is', createUserStatus);
+      data.allUserStatuses.edges.push(createUserStatus);
+      proxy.writeQuery({ query: userStatusesContainerQuery, data });
+    },
+  },
+})(ApolloUserStatusForm);
 
 export default ApolloUserStatusForm;
