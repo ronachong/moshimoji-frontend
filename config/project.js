@@ -1,7 +1,13 @@
 // ----------------------
-// IMPORTS
+// (some) IMPORTS
+
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+
 // Config API for adding reducers and configuring ReactQL app
 import config from 'kit/config';
+import introspectionQueryResultData from 'config/fragmentTypes.json';
 
 // ----------------------
 // PROJECT CONFIGURATION
@@ -39,8 +45,19 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* APOLLO */
-// TODO: figure out if setting this here is OK if network int.
-// is created before, in browser and server_*.js.
+// TODO: figure out if setting this here is OK if apollo client, network int.
+// are created before, in browser and server_*.js.
+const fragmentMatcher = new IntrospectionFragmentMatcher({
+  introspectionQueryResultData,
+});
+
+const cache = new InMemoryCache({ fragmentMatcher });
+
+config.setApolloClientOptions({
+  cache,
+  link: new HttpLink(),
+  dataIdFromObject: o => o.id,
+});
 config.setApolloNetworkOptions({
   credentials: 'same-origin',
-})
+});
