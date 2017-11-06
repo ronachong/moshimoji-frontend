@@ -19,6 +19,8 @@ import { getServerURL } from 'kit/lib/env';
 // Helper function to create a new Apollo client, by merging in
 // passed options alongside any set by `config.setApolloOptions` and defaults
 export function createClient(opt = {}) {
+  console.log('creating Apollo client; config.apolloClientOptions are',
+  config.apolloClientOptions);
   return new ApolloClient(Object.assign({
     reduxRootSelector: state => state.apollo,
   }, config.apolloClientOptions, opt));

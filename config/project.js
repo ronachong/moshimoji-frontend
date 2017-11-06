@@ -45,8 +45,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* APOLLO */
-// TODO: figure out if setting this here is OK if apollo client, network int.
-// are created before, in browser and server_*.js.
+// App & this config are imported prior to creating client and network interface
+// in server and browser.js
+console.log("creating IntrospectionFragmentMatcher")
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
