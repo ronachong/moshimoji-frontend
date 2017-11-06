@@ -15,6 +15,7 @@ const userStatusFormMutation = gql`
       }
     }
   }
+  ${fragments.userStatusForList}
 `;
 
 const userStatusFormQuery = gql`
@@ -34,7 +35,14 @@ const UserStatusForm = ({ data, mutate }) => {
     mutate({
       mutation: userStatusFormMutation,
       variables: { text: status.get('text') },
-      refetchQueries: [{ query: userStatusesContainerQuery }],
+      // update: (proxy, { data: { createUserStatus } }) => {
+      //   const data = proxy.readQuery({ query: userStatusesContainerQuery });
+      //   console.log('data is', data);
+      //   console.log('createUserStatus is', createUserStatus);
+      //   data.allUserStatuses.edges.push(createUserStatus);
+      //   proxy.writeQuery({ query: userStatusesContainerQuery, data });
+      // },
+      // refetchQueries: [{ query: userStatusesContainerQuery }],
     })
       .then(res => {
         console.log('Res:', res);
@@ -74,6 +82,7 @@ ApolloUserStatusForm = graphql(userStatusFormMutation, {
       proxy.writeQuery({ query: userStatusesContainerQuery, data });
     },
   },
-})(ApolloUserStatusForm);
+}
+)(ApolloUserStatusForm);
 
 export default ApolloUserStatusForm;
