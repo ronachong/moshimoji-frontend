@@ -35,24 +35,10 @@ const UserStatusForm = ({ data, mutate }) => {
     mutate({
       mutation: userStatusFormMutation,
       variables: { text: status.get('text') },
-      update: (proxy, { data: { createUserStatus } }) => {
-        const data = proxy.readQuery({
-          query: userStatusesContainerQuery,
-          variables: {
-            cursor: null,
-          }
-        });
-        console.log('data is', data);
-        console.log('createUserStatus is', createUserStatus);
-        console.log('data is', data);
-        data.allUserStatuses.edges.push({
-          node: createUserStatus.userStatus,
-          __typename: "UserStatusNodeEdge",
-          'Symbol(id)': '$ROOT_QUERY.allUserStatuses({"first":5,"after":null}).edges.5',
-        });
-        proxy.writeQuery({ query: userStatusesContainerQuery, data });
-      },
-      refetchQueries: [{ query: userStatusesContainerQuery }],
+      refetchQueries: [{
+        query: userStatusesContainerQuery,
+        variables: { cursor: null },
+      }],
     })
       .then(res => {
         console.log('Res:', res);
