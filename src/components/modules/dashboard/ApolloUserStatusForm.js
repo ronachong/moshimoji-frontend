@@ -27,7 +27,7 @@ const userStatusFormQuery = gql`
 `;
 
 // TODO: consider using update instead of refetch to update cache
-const UserStatusForm = ({ data, mutate }) => {
+const UserStatusForm = ({ mutate }) => {
   let form = null;
   const handleSubmit = e => {
     e.preventDefault();
@@ -65,6 +65,10 @@ const UserStatusForm = ({ data, mutate }) => {
       </form>
     </div>
   );
+};
+
+UserStatusForm.propTypes = {
+  mutate: PropTypes.func.isRequired,
 };
 
 let ApolloUserStatusForm = graphql(userStatusFormQuery)(UserStatusForm);
