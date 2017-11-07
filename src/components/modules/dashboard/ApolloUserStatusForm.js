@@ -41,13 +41,17 @@ const UserStatusForm = ({ mutate }) => {
       }],
     })
       .then(res => {
+        // eslint-disable-next-line no-console
         console.log('Res:', res);
+        // eslint-disable-next-line no-console
         console.log(res.data.createUserStatus.reqStatus);
         if (res.data.createUserStatus.reqStatus === 200) {
+          // eslint-disable-next-line no-console
           console.log('status submitted successfully');
         }
       })
       .catch(err => {
+        // eslint-disable-next-line no-console
         console.log(`Network error: ${err}`);
       });
   };
@@ -71,7 +75,7 @@ UserStatusForm.propTypes = {
   mutate: PropTypes.func.isRequired,
 };
 
-let ApolloUserStatusForm = graphql(userStatusFormQuery)(UserStatusForm);
-ApolloUserStatusForm = graphql(userStatusFormMutation)(ApolloUserStatusForm);
+const ApolloUserStatusForm = graphql(userStatusFormMutation)(
+  graphql(userStatusFormQuery)(UserStatusForm));
 
 export default ApolloUserStatusForm;
