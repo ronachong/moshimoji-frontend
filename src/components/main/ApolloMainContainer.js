@@ -29,6 +29,9 @@
 import React from 'react';
 import { gql, graphql } from 'react-apollo';
 
+// Prop types
+import PropTypes from 'prop-types';
+
 // Routing via React Router
 import {
   Link,
@@ -66,11 +69,11 @@ import logo from './reactql-logo.svg';
 // ----------------------
 
 const query = gql`
-{
-  currentUser {
-    id
+  {
+    currentUser {
+      id
+    }
   }
-}
 `;
 
 const MainContainer = ({ data }) => (
@@ -149,6 +152,15 @@ const MainContainer = ({ data }) => (
     <Styles />
   </div>
 );
+
+MainContainer.propTypes = {
+  data: {
+    loading: PropTypes.bool.isRequired,
+    currentUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }.isRequired,
+};
 
 const ApolloMainContainer = graphql(query)(MainContainer);
 
