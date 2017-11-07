@@ -7,15 +7,15 @@ import { connect } from 'react-redux'; // HOC/decorator to listen to Redux store
 import PropTypes from 'prop-types';
 
 /* Moshimoji */
-// components
-import LinkOrButton from 'src/components/reused/LinkOrButton';
+// child components
+import LinkOrButton from 'src/components/base/LinkOrButton';
 
 // Redux actions
 import { toggleLoginModal } from 'src/store/actions';
 
 
 // ----------------------
-// COMPONENT
+// COMPONENT: DashboardLinkOrButton
 // DashboardLinkOrButton is an HOC around LinkOrButton. It specifies
 // the display component (dashboard button) and dictates isLink or
 // button based on the currentUser prop.
