@@ -46,13 +46,10 @@ import { Redirect } from 'kit/lib/routing';
 
 /* App */
 
-// Child React components. Note:  We can either export one main React component
-// per file, or in the case of <Home>, <Page> and <WhenFound>, we can group
-// multiple components per file where it makes sense to do so
+// Child React components
 import GraphQLMessage from 'src/components/graphql';
 import { Page, WhenNotFound } from 'src/components/routes';
-import LoginModal from 'src/components/main/LoginModal';
-import DashboardLinkOrButton from 'src/components/main/DashboardLinkOrButton';
+import { DashboardLinkOrButton, LoginModal } from 'src/components/main';
 import modules from 'src/components/modules';
 
 import ReduxCounter from 'src/components/redux';
