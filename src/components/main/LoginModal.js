@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { Modal, Transition } from 'react-bootstrap';
 
 import config from 'kit/config';
-import { toggleLoginModal } from '../../../store/actions';
+import { toggleLoginModal } from 'src/store/actions';
 
 // ----------------------
 // STYLING
