@@ -3,10 +3,10 @@
 
 /* NPM */
 import React from 'react';
+import { connect } from 'react-redux'; // HOC/decorator to listen to Redux store state
+import PropTypes from 'prop-types';
 
-// HOC/decorator to listen to Redux store state
-import { connect } from 'react-redux';
-
+/* Moshimoji */
 // components
 import LinkOrButton from 'src/components/reused/LinkOrButton';
 
@@ -25,16 +25,10 @@ import { toggleLoginModal } from 'src/store/actions';
 @connect()
 class DashboardLinkOrButton extends React.PureComponent {
   static propTypes = {
-    // counter: PropTypes.shape({
-    //   count: PropTypes.number.isRequired,
-    // }),
+    currentUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
   };
-
-  static defaultProps = {
-    // counter: {
-    //   count: 0,
-    // },
-  }
 
   constructor(props) {
     super(props);
@@ -50,7 +44,7 @@ class DashboardLinkOrButton extends React.PureComponent {
         onClick: () => {
           console.log('dashboard button was clicked');
           this.props.dispatch(toggleLoginModal(true));
-        }
+        },
       };
     }
   }
