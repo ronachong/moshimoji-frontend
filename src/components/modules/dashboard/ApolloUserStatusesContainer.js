@@ -1,13 +1,25 @@
+// ----------------------
+// IMPORTS
+
+/* NPM */
 import React from 'react';
 import { gql, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 
+/* Moshimoji */
+// graphql
 import fragments from 'src/graphql/fragments';
 
+// child components
 import { UserStatusesPresentation } from 'src/components/modules/dashboard';
 
+// ----------------------
+// COMPONENT: UserStatusesContainer
+// UserStatusesContainer is a pre-Apollo container for display of
+// user statuses. It has loading, presentation, and error directives.
 
-// I can create stateless functional components which receive data from apollo,
+// TODO: create a base HOC for populated lists with load more functionality.
+// Note: I can create stateless functional components which receive data from apollo,
 // if I use the graphql(query)(component) pattern (instead of class decorator).
 const UserStatusesContainer = ({ loading, allUserStatuses, loadMoreEntries }) => {
   if (loading) {
