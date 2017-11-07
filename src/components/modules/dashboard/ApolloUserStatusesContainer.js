@@ -4,25 +4,8 @@ import PropTypes from 'prop-types';
 
 import fragments from 'src/graphql/fragments';
 
-const UserStatusesPresentation = ({ userStatusEdges }) => (
-  <div>
-    {userStatusEdges.map(userStatus => (
-      <p key={userStatus.node.id}>
-        '{userStatus.node.text}' created {userStatus.node.creationDate}
-      </p>
-    ))}
-  </div>
-);
+import { UserStatusesPresentation } from 'src/components/modules/dashboard';
 
-UserStatusesPresentation.propTypes = {
-  userStatusEdges: PropTypes.arrayOf(PropTypes.shape({
-    node: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      creationDate: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired).isRequired,
-};
 
 // I can create stateless functional components which receive data from apollo,
 // if I use the graphql(query)(component) pattern (instead of class decorator).
