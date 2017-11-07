@@ -67,8 +67,9 @@ import css from './main.scss';
 import logo from './reactql-logo.svg';
 
 // ----------------------
-
-const query = gql`
+// COMPONENT: MainContainer
+// MainContainer contains the contents of the main view.
+const mainContainerQuery = gql`
   {
     currentUser {
       id
@@ -162,6 +163,6 @@ MainContainer.propTypes = {
   }.isRequired,
 };
 
-const ApolloMainContainer = graphql(query)(MainContainer);
+const ApolloMainContainer = graphql(mainContainerQuery)(MainContainer);
 
 export default ApolloMainContainer;
