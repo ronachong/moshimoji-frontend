@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import LinkOrButton from 'src/components/reused/LinkOrButton';
 
 // Redux actions
-import { toggleLoginModal } from '../../../store/actions';
+import { toggleLoginModal } from 'src/store/actions';
 
 
 // ----------------------
