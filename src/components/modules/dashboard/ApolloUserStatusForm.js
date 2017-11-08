@@ -1,10 +1,20 @@
+// ----------------------
+// IMPORTS
+
+/* NPM */
+import PropTypes from 'prop-types';
 import React from 'react';
 import { gql, graphql } from 'react-apollo';
-import PropTypes from 'prop-types';
 
+/* Moshimoji */
+// GraphQL
 import fragments from 'src/graphql/fragments';
 import { userStatusesContainerQuery } from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
 
+// ----------------------
+// COMPONENT: UserStatusForm
+// UserStatusForm is a pre-Apollo form component to submit a new user
+// status.
 const userStatusFormMutation = gql`
   mutation UserStatusForm($text: String!) {
     createUserStatus(text: $text) {

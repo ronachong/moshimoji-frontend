@@ -2,9 +2,9 @@
 // IMPORTS
 
 /* NPM */
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux'; // HOC/decorator to listen to Redux store state
-import PropTypes from 'prop-types';
 
 /* Moshimoji */
 // child components

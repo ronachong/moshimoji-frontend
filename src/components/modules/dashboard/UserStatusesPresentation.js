@@ -1,6 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// ----------------------
+// IMPORTS
 
+/* NPM */
+import PropTypes from 'prop-types';
+import React from 'react';
+
+// ----------------------
+// COMPONENT: UserStatusesPresentation
+// UserStatuses is a presentational component for user statuses.
 const UserStatusesPresentation = ({ userStatusEdges }) => (
   <div>
     {userStatusEdges.map(userStatus => (
