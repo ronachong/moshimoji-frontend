@@ -47,9 +47,9 @@ import Helmet from 'react-helmet';
 // NotFound 404 handler for unknown routes
 import { Redirect } from 'kit/lib/routing';
 
-/* App */
+/* Moshimoji */
 
-// Child React components
+// Child components
 import GraphQLMessage from 'src/components/graphql';
 import { Page, WhenNotFound } from 'src/components/routes';
 import { DashboardLinkOrButton, LoginModal } from 'src/components/main';
