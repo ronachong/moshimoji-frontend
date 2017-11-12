@@ -8,7 +8,7 @@ import { connect } from 'react-redux'; // HOC/decorator to listen to Redux store
 
 /* Moshimoji */
 // child components
-import LinkOrButton from 'src/components/base/LinkOrButton';
+import { LinkOrButton } from 'src/components/base';
 
 // Redux actions
 import { toggleLoginModal } from 'src/store/actions';
