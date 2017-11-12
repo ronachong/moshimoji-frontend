@@ -3,7 +3,6 @@
 
 /* NPM */
 import PropTypes from 'prop-types';
-import React from 'react';
 
 /* Moshimoji */
 // child components
@@ -13,24 +12,28 @@ import React from 'react';
 // dealing with UI state. 'Higher order' components which must determine what
 // presentational components to display based on global UI state can build on
 // top of this component.
-class UIStateComponentContainer extends React.PureComponent {
-  static propTypes = {
-    runOnServer: PropTypes.bool,
-    dataLoading: PropTypes.bool,
-    userAuthed: PropTypes.bool,
-    caseRunOnServer: PropTypes.func,
-    caseDataLoading: PropTypes.func,
-    caseUserAuthed: PropTypes.func,
-    caseUserAnon: PropTypes.func,
+const UIStateComponentContainer = ({ UIState, cases }) => {
+  if (UIState.runOnServer) {
+    return cases.RunOnServer();
   }
-  render() {
-    if (runOnServer) {
-      return caseRunOnServer()
-    }
-    if (dataLoading) {
-      return caseDataLoading()
-    }
-    (userAuthed) ?
-      caseUserAuthed() :
-      caseUserAnon()
-}
+  if (UIState.dataLoading) {
+    return cases.DataLoading();
+  }
+  return (UIState.userAuthed) ?
+    cases.UserAuthed() :
+    cases.UserAnon();
+};
+
+UIStateComponentContainer.propTypes = {
+  UIState: PropTypes.shape({
+    runOnServer: PropTypes.bool.isRequired,
+    dataLoading: PropTypes.bool.isRequired,
+    userAuthed: PropTypes.bool.isRequired,
+  }).isRequired,
+  cases: PropTypes.shape({
+    RunOnServer: PropTypes.func.isRequired,
+    DataLoading: PropTypes.func.isRequired,
+    UserAuthed: PropTypes.func.isRequired,
+    UserAnon: PropTypes.func.isRequired,
+  }).isRequired,
+};
