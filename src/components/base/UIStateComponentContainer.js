@@ -37,3 +37,5 @@ UIStateComponentContainer.propTypes = {
     UserAnon: PropTypes.func.isRequired,
   }).isRequired,
 };
+
+export default UIStateComponentContainer;
