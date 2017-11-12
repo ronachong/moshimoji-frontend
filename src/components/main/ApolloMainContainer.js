@@ -52,7 +52,7 @@ import { Redirect } from 'kit/lib/routing';
 // Child components
 import GraphQLMessage from 'src/components/graphql';
 import { Page, WhenNotFound } from 'src/components/routes';
-import { DashboardLinkOrButton, LoginModal } from 'src/components/main';
+import { Header, DashboardLinkOrButton, LoginModal } from 'src/components/main';
 import modules from 'src/components/modules';
 
 import ReduxCounter from 'src/components/redux';
@@ -96,6 +96,9 @@ const MainContainer = ({ data }) => (
       <Link to="/"><h1>moshimoji</h1></Link>
     </div>
     <hr />
+
+    { /* -- login / logout / register buttons */ }
+    <Header currentUser={data.currentUser} dataLoading={data.loading} />
 
     { /* -- dashboard button */ }
     <div className={css.hello}>
@@ -155,12 +158,12 @@ const MainContainer = ({ data }) => (
 );
 
 MainContainer.propTypes = {
-  data: {
+  data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     currentUser: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
-  }.isRequired,
+  }).isRequired,
 };
 
 const ApolloMainContainer = graphql(mainContainerQuery)(MainContainer);
