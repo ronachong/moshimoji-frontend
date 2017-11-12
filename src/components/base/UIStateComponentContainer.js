@@ -14,14 +14,14 @@ import PropTypes from 'prop-types';
 // top of this component.
 const UIStateComponentContainer = ({ UIState, cases }) => {
   if (UIState.runOnServer) {
-    return cases.RunOnServer();
+    return cases.runOnServer();
   }
   if (UIState.dataLoading) {
-    return cases.DataLoading();
+    return cases.dataLoading();
   }
   return (UIState.userAuthed) ?
-    cases.UserAuthed() :
-    cases.UserAnon();
+    cases.userAuthed() :
+    cases.userAnon();
 };
 
 UIStateComponentContainer.propTypes = {
@@ -31,10 +31,10 @@ UIStateComponentContainer.propTypes = {
     userAuthed: PropTypes.bool.isRequired,
   }).isRequired,
   cases: PropTypes.shape({
-    RunOnServer: PropTypes.func.isRequired,
-    DataLoading: PropTypes.func.isRequired,
-    UserAuthed: PropTypes.func.isRequired,
-    UserAnon: PropTypes.func.isRequired,
+    runOnServer: PropTypes.func.isRequired,
+    dataLoading: PropTypes.func.isRequired,
+    userAuthed: PropTypes.func.isRequired,
+    userAnon: PropTypes.func.isRequired,
   }).isRequired,
 };
 
