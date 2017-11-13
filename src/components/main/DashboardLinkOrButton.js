@@ -26,18 +26,17 @@ import { toggleLoginModal } from 'src/store/actions';
 // TODO: determine if propsToPass really makes sense, or if I can/should pass uri,
 // onClick, separately
 // TODO: figure out if isLink logic should be moved elswhere
+// TODO: implement disabled bool prop
 @connect()
 class DashboardLinkOrButton extends React.PureComponent {
   static propTypes = {
-    currentUser: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
+    userAuthed: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
     super(props);
     // TODO: figure out if this should be setState instead
-    if (this.props.currentUser) {
+    if (this.props.userAuthed) {
       this.isLink = true;
       this.propsToPass = {
         uri: '/dashboard/site',
