@@ -52,7 +52,7 @@ import { Redirect } from 'kit/lib/routing';
 // Child components
 import GraphQLMessage from 'src/components/graphql';
 import { Page, WhenNotFound } from 'src/components/routes';
-import { Header, DashboardLinkOrButton, LoginModal } from 'src/components/main';
+import { Header, LoginModal } from 'src/components/main';
 import modules from 'src/components/modules';
 
 import ReduxCounter from 'src/components/redux';
@@ -98,19 +98,11 @@ const MainContainer = ({ data }) => (
     <hr />
 
     { /* -- login / logout / register buttons */ }
-    <Header currentUser={data.currentUser} dataLoading={data.loading} />
-
-    { /* -- dashboard button */ }
-    <div className={css.hello}>
-      {
-        (data.loading || SERVER)
-        // TODO: use presentational component for first button
-        // TODO: make sure first button is grayed out when loading or initial react
-          ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
-          <DashboardLinkOrButton currentUser={data.currentUser} />
-      }
-    </div>
+    <Header
+      userAuthed={data.currentUser !== null}
+      dataLoading={data.loading} />
     <hr />
+
     { /* -- nav */ }
     <ul>
       <li><Link to="/reader">reader</Link></li>
