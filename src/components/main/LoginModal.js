@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { Modal, Transition } from 'react-bootstrap';
 
 import config from 'kit/config';
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 // ----------------------
 // STYLING
@@ -98,7 +98,7 @@ class LoginModal extends Component {
       //   enteringClassName='in'>
         <Modal
           show={this.props.loginModal.show}
-          onHide={() => {this.props.dispatch(toggleLoginModal(false))}}
+          onHide={() => {this.props.dispatch(showLoginModal(false))}}
           style={styles.modal}
           backdropStyle={styles.modalBackdrop}>
           <Modal.Body style={styles.modalTextContainer}>
