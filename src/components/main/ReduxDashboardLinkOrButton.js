@@ -21,7 +21,6 @@ import { toggleLoginModal } from 'src/store/actions';
 // button based on the userAuthed prop.
 
 // TODO: add styling to disabled display component to indicate deactivation
-// TODO: add prop types
 const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
   const DisplayComponent = ({ onClick }) => (
     <button onClick={onClick}>dashboard</button>
