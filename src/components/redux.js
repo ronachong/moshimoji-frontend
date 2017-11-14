@@ -1,5 +1,5 @@
 // Component that demonstrates using a part of the Redux store
-// outside of Apollo.  We can use config.addReducer(key, reducer) in `src/app.js`
+// outside of Apollo.  We can use config.addReducer(key, reducer) in `src/App.js`
 // to add custom Redux reducers
 
 // ----------------------
