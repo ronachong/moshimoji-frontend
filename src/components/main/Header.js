@@ -38,6 +38,10 @@ const LoginButton = ({ toggleLoginModal }) => (
   <button onClick={() => toggleLoginModal(true)}>login</button>
 );
 
+LoginButton.propTypes = {
+  toggleLoginModal: PropTypes.func.isRequired,
+};
+
 const mapDispatchToProps = dispatch => (
   {
     toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
@@ -54,10 +58,9 @@ const LogoutButton = () => {
   const handleClick = () => {
     localStorage.removeItem('token');
     window.location.replace('/');
-  }
+  };
 
-  handleClick();
-  return <button onClick={handleClick}>Stub.</button>;
+  return <button onClick={handleClick}>logout</button>;
 };
 
 
@@ -76,7 +79,7 @@ const Header = ({ dataLoading, userAuthed }) => {
   const cases = {
     thingsShouldBeDisabled: () => (
       <div>
-        <LoginLogoutPlaceholder />
+        <div><LoginLogoutPlaceholder /></div>
         <ReduxDashboardLinkOrButton disabled userAuthed />
       </div>
     ),
@@ -88,7 +91,7 @@ const Header = ({ dataLoading, userAuthed }) => {
     },
     userAuthed: () => (
       <div>
-        <LogoutButton />
+        <div><LogoutButton /></div>
         <ReduxDashboardLinkOrButton userAuthed={userAuthed} />
       </div>
     ),
