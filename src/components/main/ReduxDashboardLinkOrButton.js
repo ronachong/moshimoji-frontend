@@ -30,6 +30,10 @@ const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
     onClick: PropTypes.func.isRequired,
   };
 
+  DisplayComponent.defaultProps = {
+    onClick: () => (null),
+  }
+
   if (disabled) {
     return <DisplayComponent />;
   }
@@ -47,6 +51,10 @@ DashboardLinkOrButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
   userAuthed: PropTypes.bool.isRequired,
   toggleLoginModal: PropTypes.func.isRequired,
+};
+
+DashboardLinkOrButton.defaultProps = {
+  disabled: false,
 };
 
 const mapDispatchToProps = dispatch => (

@@ -21,8 +21,8 @@ const LinkOrButton = ({ DisplayComponent, isLink, onClick, uri }) => {
 LinkOrButton.propTypes = {
   DisplayComponent: PropTypes.func.isRequired,
   isLink: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-  uri: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  uri: PropTypes.string,
 };
 
 export default LinkOrButton;
