@@ -108,6 +108,4 @@ Header.propTypes = {
   userAuthed: PropTypes.bool.isRequired,
 };
 
-export {ReduxLoginButton};
-
 export default Header;
