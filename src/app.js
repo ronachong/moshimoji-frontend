@@ -20,7 +20,7 @@
 import Main from 'src/components/main';
 
 // Init config
-import 'src/reducers/add_calls';
+import 'src/reducers';
 import 'config/project';
 import 'config/server';
 import 'config/browser';
