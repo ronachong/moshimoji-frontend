@@ -2,6 +2,7 @@
 // IMPORTS
 
 /* NPM */
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,6 +16,13 @@ const LinkOrButton = ({ DisplayComponent, isLink, onClick, uri }) => {
     return <Link to={uri}><DisplayComponent /></Link>;
   }
   return <DisplayComponent onClick={onClick} />;
+};
+
+LinkOrButton.propTypes = {
+  DisplayComponent: PropTypes.func.isRequired,
+  isLink: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  uri: PropTypes.string.isRequired,
 };
 
 export default LinkOrButton;
