@@ -1,4 +1,4 @@
-// Main React component, that we'll import in `src/app.js`
+// Main React component, that we'll import in `src/App.js`
 //
 // Note a few points from this file:
 //
