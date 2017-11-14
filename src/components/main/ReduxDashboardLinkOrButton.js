@@ -27,6 +27,10 @@ const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
     <button onClick={onClick}>dashboard</button>
   );
 
+  DisplayComponent.propTypes = {
+    onClick: PropTypes.func.isRequired,
+  };
+
   if (disabled) {
     return <DisplayComponent />;
   }
@@ -38,6 +42,12 @@ const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
       onClick={() => toggleLoginModal(true)}
       uri={'/dashboard/site'} />
   );
+};
+
+DashboardLinkOrButton.propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  userAuthed: PropTypes.bool.isRequired,
+  toggleLoginModal: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
