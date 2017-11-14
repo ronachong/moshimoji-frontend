@@ -1,0 +1,2 @@
+// TODO: beware that there is no error handling for fetching or displaying
+// messages, etc., from GraphQL server when none exist in db.
