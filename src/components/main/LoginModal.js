@@ -49,7 +49,7 @@ const styles = {
 
 // @connect accepts a function that takes the full Redux state, and then
 // returns the portion of state that our component cares about.  In this example,
-// we're listening to `state.counter`, which we can show inside the component
+// we're listening to `state.loginModal`, which we can show inside the component
 @connect(state => ({ loginModal: state.loginModal }))
 class LoginModal extends Component {
   static propTypes = {
@@ -89,7 +89,6 @@ class LoginModal extends Component {
     // can be dashboard or home/site news, depending on origin
     // of modal (dashboard button or link preceding)
     const loginDest = '/dashboard'
-
     return (
       // <Transition
       //   in={true}
