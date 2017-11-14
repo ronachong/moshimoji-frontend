@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 /* Moshimoji */
 // child components
 import { UIStateComponentContainer } from 'src/components/base';
-import { DashboardLinkOrButton } from 'src/components/main';
+import { ReduxDashboardLinkOrButton } from 'src/components/main';
 
 // Redux actions
 import { toggleLoginModal } from 'src/store/actions';
@@ -77,7 +77,7 @@ const Header = ({ dataLoading, userAuthed }) => {
     thingsShouldBeDisabled: () => (
       <div>
         <LoginLogoutPlaceholder />
-        <DashboardLinkOrButton disabled userAuthed />
+        <ReduxDashboardLinkOrButton disabled userAuthed />
       </div>
     ),
     get runOnServer() {
@@ -89,13 +89,13 @@ const Header = ({ dataLoading, userAuthed }) => {
     userAuthed: () => (
       <div>
         <LogoutButton />
-        <DashboardLinkOrButton userAuthed={userAuthed} />
+        <ReduxDashboardLinkOrButton userAuthed={userAuthed} />
       </div>
     ),
     userAnon: () => (
       <div>
         <div><ReduxLoginButton /> or <RegisterButton /> to access</div>
-        <DashboardLinkOrButton userAuthed={userAuthed} />
+        <ReduxDashboardLinkOrButton userAuthed={userAuthed} />
       </div>
     ),
   };
@@ -107,5 +107,7 @@ Header.propTypes = {
   dataLoading: PropTypes.bool.isRequired,
   userAuthed: PropTypes.bool.isRequired,
 };
+
+export {ReduxLoginButton};
 
 export default Header;
