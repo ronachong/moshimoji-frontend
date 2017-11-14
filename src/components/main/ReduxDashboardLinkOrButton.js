@@ -4,27 +4,25 @@
 /* NPM */
 import PropTypes from 'prop-types';
 import React from 'react';
-import { connect } from 'react-redux'; // HOC/decorator to listen to Redux store state
+import { connect } from 'react-redux';
 
 /* Moshimoji */
 // child components
 import { LinkOrButton } from 'src/components/base';
-import { ReduxLoginButton } from 'src/components/main/Header'
 
 // Redux actions
-import { toggleLoginModal, printLoginModalState } from 'src/store/actions';
+import { toggleLoginModal } from 'src/store/actions';
 
 
 // ----------------------
-// COMPONENT: DashboardLinkOrButton
-// DashboardLinkOrButton is an HOC around LinkOrButton. It specifies
+// COMPONENT: ReduxDashboardLinkOrButton
+// ReduxDashboardLinkOrButton is an HOC around LinkOrButton. It specifies
 // the display component (dashboard button) and dictates isLink or
-// button based on the currentUser prop.
+// button based on the userAuthed prop.
 
-// TODO: implement disabled bool prop
 // TODO: add styling to disabled display component to indicate deactivation
+// TODO: add prop types
 const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
-
   const DisplayComponent = ({ onClick }) => (
     <button onClick={onClick}>dashboard</button>
   );
