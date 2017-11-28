@@ -1,4 +1,4 @@
-// Aapp's entry point.  Every ReactQL projects requires 'src/app.js',
+// Aapp's entry point.  Every ReactQL projects requires 'src/App.js',
 // which both the server and browser will import.
 //
 // In this file, two things happen:
@@ -20,7 +20,7 @@
 import Main from 'src/components/main';
 
 // Init config
-import 'src/reducers/add_calls';
+import 'src/reducers';
 import 'config/project';
 import 'config/server';
 import 'config/browser';

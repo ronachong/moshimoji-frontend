@@ -1,8 +1,9 @@
 
 import MainContainer from 'src/components/main/ApolloMainContainer';
-import DashboardLinkOrButton from 'src/components/main/DashboardLinkOrButton';
+import Header from 'src/components/main/Header';
+import ReduxDashboardLinkOrButton from 'src/components/main/ReduxDashboardLinkOrButton';
 import LoginModal from 'src/components/main/LoginModal';
 
-export { DashboardLinkOrButton, LoginModal };
+export { Header, ReduxDashboardLinkOrButton, LoginModal };
 
 export default MainContainer;

@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { Modal, Transition } from 'react-bootstrap';
 
 import config from 'kit/config';
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 // ----------------------
 // STYLING
@@ -49,7 +49,7 @@ const styles = {
 
 // @connect accepts a function that takes the full Redux state, and then
 // returns the portion of state that our component cares about.  In this example,
-// we're listening to `state.counter`, which we can show inside the component
+// we're listening to `state.loginModal`, which we can show inside the component
 @connect(state => ({ loginModal: state.loginModal }))
 class LoginModal extends Component {
   static propTypes = {
@@ -89,7 +89,6 @@ class LoginModal extends Component {
     // can be dashboard or home/site news, depending on origin
     // of modal (dashboard button or link preceding)
     const loginDest = '/dashboard'
-
     return (
       // <Transition
       //   in={true}
@@ -99,7 +98,7 @@ class LoginModal extends Component {
       //   enteringClassName='in'>
         <Modal
           show={this.props.loginModal.show}
-          onHide={() => {this.props.dispatch(toggleLoginModal(false))}}
+          onHide={() => {this.props.dispatch(showLoginModal(false))}}
           style={styles.modal}
           backdropStyle={styles.modalBackdrop}>
           <Modal.Body style={styles.modalTextContainer}>
@@ -109,7 +108,7 @@ class LoginModal extends Component {
             >
               <div>
                 <label>Username:</label>
-                <input type="text" name="username" />
+                <input type="text" name="slug" />
               </div>
               <div>
                 <label>Password:</label>
