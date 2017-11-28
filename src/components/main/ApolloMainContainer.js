@@ -1,4 +1,4 @@
-// Main React component, that we'll import in `src/app.js`
+// Main React component, that we'll import in `src/App.js`
 //
 // Note a few points from this file:
 //
@@ -52,7 +52,7 @@ import { Redirect } from 'kit/lib/routing';
 // Child components
 import GraphQLMessage from 'src/components/graphql';
 import { Page, WhenNotFound } from 'src/components/routes';
-import { DashboardLinkOrButton, LoginModal } from 'src/components/main';
+import { Header, LoginModal } from 'src/components/main';
 import modules from 'src/components/modules';
 
 import ReduxCounter from 'src/components/redux';
@@ -97,17 +97,12 @@ const MainContainer = ({ data }) => (
     </div>
     <hr />
 
-    { /* -- dashboard button */ }
-    <div className={css.hello}>
-      {
-        (data.loading || SERVER)
-        // TODO: use presentational component for first button
-        // TODO: make sure first button is grayed out when loading or initial react
-          ? <button onClick={console.log('dashboard button clicked while inactive')}>dashboard</button> :
-          <DashboardLinkOrButton currentUser={data.currentUser} />
-      }
-    </div>
+    { /* -- login / logout / register buttons */ }
+    <Header
+      userAuthed={data.currentUser !== null}
+      dataLoading={data.loading} />
     <hr />
+
     { /* -- nav */ }
     <ul>
       <li><Link to="/reader">reader</Link></li>
@@ -155,12 +150,12 @@ const MainContainer = ({ data }) => (
 );
 
 MainContainer.propTypes = {
-  data: {
+  data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     currentUser: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
-  }.isRequired,
+  }).isRequired,
 };
 
 const ApolloMainContainer = graphql(mainContainerQuery)(MainContainer);
