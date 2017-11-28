@@ -82,7 +82,7 @@ import * as graphql from 'graphql';
 
 // App entry point.  This must come first, because app.js will set-up the
 // server config that we'll use later
-import App from 'src/app';
+import App from 'src/App';
 
 // Custom redux store creator.  This will allow us to create a store 'outside'
 // of Apollo, so we can apply our own reducers and make use of the Redux dev
