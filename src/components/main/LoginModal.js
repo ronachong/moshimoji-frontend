@@ -108,7 +108,7 @@ class LoginModal extends Component {
             >
               <div>
                 <label>Username:</label>
-                <input type="text" name="username" />
+                <input type="text" name="slug" />
               </div>
               <div>
                 <label>Password:</label>

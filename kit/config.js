@@ -22,6 +22,7 @@ class Common {
 
     // Endpoint to retrieve jwt token. This needs setting via config.setJwtEndpoint()`
     this.jwtEndpoint = null;
+    this.forumEndpoint = null;
   }
 
   /* REDUX */
@@ -59,6 +60,10 @@ class Common {
     this.jwtEndpoint = uri;
   }
 
+  // Set a URI to retrieve jwt tokens for auth
+  setForumEndpoint(uri) {
+    this.forumEndpoint = uri;
+  }
   // Register Apollo middleware function
   addApolloMiddleware(middlewareFunc) {
     this.apolloMiddleware.push(middlewareFunc);
