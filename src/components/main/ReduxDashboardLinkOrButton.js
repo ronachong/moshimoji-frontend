@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { LinkOrButton } from 'src/components/base';
 
 // Redux actions
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 
 // ----------------------
@@ -21,7 +21,7 @@ import { toggleLoginModal } from 'src/store/actions';
 // button based on the userAuthed prop.
 
 // TODO: add styling to disabled display component to indicate deactivation
-const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
+const DashboardLinkOrButton = ({ disabled, userAuthed, showLoginModal }) => {
   const DisplayComponent = ({ onClick }) => (
     <button onClick={onClick}>dashboard</button>
   );
@@ -42,7 +42,7 @@ const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
     <LinkOrButton
       DisplayComponent={DisplayComponent}
       isLink={userAuthed}
-      onClick={() => toggleLoginModal(true)}
+      onClick={() => showLoginModal(true)}
       uri={'/dashboard/site'} />
   );
 };
@@ -50,7 +50,7 @@ const DashboardLinkOrButton = ({ disabled, userAuthed, toggleLoginModal }) => {
 DashboardLinkOrButton.propTypes = {
   disabled: PropTypes.bool.isRequired,
   userAuthed: PropTypes.bool.isRequired,
-  toggleLoginModal: PropTypes.func.isRequired,
+  showLoginModal: PropTypes.func.isRequired,
 };
 
 DashboardLinkOrButton.defaultProps = {
@@ -59,7 +59,7 @@ DashboardLinkOrButton.defaultProps = {
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
+    showLoginModal: value => (dispatch(showLoginModal(value))),
   }
 );
 
