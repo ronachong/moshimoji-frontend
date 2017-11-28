@@ -12,7 +12,7 @@ import { UIStateComponentContainer } from 'src/components/base';
 import { ReduxDashboardLinkOrButton } from 'src/components/main';
 
 // Redux actions
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 // ----------------------
 // COMPONENT: LoginLogoutPlaceholder
@@ -34,17 +34,17 @@ const RegisterButton = () => (
 // COMPONENT: LoginButton
 // TODO: implement Button component
 
-const LoginButton = ({ toggleLoginModal }) => (
-  <button onClick={() => toggleLoginModal(true)}>login</button>
+const LoginButton = ({ showLoginModal }) => (
+  <button onClick={() => showLoginModal(true)}>login</button>
 );
 
 LoginButton.propTypes = {
-  toggleLoginModal: PropTypes.func.isRequired,
+  showLoginModal: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
+    showLoginModal: value => (dispatch(showLoginModal(value))),
   }
 );
 
