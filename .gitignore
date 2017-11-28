@@ -1,3 +1,6 @@
+# Sensitive details
+*setenv.sh
+
 # Meta
 **/.DS_Store
 
@@ -41,3 +44,6 @@ jspm_packages
 
 # Distribution
 dist
+
+node_modules/
+

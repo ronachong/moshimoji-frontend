@@ -1,0 +1,23 @@
+src/reducers/loginModal.js:      return action.payload; // TODO: verify that not using a more immutable struct here is ok
+src/reducers/dead.js://         return action.payload; // TODO: verify that not using a more immutable struct here is ok
+src/components/main/Header.js:// TODO: complete - currently a stub
+src/components/main/Header.js:// TODO: implement Button component
+src/components/main/Header.js:// TODO: implement Button component
+src/components/main/Header.js:// TODO: implement Button component
+src/components/main/Header.js:// TODO: double-check with others about guidelines as to when to requery
+src/components/main/LoginModal.js:    // TODO: add logic to compute destination dynamically.
+src/components/main/ReduxDashboardLinkOrButton.js:// TODO: add styling to disabled display component to indicate deactivation
+src/components/graphql.js:  // TODO: create a function to generate gql from proptypes or vice versa, or
+src/components/graphql.js:    // TODO: understand how this line^ works
+src/components/modules/dashboard/ApolloUserStatusForm.js:// TODO: consider using update instead of refetch to update cache
+src/components/modules/dashboard/ApolloDashboard.js:// TODO: (med) update component to show form errors
+src/components/modules/dashboard/ApolloDashboard.js:    return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
+src/components/modules/dashboard/ApolloDashboard.js:  // TODO: figure out what should happen if server response
+src/components/modules/dashboard/ApolloDashboard.js:// TODO: (med) figure out if currentUser should be a required prop
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: create a base HOC for populated lists with load more functionality.
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: (high) update to only query statuses by currentUser
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: (med) consider renaming Container to List for consistency
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: add orderByArg when implemented in Schema
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: create a function to generate gql from proptypes or vice versa, or
+src/components/modules/dashboard/ApolloUserStatusesContainer.js:// TODO: (high) update prop types
+src/universal.todo:// TODO: beware that there is no error handling for fetching or displaying

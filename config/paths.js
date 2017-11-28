@@ -16,6 +16,9 @@ module.exports = {
   // aware that upgrading your starter kit could overwrite them
   kit: path.join(root, 'kit'),
 
+  // // Config. This is where I invoke the configuration for the app.
+  // config: path.join(root, 'config'),
+
   // Entry points.  This is where webpack will look for our browser.js,
   // server.js and vendor.js files to start building
   entry: path.join(root, 'kit', 'entry'),

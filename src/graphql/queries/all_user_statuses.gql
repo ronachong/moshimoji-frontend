@@ -1,0 +1,10 @@
+query {
+  allUserStatuses {
+    edges {
+      node {
+        id,
+        text
+      }
+    }
+  }
+}
