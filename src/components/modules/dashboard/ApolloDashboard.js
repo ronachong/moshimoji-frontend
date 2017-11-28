@@ -13,7 +13,7 @@ import ApolloUserStatusForm from 'src/components/modules/dashboard/ApolloUserSta
 import ApolloUserStatusesContainer from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
 
 // Redux actions
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 
 // ----------------------
@@ -31,19 +31,19 @@ const dashboardQuery = gql`
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
+    showLoginModal: value => (dispatch(showLoginModal(value))),
   }
 );
 
 // TODO: (med) update component to show form errors
-let Dashboard = ({ data, toggleLoginModal }) => {
+let Dashboard = ({ data, showLoginModal }) => {
   if (data.loading) {
     return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
   }
 
   // TODO: figure out what should happen if server response
   if (!data.currentUser) {
-    toggleLoginModal(true);
+    showLoginModal(true);
     return <div>user not logged in</div>;
   }
 
@@ -64,7 +64,7 @@ Dashboard.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  toggleLoginModal: PropTypes.func.isRequired,
+  showLoginModal: PropTypes.func.isRequired,
 };
 
 Dashboard = connect(null, mapDispatchToProps)(Dashboard);

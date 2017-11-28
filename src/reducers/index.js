@@ -5,7 +5,7 @@ import config from 'kit/config';
 
 /* REDUCERS */
 import counterReducer from 'src/reducers/counter';
-import loginModalReducer from 'src/reducers/login_modal';
+import loginModalReducer from 'src/reducers/loginModal';
 
 // ----------------------
 // ADDS
