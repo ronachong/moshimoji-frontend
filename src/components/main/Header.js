@@ -9,10 +9,10 @@ import { connect } from 'react-redux';
 /* Moshimoji */
 // child components
 import { UIStateComponentContainer } from 'src/components/base';
-import { DashboardLinkOrButton } from 'src/components/main';
+import { ReduxDashboardLinkOrButton } from 'src/components/main';
 
 // Redux actions
-import { toggleLoginModal } from 'src/store/actions';
+import { showLoginModal } from 'src/store/actions';
 
 // ----------------------
 // COMPONENT: LoginLogoutPlaceholder
@@ -34,13 +34,17 @@ const RegisterButton = () => (
 // COMPONENT: LoginButton
 // TODO: implement Button component
 
-const LoginButton = ({ toggleLoginModal }) => (
-  <button onClick={() => toggleLoginModal(true)}>login</button>
+const LoginButton = ({ showLoginModal }) => (
+  <button onClick={() => showLoginModal(true)}>login</button>
 );
+
+LoginButton.propTypes = {
+  showLoginModal: PropTypes.func.isRequired,
+};
 
 const mapDispatchToProps = dispatch => (
   {
-    toggleLoginModal: value => (dispatch(toggleLoginModal(value))),
+    showLoginModal: value => (dispatch(showLoginModal(value))),
   }
 );
 
@@ -54,10 +58,9 @@ const LogoutButton = () => {
   const handleClick = () => {
     localStorage.removeItem('token');
     window.location.replace('/');
-  }
+  };
 
-  handleClick();
-  return <button onClick={handleClick}>Stub.</button>;
+  return <button onClick={handleClick}>logout</button>;
 };
 
 
@@ -76,8 +79,8 @@ const Header = ({ dataLoading, userAuthed }) => {
   const cases = {
     thingsShouldBeDisabled: () => (
       <div>
-        <LoginLogoutPlaceholder />
-        <DashboardLinkOrButton disabled userAuthed />
+        <div><LoginLogoutPlaceholder /></div>
+        <ReduxDashboardLinkOrButton disabled userAuthed />
       </div>
     ),
     get runOnServer() {
@@ -88,14 +91,14 @@ const Header = ({ dataLoading, userAuthed }) => {
     },
     userAuthed: () => (
       <div>
-        <LogoutButton />
-        <DashboardLinkOrButton userAuthed={userAuthed} />
+        <div><LogoutButton /></div>
+        <ReduxDashboardLinkOrButton userAuthed={userAuthed} />
       </div>
     ),
     userAnon: () => (
       <div>
         <div><ReduxLoginButton /> or <RegisterButton /> to access</div>
-        <DashboardLinkOrButton userAuthed={userAuthed} />
+        <ReduxDashboardLinkOrButton userAuthed={userAuthed} />
       </div>
     ),
   };

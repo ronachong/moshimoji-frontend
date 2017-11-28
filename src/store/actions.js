@@ -1,9 +1,12 @@
-export function toggleLoginModal(bool) {
-  console.log('toggleLoginModal being called');
+export function showLoginModal(bool) {
   return {
-    type: 'TOGGLE_MODAL',
+    type: 'UPDATE_MODAL_DISPLAY',
     payload: {
       show: bool,
     },
   };
+}
+
+export function printLoginModalState() {
+  return { type: 'SHOW_MODAL_STATE' };
 }
