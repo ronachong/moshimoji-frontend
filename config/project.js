@@ -26,6 +26,7 @@ const uriOptions = {
   slugs: {
     graphql: 'gql',
     jwtRetrieve: 'api-token-auth',
+    forum: 'forum'
   },
 };
 
@@ -37,6 +38,9 @@ if (process.env.NODE_ENV === 'development') {
   );
   config.setJwtEndpoint(
     `http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}/`
+  );
+  config.setForumEndpoint(
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.forum}/`
   );
   // eslint-disable-next-line no-console
   console.log(`set graphql endpoint to ${config.graphQLEndpoint} in project config`);
