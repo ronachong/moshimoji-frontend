@@ -8,6 +8,9 @@ import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
 /* Moshimoji */
+// higher order components
+import { Module } from 'src/components/base'
+
 // child components
 import ApolloUserStatusForm from 'src/components/modules/dashboard/ApolloUserStatusForm';
 import ApolloUserStatusesContainer from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
@@ -17,10 +20,8 @@ import { showLoginModal } from 'src/store/actions';
 
 
 // ----------------------
-// COMPONENT: Dashboard
-// Dashboard is a pre-Apollo container for the components to display for the
-// Dashboard module.
-// Has: loading, notLoggedIn specs.
+// COMPONENT CODE
+
 const dashboardQuery = gql`
 {
   currentUser {
@@ -35,6 +36,10 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
+/* COMPONENT: Dashboard */
+// Dashboard is a pre-Apollo container for the components to display for the
+// Dashboard module.
+// Has: loading, notLoggedIn specs.
 // TODO: (med) update component to show form errors
 let Dashboard = ({ data, showLoginModal }) => {
   if (data.loading) {
@@ -49,7 +54,6 @@ let Dashboard = ({ data, showLoginModal }) => {
 
   return (
     <div>
-      <h2>Dashboard</h2>
       <ApolloUserStatusForm />
       <ApolloUserStatusesContainer />
     </div>
@@ -68,6 +72,13 @@ Dashboard.propTypes = {
 };
 
 Dashboard = connect(null, mapDispatchToProps)(Dashboard);
+
+/* COMPONENT: ApolloDashboard */
+// ApolloDashboard specifies the contents for the Reader module and gets passed
+// to Module
 const ApolloDashboard = graphql(dashboardQuery)(Dashboard);
 
-export default ApolloDashboard;
+ApolloDashboard.title = "Dashboard";
+ApolloDashboard.styles = {};
+
+export default Module(ApolloDashboard);
