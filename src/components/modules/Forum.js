@@ -1,33 +1,37 @@
+// ----------------------
+// IMPORTS
+
+/* NPM */
 import React from 'react';
 
+/* Moshimoji */
+// kit
 import config from 'kit/config';
 
+// styles
 import { css, withStyles } from 'src/styles';
 
-// TODO: implement ModuleContainer
-// import { ModuleContainer } from 'src/components/base';
+// higher order components
+import { Module } from 'src/components/base'
 
-const forumStyles = ({}) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    height: '70%'
-  },
 
-  iframe: {
-    height: '700px', // TODO: get child to inherit proper height from parent instead
-  },
-});
-
+// ----------------------
+// COMPONENT CODE
+/* COMPONENT: Forum */
+// Forum specifies the contents for the Forum module and gets passed to Module
 const Forum = ({ styles }) => (
-  <div {...css(styles.container)}>
-    <h2>Forum module</h2>
-    <iframe
-      src={config.forumEndpoint}
-      {...css(styles.iframe)}>
-    </iframe>
-  </div>
+  <iframe
+    src={config.forumEndpoint}
+    {...css(styles.iframe)}>
+  </iframe>
 );
 
-export default withStyles(forumStyles)(Forum);
+Forum.title = 'Forum';
+
+Forum.styles = {
+  iframe : {
+    height: '700px', // TODO: get child to inherit proper height from parent instead
+  },
+};
+
+export default Module(Forum);
