@@ -75,7 +75,7 @@ DashboardContents = connect(null, mapDispatchToProps)(DashboardContents);
 // to Module
 const ApolloDashboardContents = graphql(dashboardQuery)(DashboardContents);
 
-ApolloDashboardContents.title = "Dashboard";
+ApolloDashboardContents.title = 'Dashboard';
 ApolloDashboardContents.styles = {};
 
 export default ApolloDashboardContents;

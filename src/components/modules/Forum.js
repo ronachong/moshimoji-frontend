@@ -9,10 +9,10 @@ import React from 'react';
 import config from 'kit/config';
 
 // styles
-import { css, withStyles } from 'src/styles';
+import { css } from 'src/styles';
 
 // higher order components
-import { Module } from 'src/components/base'
+import { Module } from 'src/components/base';
 
 
 // ----------------------
@@ -21,15 +21,15 @@ import { Module } from 'src/components/base'
 // Forum specifies the contents for the Forum module and gets passed to Module
 const ForumContents = ({ styles }) => (
   <iframe
+    title="moshimoji forum"
     src={config.forumEndpoint}
-    {...css(styles.iframe)}>
-  </iframe>
+    {...css(styles.iframe)} />
 );
 
 ForumContents.title = 'Forum';
 
 ForumContents.styles = {
-  iframe : {
+  iframe: {
     height: '700px', // TODO: get child to inherit proper height from parent instead
   },
 };
