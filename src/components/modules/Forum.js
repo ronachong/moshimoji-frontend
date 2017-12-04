@@ -19,19 +19,19 @@ import { Module } from 'src/components/base'
 // COMPONENT CODE
 /* COMPONENT: Forum */
 // Forum specifies the contents for the Forum module and gets passed to Module
-const Forum = ({ styles }) => (
+const ForumContents = ({ styles }) => (
   <iframe
     src={config.forumEndpoint}
     {...css(styles.iframe)}>
   </iframe>
 );
 
-Forum.title = 'Forum';
+ForumContents.title = 'Forum';
 
-Forum.styles = {
+ForumContents.styles = {
   iframe : {
     height: '700px', // TODO: get child to inherit proper height from parent instead
   },
 };
 
-export default Module(Forum);
+export default Module(ForumContents);
