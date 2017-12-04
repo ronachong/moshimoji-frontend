@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // ----------------------
-// COMPONENT: UserStatusesPresentation
+// COMPONENT: UserStatuses
 // UserStatuses is a presentational component for user statuses.
-const UserStatusesPresentation = ({ userStatusEdges }) => (
+const UserStatuses = ({ userStatusEdges }) => (
   <div>
     {userStatusEdges.map(userStatus => (
       <p key={userStatus.node.id}>
@@ -18,7 +18,7 @@ const UserStatusesPresentation = ({ userStatusEdges }) => (
   </div>
 );
 
-UserStatusesPresentation.propTypes = {
+UserStatuses.propTypes = {
   userStatusEdges: PropTypes.arrayOf(PropTypes.shape({
     node: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -28,4 +28,4 @@ UserStatusesPresentation.propTypes = {
   }).isRequired).isRequired,
 };
 
-export default UserStatusesPresentation;
+export default UserStatuses;
