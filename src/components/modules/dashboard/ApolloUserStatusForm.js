@@ -9,7 +9,7 @@ import { gql, graphql } from 'react-apollo';
 /* Moshimoji */
 // GraphQL
 import fragments from 'src/graphql/fragments';
-import { userStatusesContainerQuery } from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
+import { userStatusesFeedQuery } from 'src/components/modules/dashboard/ApolloUserStatusesFeed';
 
 // ----------------------
 // COMPONENT: UserStatusForm
@@ -46,7 +46,7 @@ const UserStatusForm = ({ mutate }) => {
       mutation: userStatusFormMutation,
       variables: { text: status.get('text') },
       refetchQueries: [{
-        query: userStatusesContainerQuery,
+        query: userStatusesFeedQuery,
         variables: { cursor: null },
       }],
     })
