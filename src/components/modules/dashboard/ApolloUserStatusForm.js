@@ -9,6 +9,8 @@ import { gql, graphql } from 'react-apollo';
 /* Moshimoji */
 // GraphQL
 import fragments from 'src/graphql/fragments';
+
+// child components
 import { userStatusesFeedQuery } from 'src/components/modules/dashboard/ApolloUserStatusesFeed';
 
 // ----------------------
