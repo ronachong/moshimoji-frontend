@@ -8,12 +8,9 @@ import { gql, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 
 /* Moshimoji */
-// higher order components
-import { Module } from 'src/components/base'
-
 // child components
 import ApolloUserStatusForm from 'src/components/modules/dashboard/ApolloUserStatusForm';
-import ApolloUserStatusesContainer from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
+import ApolloUserStatusesFeed from 'src/components/modules/dashboard/ApolloUserStatusesFeed';
 
 // Redux actions
 import { showLoginModal } from 'src/store/actions';
@@ -36,12 +33,12 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-/* COMPONENT: Dashboard */
-// Dashboard is a pre-Apollo container for the components to display for the
-// Dashboard module.
+/* COMPONENT: DashboardContents */
+// DashboardContents is a pre-Apollo container for the components to display for
+// the Dashboard module.
 // Has: loading, notLoggedIn specs.
 // TODO: (med) update component to show form errors
-let Dashboard = ({ data, showLoginModal }) => {
+let DashboardContents = ({ data, showLoginModal }) => {
   if (data.loading) {
     return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
   }
@@ -55,13 +52,13 @@ let Dashboard = ({ data, showLoginModal }) => {
   return (
     <div>
       <ApolloUserStatusForm />
-      <ApolloUserStatusesContainer />
+      <ApolloUserStatusesFeed />
     </div>
   );
 };
 
 // TODO: (med) figure out if currentUser should be a required prop
-Dashboard.propTypes = {
+DashboardContents.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     currentUser: PropTypes.shape({
@@ -71,14 +68,14 @@ Dashboard.propTypes = {
   showLoginModal: PropTypes.func.isRequired,
 };
 
-Dashboard = connect(null, mapDispatchToProps)(Dashboard);
+DashboardContents = connect(null, mapDispatchToProps)(DashboardContents);
 
 /* COMPONENT: ApolloDashboard */
 // ApolloDashboard specifies the contents for the Reader module and gets passed
 // to Module
-const ApolloDashboard = graphql(dashboardQuery)(Dashboard);
+const ApolloDashboardContents = graphql(dashboardQuery)(DashboardContents);
 
-ApolloDashboard.title = "Dashboard";
-ApolloDashboard.styles = {};
+ApolloDashboardContents.title = "Dashboard";
+ApolloDashboardContents.styles = {};
 
-export default Module(ApolloDashboard);
+export default ApolloDashboardContents;

@@ -11,23 +11,23 @@ import PropTypes from 'prop-types';
 import fragments from 'src/graphql/fragments';
 
 // child components
-import { UserStatusesPresentation } from 'src/components/modules/dashboard';
+import UserStatuses from 'src/components/modules/dashboard/UserStatuses';
 
 // ----------------------
-// COMPONENT: UserStatusesContainer
-// UserStatusesContainer is a pre-Apollo container for display of
+// COMPONENT: UserStatusesFeed
+// UserStatusesFeed is a pre-Apollo container for display of
 // user statuses. It has loading, presentation, and error directives.
 
 // TODO: create a base HOC for populated lists with load more functionality.
 // Note: I can create stateless functional components which receive data from apollo,
 // if I use the graphql(query)(component) pattern (instead of class decorator).
-const UserStatusesContainer = ({ loading, allUserStatuses, loadMoreEntries }) => {
+const UserStatusesFeed = ({ loading, allUserStatuses, loadMoreEntries }) => {
   if (loading) {
     return <div>Loading...</div>;
   }
 
   const presentation = (!allUserStatuses) ? <p>Error retrieving data</p>
-    : <UserStatusesPresentation userStatusEdges={allUserStatuses.edges} />;
+    : <UserStatuses userStatusEdges={allUserStatuses.edges} />;
 
   if (!allUserStatuses) {
     return <p>Error retrieving data</p>;
@@ -43,9 +43,8 @@ const UserStatusesContainer = ({ loading, allUserStatuses, loadMoreEntries }) =>
 };
 
 // TODO: (high) update to only query statuses by currentUser
-// TODO: (med) consider renaming Container to List for consistency
 // TODO: add orderByArg when implemented in Schema
-const userStatusesContainerQuery = gql`
+const userStatusesFeedQuery = gql`
   query UserStatuses($cursor: String) {
     allUserStatuses(first: 5, after: $cursor) {
       edges {
@@ -66,7 +65,7 @@ const userStatusesContainerQuery = gql`
 // from a common object (would I need to refer to schema for field types?),
 // if that will save me time
 // TODO: (high) update prop types
-UserStatusesContainer.propTypes = {
+UserStatusesFeed.propTypes = {
   loading: PropTypes.bool.isRequired,
   allUserStatuses: PropTypes.shape({
     edges: PropTypes.arrayOf(PropTypes.shape({
@@ -84,7 +83,7 @@ UserStatusesContainer.propTypes = {
   loadMoreEntries: PropTypes.func.isRequired,
 };
 
-UserStatusesContainer.defaultProps = {
+UserStatusesFeed.defaultProps = {
   allUserStatuses: {
     edges: [
       {
@@ -102,14 +101,14 @@ UserStatusesContainer.defaultProps = {
   },
 };
 
-const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery, {
+const ApolloUserStatusesFeed = graphql(userStatusesFeedQuery, {
   props({ data: { loading, allUserStatuses, fetchMore } }) {
     return {
       loading,
       allUserStatuses,
       loadMoreEntries: () => (
         fetchMore({
-          query: userStatusesContainerQuery,
+          query: userStatusesFeedQuery,
           variables: {
             cursor: allUserStatuses.pageInfo.endCursor,
           },
@@ -128,7 +127,7 @@ const ApolloUserStatusesContainer = graphql(userStatusesContainerQuery, {
       ),
     };
   },
-})(UserStatusesContainer);
+})(UserStatusesFeed);
 
-export { userStatusesContainerQuery };
-export default ApolloUserStatusesContainer;
+export { userStatusesFeedQuery };
+export default ApolloUserStatusesFeed;
