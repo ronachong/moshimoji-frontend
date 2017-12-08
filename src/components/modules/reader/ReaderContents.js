@@ -7,7 +7,7 @@ import { Route } from 'react-router-dom';
 
 /* Moshimoji */
 // child components
-import SeriesSelectForm from 'src/components/modules/reader/SeriesSelectForm';
+import SeriesDropdownSelectForm from 'src/components/modules/reader/SeriesDropdownSelectForm';
 
 // styles
 import { css } from 'src/styles';
@@ -21,10 +21,7 @@ import { css } from 'src/styles';
 // Reader specifies the contents for the Reader module and gets passed to Module
 const ReaderContents = ({ styles }) => (
   <div>
-    {
-    // TODO: make this into a dropdown menu with input
-    }
-    <Route render={props => <SeriesSelectForm {...props} />} />
+    <Route render={props => <SeriesDropdownSelectForm {...props} />} />
   </div>
 );
 

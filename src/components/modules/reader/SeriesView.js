@@ -7,20 +7,25 @@ import { Route } from 'react-router-dom';
 
 /* moshimoji */
 // child components
-import ChapterSelectForm from 'src/components/modules/reader/ChapterSelectForm';
+import ChapterDropdownSelectForm from 'src/components/modules/reader/ChapterDropdownSelectForm';
 
 
 // -----------------
 // COMPONENT CODE
+
 /* COMPONENT: SeriesView */
-// SeriesView ....
-const SeriesView = ({ seriesOption }) => (
-  <div>
-    <h3>{seriesOption}</h3>
-    <p>Description here</p>
-    <p>Chapter dropdown here</p>
-    <Route render={props => <ChapterSelectForm {...props} seriesOption={seriesOption} />} />
-  </div>
-);
+// SeriesView ....TODO: add description
+// TODO: add prop types
+const SeriesView = ({ datum }) => {
+  const seriesKey = datum;
+  return (
+    <div>
+      <h3>{seriesKey}</h3>
+      <p>Description here</p>
+      <p>Chapter dropdown here</p>
+      <Route render={props => <ChapterDropdownSelectForm {...props} seriesKey={seriesKey} />} />
+    </div>
+  );
+}
 
 export default SeriesView;
