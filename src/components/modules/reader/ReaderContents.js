@@ -2,6 +2,7 @@
 // IMPORTS
 
 /* NPM */
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Route } from 'react-router-dom';
 
@@ -17,8 +18,12 @@ import { css } from 'src/styles';
 
 // const bucket = s3Cli
 
-/* COMPONENT: Reader */
-// Reader specifies the contents for the Reader module and gets passed to Module
+/* COMPONENT: Reader
+Reader specifies the contents for the Reader module and gets passed to Module
+  Inputs:
+  * styles: an object matching ReaderContents.styles
+*/
+// TODO: add styling
 const ReaderContents = ({ styles }) => (
   <div>
     <Route render={props => <SeriesDropdownSelectForm {...props} />} />
@@ -28,5 +33,10 @@ const ReaderContents = ({ styles }) => (
 ReaderContents.title = 'Reader';
 
 ReaderContents.styles = {};
+
+ReaderContents.propTypes = {
+  // TODO: figure out if it makes sense to validate against object id
+  styles: PropTypes.object.isRequired,
+};
 
 export default ReaderContents;
