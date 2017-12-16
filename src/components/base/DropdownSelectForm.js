@@ -11,12 +11,13 @@ import PropTypes from 'prop-types';
 // COMPONENT CODE
 
 /* COMPONENT: ViewRoutesFromData
-ViewRoutesFromData renders an array of view routes from provided data.
-  Inputs:
-  * data - an array of data to be mapped into view routes
-  * datumToUriPath - the mapping function
-  * ViewComponent - the view component to render for each route
-*/
+ *  ViewRoutesFromData renders an array of view routes from provided data.
+ *    Inputs:
+ *    + props
+ *      + data - an array of data to be mapped into view routes
+ *      + datumToUriPath - the mapping function
+ *      + ViewComponent - the view component to render for each route
+ */
 const ViewRoutesFromData = ({ data, datumToUriPath, ViewComponent }) => (
   data.map(
     datum => (
@@ -36,12 +37,12 @@ ViewRoutesFromData.propTypes = {
 
 
 /* COMPONENT: SelectDropdown
-SelectDropdown renders a dropdown that accepts input and allows the user to
-select an option.
-Implementation note: this implementation of Select differs from the canonical
-example since I only use the 'value' part of the option object. See: this.state
-and the value prop.
-*/
+ *  SelectDropdown renders a dropdown that accepts input and allows the user to
+ *  select an option.
+ *  Implementation note: this implementation of Select differs from the canonical
+ *  example since I only use the 'value' part of the option object. See: this.state
+ *  and the value prop.
+ */
 class SelectDropdown extends React.Component {
   state = {
     selectedOption: '',
@@ -74,21 +75,20 @@ SelectDropdown.propTypes = {
 
 
 /* COMPONENT: DropdownSelectForm
-DropdownSelectForm renders a dropdown list from an array of options and
-populates a new view based on the selected option on submit.
-  Inputs:
-  * history - the history object for React router
-  * options - a string array for the options to render
-  * optionLabel - a string to be used in the name attribute for the dropdown
-  * optionToUriPath - the function to map option string to its view uri
-  * Routes - an array of Route components for all the options provided
-NOTE: DropdownSelectForm should itself be a view route in order to get the
-history prop.
-Instead of passing an instance of ViewRoutesFromData as Routes, I could pass
-the ViewComponent and create the instance of ViewRoutesFromData in here.
-Behavior: DropdownSelectForm uses the selected input to render a provided
-route on submit.
-*/
+ *  DropdownSelectForm renders a dropdown list from an array of options and
+ *  populates a new view based on the selected option on submit.
+ *    Inputs:
+ *    + props
+ *      + history - the history object for React router
+ *      + options - a string array for the options to render
+ *      + optionLabel - a string to be used in the name attribute for the dropdown
+ *      + optionToUriPath - the function to map option string to its view uri
+ *      + Routes - an array of Route components for all the options provided
+ *  NOTE: DropdownSelectForm should itself be a view route in order to get the
+ *  history prop.
+ *  Instead of passing an instance of ViewRoutesFromData as Routes, I could pass
+ *  the ViewComponent and create the instance of ViewRoutesFromData in here.
+ */
 const DropdownSelectForm = ({ history, options, optionLabel, optionToUriPath, Routes }) => {
   let dropdown = null; // not sure if this init is necessary
 

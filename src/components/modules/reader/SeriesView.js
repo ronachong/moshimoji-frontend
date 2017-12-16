@@ -16,13 +16,15 @@ import readerProps from 'src/components/modules/reader/props';
 // -----------------
 // COMPONENT CODE
 
-/* COMPONENT: SeriesView */
-// SeriesView is a presentational component which renders the view for a
-// given series.
-//    Input:
-//    * datum - the key for the series to be rendered
-// Implementation note: SeriesViewRoutes passes SeriesView to ViewRoutesFromData
-// to generate the view routes for all the series on moshimoji.
+/* COMPONENT: SeriesView
+ *  SeriesView is a presentational component which renders the view for a
+ *  given series.
+ *    Input:
+ *    + props
+ *      + datum - the key for the series to be rendered
+ *  Implementation note: SeriesViewRoutes passes SeriesView to ViewRoutesFromData
+ *  to generate the view routes for all the series on moshimoji.
+ */
 const SeriesView = ({ datum }) => {
   const seriesKey = datum;
   return (
