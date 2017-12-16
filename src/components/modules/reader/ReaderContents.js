@@ -19,10 +19,11 @@ import { css } from 'src/styles';
 // const bucket = s3Cli
 
 /* COMPONENT: Reader
-Reader specifies the contents for the Reader module and gets passed to Module
-  Inputs:
-  * styles: an object matching ReaderContents.styles
-*/
+ *  Reader specifies the contents for the Reader module and gets passed to Module
+ *    Inputs:
+ *    + props
+ *      + styles: an object matching ReaderContents.styles
+ */
 // TODO: add styling
 const ReaderContents = ({ styles }) => (
   <div>

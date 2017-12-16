@@ -18,12 +18,13 @@ import readerProps from 'src/components/modules/reader/props';
 const pages = ['1', '2', '3', '4', '5']; // TODO: get pages from graphql or w/e.
 
 /* COMPONENT: ChapterPages
-ChapterPages is a presentational component which renders all the page images
-of a given chapter of a given series.
-  Inputs:
-  * seriesKey - string or int used to identify series in uri, dropdown, and etc.
-  * chapterKey - string used to identify chapters in uri, dropdowns, and etc.
-*/
+ *  ChapterPages is a presentational component which renders all the page images
+ *  of a given chapter of a given series.
+ *  Inputs:
+ *  + props
+ *    + seriesKey - string or int used to identify series in uri, dropdown, and etc.
+ *    + chapterKey - string used to identify chapters in uri, dropdowns, and etc.
+ */
 const ChapterPages = ({ seriesKey, chapterKey }) => (
   pages.map(
     pageKey => (
