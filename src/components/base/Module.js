@@ -2,7 +2,6 @@
 // IMPORTS
 
 /* NPM */
-import PropTypes from 'prop-types';
 import React from 'react';
 
 /* Moshimoji */
@@ -11,10 +10,19 @@ import { css, withStyles } from 'src/styles';
 
 
 // ----------------------
-// COMPONENT: Module
-// Module is an HOC that expects a presentational component with styles & title
-// attributes to render as the module contents, and provides the styles for the
-// surrounding div.
+// COMPONENT CODE
+
+/* COMPONENT: Module
+ *  Module is an HOC that expects a presentational component with styles & title
+ *  attributes to render as the module contents, and provides the styles for the
+ *  surrounding div.
+ *  Input:
+ *  + ModuleContents - the presentational component to render as contents of the
+ *    module
+ */
+// TODO: add validation for ModuleContents?
+// TODO: consider refactoring to make Module a double arrow function like
+// withStyles
 const Module = ModuleContents => {
   const moduleContainerStyles = () => ({
     ...ModuleContents.styles,
@@ -33,10 +41,6 @@ const Module = ModuleContents => {
       <ModuleContents styles={styles} />
     </div>
   );
-
-  // TODO: add prop types
-  ModuleContainer.propTypes = {
-  };
 
   return (
     withStyles(moduleContainerStyles)(ModuleContainer)

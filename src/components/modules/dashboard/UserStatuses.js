@@ -6,8 +6,14 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 // ----------------------
-// COMPONENT: UserStatuses
-// UserStatuses is a presentational component for user statuses.
+// COMPONENT CODE
+
+/* COMPONENT: UserStatuses
+ *  UserStatuses is a presentational component for user statuses.
+ *  Input:
+ *  + props
+ *    + userStatusEdges - objects representing user status edges
+ */
 const UserStatuses = ({ userStatusEdges }) => (
   <div>
     {userStatusEdges.map(userStatus => (

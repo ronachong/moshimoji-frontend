@@ -14,13 +14,20 @@ import fragments from 'src/graphql/fragments';
 import UserStatuses from 'src/components/modules/dashboard/UserStatuses';
 
 // ----------------------
-// COMPONENT: UserStatusesFeed
-// UserStatusesFeed is a pre-Apollo container for display of
-// user statuses. It has loading, presentation, and error directives.
+// COMPONENT CODE
 
+/* COMPONENT: UserStatusesFeed
+ *  UserStatusesFeed is a pre-Apollo container for display of user statuses.
+ *  It has loading, presentation, and error directives.
+ *  Inputs:
+ *  + props
+ *    + loading - bool for status of graphql query response; from Apollo HOC
+ *    + allUserStatuses - object representing graphql query response; from
+ *      Apollo HOC
+ *    + loadMoreEntries - action to requery for more user statuses; from Apollo
+ *      HOC
+ */
 // TODO: create a base HOC for populated lists with load more functionality.
-// Note: I can create stateless functional components which receive data from apollo,
-// if I use the graphql(query)(component) pattern (instead of class decorator).
 const UserStatusesFeed = ({ loading, allUserStatuses, loadMoreEntries }) => {
   if (loading) {
     return <div>Loading...</div>;
@@ -101,6 +108,10 @@ UserStatusesFeed.defaultProps = {
   },
 };
 
+
+/* COMPONENT: ApolloUserStatusesFeed
+ *  ApolloUserStatusesFeed renders a feed of user statuses.
+ */
 const ApolloUserStatusesFeed = graphql(userStatusesFeedQuery, {
   props({ data: { loading, allUserStatuses, fetchMore } }) {
     return {
