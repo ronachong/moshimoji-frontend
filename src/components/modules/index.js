@@ -1,4 +1,4 @@
-import Dashboard from 'src/components/modules/dashboard/ApolloDashboard';
+import Dashboard from 'src/components/modules/dashboard';
 import Database from 'src/components/modules/Database';
 import Doujin from 'src/components/modules/Doujin';
 import Forum from 'src/components/modules/Forum';
