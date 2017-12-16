@@ -33,10 +33,18 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
-/* COMPONENT: DashboardContents */
-// DashboardContents is a pre-Apollo container for the components to display for
-// the Dashboard module.
-// Has: loading, notLoggedIn specs.
+/* COMPONENT: DashboardContents
+ *  DashboardContents is a pre-Apollo container for the components to display
+ *  for the Dashboard module.
+ *  Has: loading, notLoggedIn specs.
+ *  Inputs:
+ *  + props
+ *    + data - object representing query response; from Apollo/graphql HOC
+ *      + loading - bool for whether query response is available or not
+ *      + currentUser - object representing the current user
+ *        + id - base64 string for id of user node
+ *    + showLoginModal - Redux action to show login modal; from connect HOC
+ */
 // TODO: (med) update component to show form errors
 let DashboardContents = ({ data, showLoginModal }) => {
   if (data.loading) {
@@ -70,9 +78,10 @@ DashboardContents.propTypes = {
 
 DashboardContents = connect(null, mapDispatchToProps)(DashboardContents);
 
-/* COMPONENT: ApolloDashboard */
-// ApolloDashboard specifies the contents for the Reader module and gets passed
-// to Module
+/* COMPONENT: ApolloDashboardContents
+ * ApolloDashboard specifies the contents for the Reader module and gets passed
+ * to Module.
+ */
 const ApolloDashboardContents = graphql(dashboardQuery)(DashboardContents);
 
 ApolloDashboardContents.title = 'Dashboard';
