@@ -15,12 +15,13 @@ import introspectionQueryResultData from 'config/fragmentTypes.json';
 // eslint-disable-next-line no-console
 console.log('project config being run');
 // eslint-disable-next-line no-console
-console.log(process.env);
+console.log('process.env for node process:\n', process.env);
 
 /* BACKEND */
 const uriOptions = {
   servers: {
     development: '127.0.0.1:8000',
+    stage: 'stage.moshi-moji.xyz:8000',
     production: '',
     cdn: 'd2srxik7hofznk.cloudfront.net'
   },
@@ -32,7 +33,12 @@ const uriOptions = {
 };
 
 /* GRAPHQL */
-// TODO: add logic to determine graphql,jwt endpoint in docker for aws swarm
+// For distinction between NODE_ENV prod and prod environment:
+// https://paper.dropbox.com/doc/travailsvictory-log-in-dev-stuff-urw9F3oeUadSzjULXWYiM#:h2=4:30-pm
+// TODO: make a function that formats args into https uri string
+// TODO: split into function calls for each env scenario (make code more readable)
+// something like setEndpoints(process.env.NODE_ENV) if NODE_ENV == 'development'
+// else setEndpoints(process.env.PROD_TYPE)
 if (process.env.NODE_ENV === 'development') {
   config.setGraphQLEndpoint(
     `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}/`
@@ -43,13 +49,27 @@ if (process.env.NODE_ENV === 'development') {
   config.setForumEndpoint(
     `http://${uriOptions.servers.development}/${uriOptions.slugs.forum}/`
   );
-  // eslint-disable-next-line no-console
-  console.log(`set graphql endpoint to ${config.graphQLEndpoint} in project config`);
-  // eslint-disable-next-line no-console
-  console.log(`set endpoint to retrieve jwt to ${config.jwtEndpoint} in project config`);
+} else if (process.env.STAGE) {
+  config.setGraphQLEndpoint(
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.graphql}/`
+  );
+  config.setJwtEndpoint(
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.jwtRetrieve}/`
+  );
+  config.setForumEndpoint(
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.forum}/`
+  );
 }
-
+// TODO: add block for PROD_TYPE == 'production'
+// eslint-disable-next-line no-console
 config.setCdnEndpoint(`http://${uriOptions.servers.cdn}/`);
+// eslint-disable-next-line no-console
+console.log(`set graphql endpoint to ${config.graphQLEndpoint} in project config`);
+// eslint-disable-next-line no-console
+console.log(`set endpoint to retrieve jwt to ${config.jwtEndpoint} in project config`);
+// eslint-disable-next-line no-console
+console.log(`set endpoint to retrieve forum to ${config.forumEndpoint} in project config`);
+// eslint-disable-next-line no-console
 console.log(`set CDN endpoint to ${config.cdnEndpoint} in project config`);
 
 /* APOLLO */
