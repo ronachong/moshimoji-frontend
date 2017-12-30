@@ -73,6 +73,9 @@ console.log(`set endpoint to retrieve forum to ${config.forumEndpoint} in projec
 // eslint-disable-next-line no-console
 console.log(`set CDN endpoint to ${config.cdnEndpoint} in project config`);
 
+config.setCdnEndpoint(`http://${uriOptions.servers.cdn}/`);
+console.log(`set CDN endpoint to ${config.cdnEndpoint} in project config`);
+
 /* APOLLO */
 // App & this config are imported prior to creating client and network interface
 // in server and browser.js
