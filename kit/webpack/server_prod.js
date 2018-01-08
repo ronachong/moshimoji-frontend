@@ -71,6 +71,8 @@ export default new WebpackConfig().extend({
         // with a string not only removes this expensive check, it allows
         // a minifier to remove all of React's warnings in production.
         NODE_ENV: JSON.stringify('production'),
+        // Does the same concern apply to STAGE?
+        STAGE: JSON.stringify(process.env.STAGE),
         DEBUG: false,
       },
     }),
