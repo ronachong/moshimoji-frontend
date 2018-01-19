@@ -42,8 +42,7 @@ if (SERVER) {
   // see config/example.js fmi.
   config.setErrorHandler((e, ctx /* `next` is unused in this example */) => {
     // eslint-disable-next-line no-console
-    console.log('Error: ', e.message);
-    ctx.body = `Some kind of error. Check your source code.\n${e.message}`;
+    ctx.body = `Some kind of error. Check your source code.\n${e.message}\n\n${e}`;
   });
 
   /* CUSTOM KOA APP INSTANTIATION */
