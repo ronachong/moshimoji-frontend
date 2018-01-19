@@ -1,8 +1,9 @@
 // ----------------------
 // (some) IMPORTS
 
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
+import {
+  InMemoryCache,
+  IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 
 // Config API for adding reducers and configuring ReactQL app
@@ -20,14 +21,15 @@ console.log('process.env for node process:\n', process.env);
 /* BACKEND */
 const uriOptions = {
   servers: {
-    development: '127.0.0.1:8000',
-    stage: 'stage.moshi-moji.xyz:8000',
+    development: '127.0.0.1:8000/backend',
+    stage: 'stage.moshi-moji.xyz/backend',
     production: '',
+    cdn: 'd2srxik7hofznk.cloudfront.net',
   },
   slugs: {
     graphql: 'gql',
     jwtRetrieve: 'api-token-auth',
-    forum: 'forum'
+    forum: 'forum',
   },
 };
 
@@ -40,23 +42,23 @@ const uriOptions = {
 // else setEndpoints(process.env.PROD_TYPE)
 if (process.env.NODE_ENV === 'development') {
   config.setGraphQLEndpoint(
-    `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}/`
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.graphql}/`,
   );
   config.setJwtEndpoint(
-    `http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}/`
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.jwtRetrieve}/`,
   );
   config.setForumEndpoint(
-    `http://${uriOptions.servers.development}/${uriOptions.slugs.forum}/`
+    `http://${uriOptions.servers.development}/${uriOptions.slugs.forum}/`,
   );
 } else if (process.env.STAGE) {
   config.setGraphQLEndpoint(
-    `http://${uriOptions.servers.stage}/${uriOptions.slugs.graphql}/`
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.graphql}/`,
   );
   config.setJwtEndpoint(
-    `http://${uriOptions.servers.stage}/${uriOptions.slugs.jwtRetrieve}/`
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.jwtRetrieve}/`,
   );
   config.setForumEndpoint(
-    `http://${uriOptions.servers.stage}/${uriOptions.slugs.forum}/`
+    `http://${uriOptions.servers.stage}/${uriOptions.slugs.forum}/`,
   );
 }
 // TODO: add block for PROD_TYPE == 'production'
@@ -74,7 +76,8 @@ console.log(`set CDN endpoint to ${config.cdnEndpoint} in project config`);
 /* APOLLO */
 // App & this config are imported prior to creating client and network interface
 // in server and browser.js
-console.log("creating IntrospectionFragmentMatcher")
+// eslint-disable-next-line no-console
+console.log('creating IntrospectionFragmentMatcher');
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
 });
