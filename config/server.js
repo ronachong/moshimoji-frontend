@@ -42,7 +42,7 @@ if (SERVER) {
   // see config/example.js fmi.
   config.setErrorHandler((e, ctx /* `next` is unused in this example */) => {
     // eslint-disable-next-line no-console
-    ctx.body = `Some kind of error. Check your source code.\n${e.message}\n\n${e}`;
+    ctx.body = `Some kind of error. Check your source code.\n${e.stack}`;
   });
 
   /* CUSTOM KOA APP INSTANTIATION */
@@ -69,5 +69,19 @@ if (SERVER) {
     // Always return `next()`, otherwise the request won't 'pass' to the next
     // middleware in the stack (likely, the React handler)
     return next();
+  });
+
+  /* APOLLO */
+  config.addApolloMiddleware((req, next) => {
+  // TODO: figure out if I should sync server or graphql store with localstorage
+  // for session-like purposes
+    if (!req.options.headers) {
+      req.options.headers = {};
+    }
+
+    // set authorization header for JWT to null; no user for naive response
+    req.options.headers.authorization = `JWT ${null}`;
+
+    next();
   });
 }
