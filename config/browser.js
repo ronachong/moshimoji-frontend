@@ -6,7 +6,7 @@ import config from 'kit/config';
 // ----------------------
 // BROWSER CONFIGURATION
 
-// Set browsesr config, by checking `SERVER`
+// Set browser config, by checking `SERVER`
 
 if (!SERVER) {
   /* APOLLO */
