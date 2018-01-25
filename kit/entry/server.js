@@ -103,6 +103,11 @@ import config from 'kit/config';
 // so we can serve static files
 import PATHS from 'config/paths';
 
+// Import Aphrodite StyleSheetServer to gather Aphrodite styles as static asset
+// (necessary for SSR, as Aphrodite typically assumes it's being invoked in the
+// browser: https://github.com/khan/aphrodite#server-side-rendering)
+import { StyleSheetServer } from 'aphrodite';
+
 // ----------------------
 
 // Create a network layer based on settings.  This is an immediate function
@@ -154,7 +159,7 @@ export function staticMiddleware() {
 
 // Function to create a React handler, per the environment's correct
 // manifest files
-export function createReactHandler(css = [], scripts = [], chunkManifest = {}) {
+export function createReactHandler(nonAphroditeCss = [], scripts = [], chunkManifest = {}) {
   return async function reactHandler(ctx) {
     const routeContext = {};
 
@@ -171,7 +176,11 @@ export function createReactHandler(css = [], scripts = [], chunkManifest = {}) {
 
     // Wait for GraphQL data to be available in our initial render,
     // before dumping HTML back to the client
-    await getDataFromTree(components);
+    // Data-gathering has to be wrapped in renderStatic because 'fake' render
+    // of tree invokes Aphrodite injection logic
+    await StyleSheetServer.renderStatic(() =>
+      getDataFromTree(components)
+    );
 
     // Handle redirects
     if ([301, 302].includes(routeContext.status)) {
@@ -218,7 +227,7 @@ export function createReactHandler(css = [], scripts = [], chunkManifest = {}) {
           webpackManifest: chunkManifest,
           __STATE__: ctx.store.getState(),
         }}
-        css={css}
+        nonAphroditeCss={nonAphroditeCss}
         scripts={scripts}>
         {components}
       </Html>,
