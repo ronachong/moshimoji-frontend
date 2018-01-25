@@ -65,7 +65,7 @@ class LoginModal extends Component {
   }
 
   handleSubmit(loginDest, e) {
-    e.preventDefault()
+    e.preventDefault();
     const data = new FormData(this.form);
     fetch(config.jwtEndpoint, {
       method: 'POST',
@@ -80,7 +80,7 @@ class LoginModal extends Component {
         });
       })
       .catch(err => {
-        console.log(`Network error: ${err}`);
+        console.log(`LoginModal: Network error: ${err}`);
       });
   }
 

@@ -64,7 +64,7 @@ const UserStatusForm = ({ mutate }) => {
       })
       .catch(err => {
         // eslint-disable-next-line no-console
-        console.log(`Network error: ${err}`);
+        console.log(`UserStatusForm: Network error: ${err}`);
       });
   };
 
