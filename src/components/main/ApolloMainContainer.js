@@ -60,15 +60,72 @@ import Stats from 'src/components/stats';
 import Styles from 'src/components/styles';
 
 // Styles
-import css from './main.scss';
+import { css, withStyles } from 'src/styles';
 
 // Get the ReactQL logo.  This is a local .svg file, which will be made
 // available as a string relative to [root]/dist/assets/img/
 import logo from './reactql-logo.svg';
 
+
+// ----------------------
+// STYLES
+const mainContainerStyles = () => ({
+  mainContainer: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  nav:{
+    height: '20%',
+  }
+});
+
+
 // ----------------------
 // COMPONENT: MainContainer
 // MainContainer contains the contents of the main view.
+// const routes = [
+//   {
+//     path: '/',
+//     component: modules.SiteNews,
+//   },
+//   {
+//     path: '/dashboard',
+//     component: modules.Dashboard,
+//     routes: [
+//       {
+//         path: '/dashboard/site',
+//         component: null,
+//       },
+//       {
+//         path: 'dashboard/user',
+//         component: null,
+//       },
+//     ],
+//   },
+//   {
+//     path: '/reader',
+//     component: modules.Reader,
+//   },
+//   {
+//     path: '/database',
+//     component: modules.Database,
+//   },
+//   {
+//     path: '/forum',
+//     component: modules.Forum,
+//   },
+//   {
+//     path: '/reviews',
+//     component: modules.Reviews,
+//   },
+//   {
+//     path: '/doujin',
+//     component: modules.Doujin,
+//   },
+// ];
+
 const mainContainerQuery = gql`
   {
     currentUser {
@@ -77,8 +134,8 @@ const mainContainerQuery = gql`
   }
 `;
 
-const MainContainer = ({ data }) => (
-  <div>
+let MainContainer = ({ data, styles }) => (
+  <div {...css(styles.mainContainer)}>
     { /* -- meta */ }
     <Helmet
       title="moshimoji"
@@ -92,7 +149,7 @@ const MainContainer = ({ data }) => (
       toggleModal={null} />
 
     { /* -- header */ }
-    <div className={css.hello}>
+    <div>
       <Link to="/"><h1>moshimoji</h1></Link>
     </div>
     <hr />
@@ -104,7 +161,7 @@ const MainContainer = ({ data }) => (
     <hr />
 
     { /* -- nav */ }
-    <ul>
+    <ul {...css(styles.nav)}>
       <li><Link to="/reader">reader</Link></li>
       <li><Link to="/database">database</Link></li>
       <li><Link to="/forum">forum</Link></li>
@@ -149,6 +206,8 @@ const MainContainer = ({ data }) => (
   </div>
 );
 
+MainContainer = withStyles(mainContainerStyles)(MainContainer);
+
 MainContainer.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
@@ -157,6 +216,7 @@ MainContainer.propTypes = {
     }),
   }).isRequired,
 };
+
 
 const ApolloMainContainer = graphql(mainContainerQuery)(MainContainer);
 
