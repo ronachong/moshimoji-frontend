@@ -105,6 +105,7 @@ export default new WebpackConfig().extend({
 
         // Optimise React, etc
         NODE_ENV: JSON.stringify('production'),
+        STAGE: JSON.stringify(process.env.STAGE),
         DEBUG: false,
       },
     }),
