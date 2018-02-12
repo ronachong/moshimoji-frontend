@@ -22,6 +22,7 @@ const uriOptions = {
   servers: {
     development: '127.0.0.1:8000',
     production: '',
+    cdn: 'd2srxik7hofznk.cloudfront.net'
   },
   slugs: {
     graphql: 'gql',
@@ -47,6 +48,9 @@ if (process.env.NODE_ENV === 'development') {
   // eslint-disable-next-line no-console
   console.log(`set endpoint to retrieve jwt to ${config.jwtEndpoint} in project config`);
 }
+
+config.setCdnEndpoint(`http://${uriOptions.servers.cdn}/`);
+console.log(`set CDN endpoint to ${config.cdnEndpoint} in project config`);
 
 /* APOLLO */
 // App & this config are imported prior to creating client and network interface
