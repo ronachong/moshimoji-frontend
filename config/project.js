@@ -23,7 +23,7 @@ const uriOptions = {
   servers: {
     development: '127.0.0.1:8000/backend',
     stage: 'stage.moshi-moji.xyz/backend',
-    production: '',
+    production: 'www.moshi-moji.xyz/backend',
     cdn: 'd2srxik7hofznk.cloudfront.net',
   },
   slugs: {
@@ -59,6 +59,16 @@ if (process.env.NODE_ENV === 'development') {
   );
   config.setForumEndpoint(
     `http://${uriOptions.servers.stage}/${uriOptions.slugs.forum}/`,
+  );
+} else { // not development and not stage == prod
+  config.setGraphQLEndpoint(
+    `http://${uriOptions.servers.production}/${uriOptions.slugs.graphql}/`,
+  );
+  config.setJwtEndpoint(
+    `http://${uriOptions.servers.production}/${uriOptions.slugs.jwtRetrieve}/`,
+  );
+  config.setForumEndpoint(
+    `http://${uriOptions.servers.production}/${uriOptions.slugs.forum}/`,
   );
 }
 // TODO: add block for PROD_TYPE == 'production'
