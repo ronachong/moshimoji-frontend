@@ -72,7 +72,7 @@ export default new WebpackConfig().extend({
         // a minifier to remove all of React's warnings in production.
         NODE_ENV: JSON.stringify('production'),
         // Does the same concern apply to STAGE?
-        STAGE: JSON.stringify(process.env.STAGE),
+        STAGE: process.env.STAGE == "true",
         DEBUG: false,
       },
     }),
