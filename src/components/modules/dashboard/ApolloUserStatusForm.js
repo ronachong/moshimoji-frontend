@@ -9,12 +9,13 @@ import { gql, graphql } from 'react-apollo';
 /* Moshimoji */
 // GraphQL
 import fragments from 'src/graphql/fragments';
-import { userStatusesContainerQuery } from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
+
+// child components
+import { userStatusesFeedQuery } from 'src/components/modules/dashboard/ApolloUserStatusesFeed';
 
 // ----------------------
-// COMPONENT: UserStatusForm
-// UserStatusForm is a pre-Apollo form component to submit a new user
-// status.
+// COMPONENT CODE
+
 const userStatusFormMutation = gql`
   mutation UserStatusForm($text: String!) {
     createUserStatus(text: $text) {
@@ -36,6 +37,12 @@ const userStatusFormQuery = gql`
 }
 `;
 
+/* COMPONENT: UserStatusForm
+ *  UserStatusForm is a pre-Apollo form component to submit a new user status
+ *  Input:
+ *  + props
+ *    + mutate - action to send mutation to GraphQL endpoint; from Apollo HOC
+ */
 // TODO: consider using update instead of refetch to update cache
 const UserStatusForm = ({ mutate }) => {
   let form = null;
@@ -46,7 +53,7 @@ const UserStatusForm = ({ mutate }) => {
       mutation: userStatusFormMutation,
       variables: { text: status.get('text') },
       refetchQueries: [{
-        query: userStatusesContainerQuery,
+        query: userStatusesFeedQuery,
         variables: { cursor: null },
       }],
     })
@@ -85,6 +92,9 @@ UserStatusForm.propTypes = {
   mutate: PropTypes.func.isRequired,
 };
 
+/* COMPONENT: ApolloUserStatusForm
+ * ApolloUserStatusForm renders a form to submit a user status.
+ */
 const ApolloUserStatusForm = graphql(userStatusFormMutation)(
   graphql(userStatusFormQuery)(UserStatusForm));
 
