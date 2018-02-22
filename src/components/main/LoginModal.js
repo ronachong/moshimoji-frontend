@@ -18,28 +18,14 @@ import { showLoginModal } from 'src/store/actions';
 const FADE_DURATION = 200;
 
 const styles = {
-  modal : {
-    position: 'fixed',
-    zIndex: 1040,
-    top: 0, bottom: 0, left: 0, right: 0,
-  },
   modalBackdrop : {
-    position: 'fixed',
-    top: 0, bottom: 0, left: 0, right: 0,
-    zIndex: 'auto',
     backgroundColor:'#000',
     opacity: 0.5
   },
   modalTextContainer : {
-    position: 'absolute',
-    width: '50%',
-    height: '50%',
-    top: '50%', left: '50%',
-    transform: `translate(-${50}%, -${50}%)`,
-    border: '1px solid #fff555',
+    borderRadius: '100px',
     backgroundColor: 'white',
-    boxShadow: '0 5px 15px rgba(0,0,0,.5)',
-    padding: 20,
+    padding: '75px 50px',
     textAlign: 'center'
   }
 };
@@ -50,6 +36,9 @@ const styles = {
 // @connect accepts a function that takes the full Redux state, and then
 // returns the portion of state that our component cares about.  In this example,
 // we're listening to `state.loginModal`, which we can show inside the component
+// TODO: add prop types, default prop values
+// TODO: add docstrings
+// TODO: consider making this into stateless functional component
 @connect(state => ({ loginModal: state.loginModal }))
 class LoginModal extends Component {
   static propTypes = {
@@ -89,36 +78,31 @@ class LoginModal extends Component {
     // can be dashboard or home/site news, depending on origin
     // of modal (dashboard button or link preceding)
     const loginDest = '/dashboard'
+    console.log('this.props.loginModal.show:', this.props.loginModal.show)
     return (
-      // <Transition
-      //   in={true}
-      //   timeout={FADE_DURATION}
-      //   className='fade'
-      //   enteredClassName='in'
-      //   enteringClassName='in'>
-        <Modal
-          show={this.props.loginModal.show}
-          onHide={() => {this.props.dispatch(showLoginModal(false))}}
-          style={styles.modal}
-          backdropStyle={styles.modalBackdrop}>
-          <Modal.Body style={styles.modalTextContainer}>
-            <form
-              ref={ref => (this.form = ref)}
-              onSubmit={e => this.handleSubmit(loginDest, e)}
-            >
-              <div>
-                <label>Username:</label>
-                <input type="text" name="slug" />
-              </div>
-              <div>
-                <label>Password:</label>
-                <input type="password" name="password" />
-              </div>
-              <button type="submit">Login</button>
-            </form>
-          </Modal.Body>
-        </Modal>
-      // </Transition>
+      <Modal
+        show={this.props.loginModal.show}
+        onHide={() => {this.props.dispatch(showLoginModal(false))}}
+        animation={false}
+        backdropStyle={styles.modalBackdrop}
+      >
+        <Modal.Body style={styles.modalTextContainer}>
+          <form
+            ref={ref => (this.form = ref)}
+            onSubmit={e => this.handleSubmit(loginDest, e)}
+          >
+            <div>
+              <label>Username:</label>
+              <input type="text" name="slug" />
+            </div>
+            <div>
+              <label>Password:</label>
+              <input type="password" name="password" />
+            </div>
+            <button type="submit">Login</button>
+          </form>
+        </Modal.Body>
+      </Modal>
     );
   }
 }
