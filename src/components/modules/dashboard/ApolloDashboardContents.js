@@ -10,17 +10,15 @@ import { connect } from 'react-redux';
 /* Moshimoji */
 // child components
 import ApolloUserStatusForm from 'src/components/modules/dashboard/ApolloUserStatusForm';
-import ApolloUserStatusesContainer from 'src/components/modules/dashboard/ApolloUserStatusesContainer';
+import ApolloUserStatusesFeed from 'src/components/modules/dashboard/ApolloUserStatusesFeed';
 
 // Redux actions
 import { showLoginModal } from 'src/store/actions';
 
 
 // ----------------------
-// COMPONENT: Dashboard
-// Dashboard is a pre-Apollo container for the components to display for the
-// Dashboard module.
-// Has: loading, notLoggedIn specs.
+// COMPONENT CODE
+
 const dashboardQuery = gql`
 {
   currentUser {
@@ -35,8 +33,20 @@ const mapDispatchToProps = dispatch => (
   }
 );
 
+/* COMPONENT: DashboardContents
+ *  DashboardContents is a pre-Apollo container for the components to display
+ *  for the Dashboard module.
+ *  Has: loading, notLoggedIn specs.
+ *  Inputs:
+ *  + props
+ *    + data - object representing query response; from Apollo/graphql HOC
+ *      + loading - bool for whether query response is available or not
+ *      + currentUser - object representing the current user
+ *        + id - base64 string for id of user node
+ *    + showLoginModal - Redux action to show login modal; from connect HOC
+ */
 // TODO: (med) update component to show form errors
-let Dashboard = ({ data, showLoginModal }) => {
+let DashboardContents = ({ data, showLoginModal }) => {
   if (data.loading) {
     return <div>Loading...</div>; // TODO: maybe make this inactive cmps instead
   }
@@ -49,15 +59,14 @@ let Dashboard = ({ data, showLoginModal }) => {
 
   return (
     <div>
-      <h2>Dashboard</h2>
       <ApolloUserStatusForm />
-      <ApolloUserStatusesContainer />
+      <ApolloUserStatusesFeed />
     </div>
   );
 };
 
 // TODO: (med) figure out if currentUser should be a required prop
-Dashboard.propTypes = {
+DashboardContents.propTypes = {
   data: PropTypes.shape({
     loading: PropTypes.bool.isRequired,
     currentUser: PropTypes.shape({
@@ -67,7 +76,15 @@ Dashboard.propTypes = {
   showLoginModal: PropTypes.func.isRequired,
 };
 
-Dashboard = connect(null, mapDispatchToProps)(Dashboard);
-const ApolloDashboard = graphql(dashboardQuery)(Dashboard);
+DashboardContents = connect(null, mapDispatchToProps)(DashboardContents);
 
-export default ApolloDashboard;
+/* COMPONENT: ApolloDashboardContents
+ * ApolloDashboard specifies the contents for the Reader module and gets passed
+ * to Module.
+ */
+const ApolloDashboardContents = graphql(dashboardQuery)(DashboardContents);
+
+ApolloDashboardContents.title = 'Dashboard';
+ApolloDashboardContents.styles = {};
+
+export default ApolloDashboardContents;
