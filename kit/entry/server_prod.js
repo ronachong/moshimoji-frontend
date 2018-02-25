@@ -27,11 +27,23 @@ import server, { createReactHandler, staticMiddleware } from './server';
 // ----------------------
 
 // Read in manifest files
-const [manifest, chunkManifest] = ['manifest', 'chunk-manifest'].map(
-  name => JSON.parse(
-    readFileSync(path.resolve(PATHS.dist, `${name}.json`), 'utf8'),
-  ),
-);
+  const [manifest, chunkManifest] = ['manifest', 'chunk-manifest'].map(
+    name => {
+      const file = path.resolve(PATHS.dist, `${name}.json`);
+      try {
+        return JSON.parse(readFileSync(file, 'utf8'),)
+      } catch (err) {
+        if (err.code === 'ENOENT') {
+          console.log(`Error reading ${file} manifest:\n`, err.message);
+          console.log('If this is for chunk-manifest.json, it probably means no chunking was used to split app into several bundles.')
+          console.log('Defaulting to empty {} for manifest.')
+          return {}
+        } else {
+          throw err;
+        }
+      }
+    },
+  );
 
 // Get manifest values
 const css = manifest['browser.css'];
