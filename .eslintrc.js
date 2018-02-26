@@ -52,6 +52,7 @@ module.exports = {
     'import/resolver': {
       node: {
         paths: [
+          PATHS.src,
           PATHS.root,
           'node_modules',
         ],
