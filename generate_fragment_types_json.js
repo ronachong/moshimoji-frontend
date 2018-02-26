@@ -12,7 +12,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 
 //TODO: run config during build instead and get this from that config.
-const graphQLEndpoint = 'http://127.0.0.1:8000/gql'
+const graphQLEndpoint = 'http://www.moshi-moji.xyz/backend/gql'
 
 console.log("generateFragmentTypesJson running")
 fetch(graphQLEndpoint, {
