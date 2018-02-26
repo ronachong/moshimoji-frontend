@@ -21,7 +21,7 @@ import server, { createReactHandler, staticMiddleware } from './server';
 // ----------------------
 
 // Get manifest values
-const css = '/assets/css/style.css';
+const nonAphroditeCss = '/assets/css/style.css';
 const scripts = [
   'vendor.js',
   'browser.js'].map(key => `/${key}`);
@@ -32,7 +32,7 @@ const scripts = [
   const { app, router, listen } = server;
 
   // Create proxy to tunnel requests to the browser `webpack-dev-server`
-  router.get('/*', createReactHandler(css, scripts));
+  router.get('/*', createReactHandler(nonAphroditeCss, scripts));
 
   // Connect the development routes to the server
   app

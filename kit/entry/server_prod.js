@@ -34,7 +34,7 @@ const [manifest, chunkManifest] = ['manifest', 'chunk-manifest'].map(
 );
 
 // Get manifest values
-const css = manifest['browser.css'];
+const nonAphroditeCss = manifest['browser.css'];
 const scripts = [
   'manifest.js',
   'vendor.js',
@@ -46,7 +46,7 @@ const scripts = [
   const { app, router, listen } = server;
 
   // Connect the production routes to the server
-  router.get('/*', createReactHandler(css, scripts, chunkManifest));
+  router.get('/*', createReactHandler(nonAphroditeCss, scripts, chunkManifest));
   app
     .use(staticMiddleware())
     .use(router.routes())
