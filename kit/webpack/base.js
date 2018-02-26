@@ -47,6 +47,7 @@ export default new WebpackConfig().merge({
     // short-hand imports without knowing the full/relative path.  If it
     // doesn't find anything, then it'll check `node_modules` as normal
     modules: [
+      PATHS.src,
       PATHS.root,
       'node_modules',
     ],
